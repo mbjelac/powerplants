@@ -1,10 +1,10 @@
 {
-  "name": "p5test1",
+  "name": "architect",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "p5test1/node_modules/.bin/vite",
-    "build": "p5test1/node_modules/.bin/vite build"
+    "dev": "node_modules/.bin/vite",
+    "build": "node_modules/.bin/vite build"
   },
   "keywords": [],
   "author": "",
