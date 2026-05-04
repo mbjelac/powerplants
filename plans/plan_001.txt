@@ -12,8 +12,11 @@ do these steps and report after each step. then wait for my approval to continue
     - remove any land generation (land, river, mountains)
 
 #2 implement 3-sided pyramid
-- when text area changes text, parse it line by line
+- [done] when text area changes text, parse it line by line
     - apply every line you understand by drawing something in the p5.js box
-- when text area contains line "pyr3" draw a 3-sided pyramid, with it's base touching the top of the floor
+- [done] when text area contains line "pyr3" draw a 3-sided pyramid, with it's base touching the top of the floor
     - "floor" means the top side of the already existing box
     - the floor box can not be removed from the structure
+- when site opens up, rendering viewport should be tilted so the floor panel is visible from the top at a 45 deg angle, also viewport should be rotated 45 deg to left or right so the floor appears as a rhombus
+- add playwright test to verify that "pyr3" produces the 3-sided pyramid
+
