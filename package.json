@@ -1,0 +1,17 @@
+{
+  "name": "p5test1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "p5test1/node_modules/.bin/vite",
+    "build": "p5test1/node_modules/.bin/vite build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "p5": "^2.2.3",
+    "vite": "^8.0.8"
+  }
+}
