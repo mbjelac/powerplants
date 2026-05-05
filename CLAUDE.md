@@ -3,7 +3,7 @@
 ## Workflow
 
 1. Read the last plan file in `plans/` before starting any work.
-2. Each plan file has numbered section starting with N# where N is the section number and continuing with the section's name
+2. Each plan file has numbered section starting with #N where N is the section number and continuing with the section's name
 3. Underneath each section heading are bullets with dashes
 4. Each bullet is a step
 5. Execute only one step at a time, then report what was done.
@@ -17,5 +17,5 @@
 ## Project
 
 - p5.js app served with Vite
-- Entry point: `index.html` + `sketch.js`
+- Entry point: `index.html` + `src/sketch.ts`
 - Run dev server: `npm run dev`
