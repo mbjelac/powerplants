@@ -63,4 +63,23 @@ do these steps and report after each step. then wait for my approval to continue
     - parameterized on parameters: r(x, 0), r(0, x) and values x = -40, 40, -90, 90, -175, 175
 
 #5 object can be scaled
-- "scale" command looks like "s("
+- "scale" command looks like "s(100, 10,250)"
+    - s function takes 3 parameters, each an integer from 1 to 1000
+    - 100 means "do not scale" as it represents the percentage of the original size
+    - 10 means "shrink 10 times"
+    - 250 means "enlarge 2.5 times"
+    - 0 is treated as 1
+    - negative numbers are treated as 1
+    - 1st parameter is scaling in right-left direction
+    - 2nd parameter is scaling in forward-backward direction
+    - 3rd parameter is scaling in up-down direction (vertically)
+- scale command can have just one parameter
+    - if so, apply all 3 directions with the same value
+- add visual tests for scaling
+    - in their own test file: scale.spec.ts
+    - parameterized:
+        - s(x, 100, 100)
+        - s(100, x, 100)
+        - s(100, 100, x)
+        - s(x)
+        - for x values: -10, 0, 1, 50, 100, 150, 500
