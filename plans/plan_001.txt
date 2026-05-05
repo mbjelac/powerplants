@@ -29,7 +29,7 @@ do these steps and report after each step. then wait for my approval to continue
     - setup
         - page.goto & page.waitForSelector("canvas") can be put into beforeEach
 
-#3 object can be moved around
+#3 [done] object can be moved around
 - [done] if after "pyr3" on the same line there is a "translate" command, apply it so that the object is placed to a location relative to it's starting one
     - example: "pyr3 t(-40, 50,120)"
     - "t" means translate
