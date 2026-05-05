@@ -64,8 +64,27 @@ function drawLandBlock(p, s) {
   p.endShape(p.CLOSE);
 }
 
+function parseTranslate(str) {
+  const match = str.match(/t\(\s*(-?\d+)\s*,\s*(-?\d+)\s*,\s*(-?\d+)\s*\)/);
+  if (!match) return null;
+  return [parseInt(match[1]), parseInt(match[2]), parseInt(match[3])];
+}
+
+function parseLine(line) {
+  const trimmed = line.trim();
+  if (!trimmed) return null;
+
+  if (trimmed.startsWith("pyr3")) {
+    const rest = trimmed.slice(4).trim();
+    const translate = rest ? parseTranslate(rest) : null;
+    return { type: "pyr3", translate };
+  }
+
+  return null;
+}
+
 function parseCommands(text) {
-  return text.split("\n").map((line) => line.trim()).filter((line) => line.length > 0);
+  return text.split("\n").map(parseLine).filter((cmd) => cmd !== null);
 }
 
 function drawPyramid3(p, s) {
@@ -139,8 +158,18 @@ const sketch = (p) => {
     drawLandBlock(p, BLOCK_SIZE);
 
     for (const cmd of commands) {
-      if (cmd === "pyr3") {
+      if (cmd.type === "pyr3") {
+        p.push();
+        if (cmd.translate) {
+          const scale = BLOCK_SIZE / 100;
+          p.translate(
+            cmd.translate[0] * scale,
+            -cmd.translate[2] * scale,
+            cmd.translate[1] * scale
+          );
+        }
         drawPyramid3(p, BLOCK_SIZE);
+        p.pop();
       }
     }
   };
