@@ -98,10 +98,10 @@
     - test pyr3 with a color
     - test multiple pyramids with different colors, scaled to 60% and moved off center each in it's own direction
 
-#8 pyramids with more than 4 sides (5-9)
-- implement pyr4, pyr5, etc. until pyr9
+#8 [done] pyramids with more than 4 sides (5-9)
+- [done] implement pyr4, pyr5, etc. until pyr9
     - follow same patterns as for pyr3 and pyr4
-- add visual tests for every new pyramid
+- [done] add visual tests for every new pyramid
 
 #9 prisms
 - implement pri3, pri4, pri5, etc. until pri9

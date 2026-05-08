@@ -21,6 +21,13 @@ test("pyr produces 4-sided pyramid", async ({ page }) => {
   await expectScreenshot(page, "pyr");
 });
 
+for (const sides of [5, 6, 7, 8, 9]) {
+  test(`pyr${sides} produces ${sides}-sided pyramid`, async ({ page }) => {
+    await page.locator("#editor textarea").fill(`pyr${sides}`);
+    await expectScreenshot(page, `pyr${sides}`);
+  });
+}
+
 test("multiple pyramids, mixed 3-sided and 4-sided", async ({ page }) => {
   const commands = [
     "pyr3 s(55) t(-30, -30, -20)",
