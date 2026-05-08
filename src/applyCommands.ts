@@ -1,10 +1,15 @@
 import p5 from "p5";
 import {drawPyramid} from "./primitive/drawPyramid";
+import {drawPrism} from "./primitive/drawPrism";
 import {CreateBody} from "./readCommands";
 import {BLOCK_SIZE} from "./constants";
 
 const pyrSides: Record<string, number> = {
   pyr3: 3, pyr4: 4, pyr5: 5, pyr6: 6, pyr7: 7, pyr8: 8, pyr9: 9,
+};
+
+const priSides: Record<string, number> = {
+  pri3: 3, pri4: 4, pri5: 5, pri6: 6, pri7: 7, pri8: 8, pri9: 9,
 };
 
 export function applyCommands(p: p5, commands: CreateBody[]) {
@@ -31,9 +36,14 @@ export function applyCommands(p: p5, commands: CreateBody[]) {
         toFactor(command.scale[1])
       );
     }
-    const sides = pyrSides[command.type];
-    if (sides) {
-      drawPyramid(p, sides, command.color ?? undefined);
+    const color = command.color ?? undefined;
+    const pyrN = pyrSides[command.type];
+    if (pyrN) {
+      drawPyramid(p, pyrN, color);
+    }
+    const priN = priSides[command.type];
+    if (priN) {
+      drawPrism(p, priN, color);
     }
     p.pop();
   }

@@ -1,4 +1,6 @@
-export type BodyType = "pyr3" | "pyr4" | "pyr5" | "pyr6" | "pyr7" | "pyr8" | "pyr9";
+export type BodyType =
+  | "pyr3" | "pyr4" | "pyr5" | "pyr6" | "pyr7" | "pyr8" | "pyr9"
+  | "pri3" | "pri4" | "pri5" | "pri6" | "pri7" | "pri8" | "pri9";
 
 export interface CreateBody {
   type: BodyType;
@@ -26,6 +28,13 @@ function parseLine(line: string): CreateBody | null {
     const sides = pyrMatch[1] ?? "4";
     const type = `pyr${sides}` as BodyType;
     const rest = trimmed.slice(pyrMatch[0].length).trim();
+    return parseBody(type, rest);
+  }
+
+  const priMatch = trimmed.match(/^pri([3-9])(?:\s|$)/);
+  if (priMatch) {
+    const type = `pri${priMatch[1]}` as BodyType;
+    const rest = trimmed.slice(priMatch[0].length).trim();
     return parseBody(type, rest);
   }
 

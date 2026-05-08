@@ -116,7 +116,13 @@
 - add visual tests for a sphere modified by functions
 
 #11 cylinder
+- implement cyl
+    - this renders a cylinder
+    - all functions which are applied to pyramids are also applied to the cylinder (translate, rotate, scale, color)
+- add visual tests for a cylinder modified by functions
 
 #12 cone
-
-#13 cut-out bodies
+- implement con
+    - this renders a cone
+    - all functions which are applied to pyramids are also applied to the cone (translate, rotate, scale, color)
+- add visual tests for a cone modified by functions
