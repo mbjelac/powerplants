@@ -22,6 +22,7 @@ export interface SubpanelState {
   scaleX: number;
   scaleY: number;
   scaleZ: number;
+  scaleLocked: boolean;
   color: string | null;
 }
 
@@ -123,7 +124,7 @@ function createSubpanel(shape: ShapeDef): SubpanelState {
   label.textContent = shape.label;
   el.appendChild(label);
 
-  const state: SubpanelState = { shape, element: el, shapeBtn, rotateX: 0, rotateY: 0, translateX: 0, translateY: 0, translateZ: 0, scaleX: 100, scaleY: 100, scaleZ: 100, color: null };
+  const state: SubpanelState = { shape, element: el, shapeBtn, rotateX: 0, rotateY: 0, translateX: 0, translateY: 0, translateZ: 0, scaleX: 100, scaleY: 100, scaleZ: 100, scaleLocked: false, color: null };
 
   shapeBtn.addEventListener("click", (e) => {
     e.stopPropagation();

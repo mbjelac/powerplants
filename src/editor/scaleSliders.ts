@@ -3,6 +3,9 @@ import { createSlider, updateFunctionOnLine } from "./editorWidgets";
 
 const SCALE_REGEX = /s\(\s*-?\d+\s*,\s*-?\d+\s*,\s*-?\d+\s*\)/;
 
+const LOCK_UNLOCKED = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#888" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0" /></svg>`;
+const LOCK_LOCKED = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#ccc" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>`;
+
 export function addScaleSliders(
   el: HTMLElement,
   state: SubpanelState,
@@ -30,6 +33,23 @@ export function addScaleSliders(
   }
 
   group.appendChild(slidersCol);
+
+  // Lock button
+  const lockBtn = document.createElement("button");
+  lockBtn.className = "lock-btn";
+  lockBtn.innerHTML = LOCK_UNLOCKED;
+  lockBtn.addEventListener("click", () => {
+    state.scaleLocked = !state.scaleLocked;
+    lockBtn.innerHTML = state.scaleLocked ? LOCK_LOCKED : LOCK_UNLOCKED;
+    if (state.scaleLocked) {
+      const val = sliders[0].slider.value;
+      sliders[1].slider.value = val;
+      sliders[2].slider.value = val;
+      update();
+    }
+  });
+  group.appendChild(lockBtn);
+
   el.appendChild(group);
 
   const update = () => {
@@ -45,7 +65,15 @@ export function addScaleSliders(
   };
 
   for (const { slider } of sliders) {
-    slider.addEventListener("input", update);
+    slider.addEventListener("input", () => {
+      if (state.scaleLocked) {
+        const val = slider.value;
+        for (const s of sliders) {
+          s.slider.value = val;
+        }
+      }
+      update();
+    });
   }
 }
 
