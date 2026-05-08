@@ -103,11 +103,11 @@
     - follow same patterns as for pyr3 and pyr4
 - [done] add visual tests for every new pyramid
 
-#9 prisms
-- implement pri3, pri4, pri5, etc. until pri9
+#9 [done] prisms
+- [done] implement pri3, pri4, pri5, etc. until pri9
     - these are prisms with 3 or more sides
     - all functions which are applied to pyramids are also applied to prisms (translate, rotate, scale, color)
-- add visual tests for every prism
+- [done] add visual tests for every prism
 
 #10 sphere
 - implement sph
