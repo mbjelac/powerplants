@@ -1,7 +1,18 @@
+import { getTextarea } from "./editorWidgets";
+import { addRotationSliders } from "./rotationSliders";
+
 interface ShapeDef {
   command: string;
   label: string;
   svg: string;
+}
+
+export interface SubpanelState {
+  shape: ShapeDef;
+  element: HTMLElement;
+  shapeBtn: HTMLElement;
+  rotateX: number;
+  rotateY: number;
 }
 
 const shapes: ShapeDef[] = [
@@ -59,31 +70,17 @@ function priSvg(sides: number): string {
 
 const defaultShape = shapes[0];
 
-interface SubpanelState {
-  shape: ShapeDef;
-  element: HTMLElement;
-  shapeBtn: HTMLElement;
-}
-
 const subpanels: SubpanelState[] = [];
-
-function getTextarea(): HTMLTextAreaElement {
-  return document.querySelector("#editor textarea") as HTMLTextAreaElement;
-}
 
 function syncTextarea() {
   const textarea = getTextarea();
   const lines = textarea.value.split("\n");
-  // Update lines that correspond to subpanels, keep any extra lines
   for (let i = 0; i < subpanels.length; i++) {
     const currentLine = lines[i] ?? "";
     const oldCommand = getShapeCommand(currentLine);
     if (oldCommand !== null) {
-      // Replace just the shape command, keep modifiers
       const rest = currentLine.slice(oldCommand.length).trim();
       lines[i] = rest ? `${subpanels[i].shape.command} ${rest}` : subpanels[i].shape.command;
-    } else if (currentLine.trim() === "") {
-      lines[i] = subpanels[i].shape.command;
     } else {
       lines[i] = subpanels[i].shape.command;
     }
@@ -116,12 +113,14 @@ function createSubpanel(shape: ShapeDef): SubpanelState {
   label.textContent = shape.label;
   el.appendChild(label);
 
-  const state: SubpanelState = { shape, element: el, shapeBtn };
+  const state: SubpanelState = { shape, element: el, shapeBtn, rotateX: 0, rotateY: 0 };
 
   shapeBtn.addEventListener("click", (e) => {
     e.stopPropagation();
     showShapePopup(state, shapeBtn);
   });
+
+  addRotationSliders(el, state, subpanels);
 
   return state;
 }

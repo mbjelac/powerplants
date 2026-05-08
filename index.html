@@ -15,7 +15,11 @@
     #editor-panel .shape-btn { width: 32px; height: 32px; background: none; border: 1px solid #666; border-radius: 4px; cursor: pointer; padding: 2px; display: flex; align-items: center; justify-content: center; }
     #editor-panel .shape-btn:hover { border-color: #aaa; }
     #editor-panel .shape-btn svg { width: 24px; height: 24px; }
-    #editor-panel .shape-label { color: #ccc; font-family: monospace; font-size: 13px; }
+    #editor-panel .shape-label { color: #ccc; font-family: monospace; font-size: 13px; min-width: 36px; }
+    #editor-panel .slider-group { display: flex; align-items: center; gap: 4px; margin-left: 8px; }
+    #editor-panel .slider-letter { color: #888; font-family: monospace; font-size: 14px; font-weight: bold; }
+    #editor-panel .sliders-col { display: flex; flex-direction: column; gap: 2px; }
+    #editor-panel .panel-slider { width: 80px; height: 14px; accent-color: #777; cursor: pointer; }
     #shape-popup { display: none; position: fixed; background: #333; border: 1px solid #555; border-radius: 6px; padding: 6px; z-index: 100; max-height: 300px; overflow-y: auto; }
     #shape-popup .shape-option { display: flex; align-items: center; gap: 8px; padding: 6px 10px; cursor: pointer; border-radius: 4px; color: #ccc; font-family: monospace; font-size: 13px; }
     #shape-popup .shape-option:hover { background: #444; }
