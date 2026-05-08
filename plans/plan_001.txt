@@ -115,20 +115,20 @@
     - all functions which are applied to pyramids are also applied to the sphere (translate, rotate, scale, color)
 - [done] add visual tests for a sphere modified by functions
 
-#11 cylinder
-- implement cyl
+#11 [done] cylinder
+- [done] implement cyl
     - this renders a cylinder
     - all functions which are applied to pyramids are also applied to the cylinder (translate, rotate, scale, color)
-- add visual tests for a cylinder modified by functions
+- [done] add visual tests for a cylinder modified by functions
 
-#12 cone
-- implement con
+#12 [done] cone
+- [done] implement con
     - this renders a cone
     - all functions which are applied to pyramids are also applied to the cone (translate, rotate, scale, color)
-- add visual tests for a cone modified by functions
+- [done] add visual tests for a cone modified by functions
 
-#13 torus
-- implement tor
+#13 [done] torus
+- [done] implement tor
     - this renders a torus
     - all functions which are applied to pyramids are also applied to the torus (translate, rotate, scale, color)
-- add visual tests for a torus modified by functions
+- [done] add visual tests for a torus modified by functions

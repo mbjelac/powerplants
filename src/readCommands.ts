@@ -1,7 +1,7 @@
 export type BodyType =
   | "pyr3" | "pyr4" | "pyr5" | "pyr6" | "pyr7" | "pyr8" | "pyr9"
   | "pri3" | "pri4" | "pri5" | "pri6" | "pri7" | "pri8" | "pri9"
-  | "sph";
+  | "sph" | "cyl" | "con" | "tor";
 
 export interface CreateBody {
   type: BodyType;
@@ -39,10 +39,12 @@ function parseLine(line: string): CreateBody | null {
     return parseBody(type, rest);
   }
 
-  const sphMatch = trimmed.match(/^sph(?:\s|$)/);
-  if (sphMatch) {
-    const rest = trimmed.slice(sphMatch[0].length).trim();
-    return parseBody("sph", rest);
+  for (const keyword of ["sph", "cyl", "con", "tor"] as const) {
+    const match = trimmed.match(new RegExp(`^${keyword}(?:\\s|$)`));
+    if (match) {
+      const rest = trimmed.slice(match[0].length).trim();
+      return parseBody(keyword, rest);
+    }
   }
 
   return null;

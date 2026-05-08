@@ -2,6 +2,9 @@ import p5 from "p5";
 import {drawPyramid} from "./primitive/drawPyramid";
 import {drawPrism} from "./primitive/drawPrism";
 import {drawSphere} from "./primitive/drawSphere";
+import {drawCylinder} from "./primitive/drawCylinder";
+import {drawCone} from "./primitive/drawCone";
+import {drawTorus} from "./primitive/drawTorus";
 import {CreateBody} from "./readCommands";
 import {BLOCK_SIZE} from "./constants";
 
@@ -48,6 +51,15 @@ export function applyCommands(p: p5, commands: CreateBody[]) {
     }
     if (command.type === "sph") {
       drawSphere(p, color);
+    }
+    if (command.type === "cyl") {
+      drawCylinder(p, color);
+    }
+    if (command.type === "con") {
+      drawCone(p, color);
+    }
+    if (command.type === "tor") {
+      drawTorus(p, color);
     }
     p.pop();
   }

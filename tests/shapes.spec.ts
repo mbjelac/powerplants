@@ -45,6 +45,36 @@ test("sphere with transforms", async ({ page }) => {
   await expectScreenshot(page, "sph-transformed");
 });
 
+test("cyl produces a cylinder", async ({ page }) => {
+  await page.locator("#editor textarea").fill("cyl");
+  await expectScreenshot(page, "cyl");
+});
+
+test("cylinder with transforms", async ({ page }) => {
+  await page.locator("#editor textarea").fill("cyl c(#e05030) s(80) t(20, -10, 30)");
+  await expectScreenshot(page, "cyl-transformed");
+});
+
+test("con produces a cone", async ({ page }) => {
+  await page.locator("#editor textarea").fill("con");
+  await expectScreenshot(page, "con");
+});
+
+test("cone with transforms", async ({ page }) => {
+  await page.locator("#editor textarea").fill("con c(#30e050) s(80) t(20, -10, 30)");
+  await expectScreenshot(page, "con-transformed");
+});
+
+test("tor produces a torus", async ({ page }) => {
+  await page.locator("#editor textarea").fill("tor");
+  await expectScreenshot(page, "tor");
+});
+
+test("torus with transforms", async ({ page }) => {
+  await page.locator("#editor textarea").fill("tor c(#e0a030) s(80) t(20, -10, 30)");
+  await expectScreenshot(page, "tor-transformed");
+});
+
 test("multiple pyramids, mixed 3-sided and 4-sided", async ({ page }) => {
   const commands = [
     "pyr3 s(55) t(-30, -30, -20)",
