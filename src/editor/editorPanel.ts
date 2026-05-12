@@ -145,7 +145,31 @@ function createSubpanel(shape: ShapeDef): SubpanelState {
   });
   el.appendChild(dupBtn);
 
+  const delBtn = document.createElement("button");
+  delBtn.className = "del-btn";
+  delBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M5 6v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`;
+  delBtn.title = "Delete";
+  delBtn.addEventListener("click", () => {
+    deleteSubpanel(state);
+  });
+  el.appendChild(delBtn);
+
   return state;
+}
+
+function deleteSubpanel(target: SubpanelState) {
+  const textarea = getTextarea();
+  const lines = textarea.value.split("\n");
+  const index = subpanels.indexOf(target);
+
+  // Remove line from textarea
+  lines.splice(index, 1);
+  textarea.value = lines.join("\n");
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+
+  // Remove subpanel from array and DOM
+  subpanels.splice(index, 1);
+  target.element.remove();
 }
 
 function duplicateSubpanel(source: SubpanelState) {

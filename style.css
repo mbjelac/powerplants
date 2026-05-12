@@ -23,6 +23,9 @@ body { margin: 0; display: flex; height: 100vh; background: #1a1a1a; }
 #editor-panel .dup-btn { width: 28px; height: 28px; background: none; border: 1px solid #555; border-radius: 4px; cursor: pointer; padding: 2px; display: flex; align-items: center; justify-content: center; margin-left: auto; }
 #editor-panel .dup-btn:hover { border-color: #aaa; }
 #editor-panel .dup-btn svg { width: 18px; height: 18px; }
+#editor-panel .del-btn { width: 28px; height: 28px; background: none; border: 1px solid #555; border-radius: 4px; cursor: pointer; padding: 2px; display: flex; align-items: center; justify-content: center; }
+#editor-panel .del-btn:hover { border-color: #aaa; }
+#editor-panel .del-btn svg { width: 18px; height: 18px; }
 #shape-popup { display: none; position: fixed; background: #333; border: 1px solid #555; border-radius: 6px; padding: 6px; z-index: 100; max-height: 300px; overflow-y: auto; }
 #shape-popup .shape-option { display: flex; align-items: center; gap: 8px; padding: 6px 10px; cursor: pointer; border-radius: 4px; color: #ccc; font-family: monospace; font-size: 13px; }
 #shape-popup .shape-option:hover { background: #444; }

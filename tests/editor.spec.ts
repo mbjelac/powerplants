@@ -154,6 +154,34 @@ test("duplicate a shape", async ({ page }) => {
   await expectEditorScreenshot(page, "editor-duplicate");
 });
 
+test("delete a shape", async ({ page }) => {
+  // Add 3 shapes
+  await addShape(page);
+  await addShape(page);
+  await addShape(page);
+
+  // Color each so they're distinguishable
+  const subpanels = page.locator("#editor-panel .subpanel");
+  for (const [idx, color] of [[0, "#e03030"], [1, "#3030e0"], [2, "#30e030"]] as [number, string][]) {
+    const colorInput = subpanels.nth(idx).locator(".color-input");
+    await colorInput.evaluate((el: HTMLInputElement, c: string) => {
+      el.value = c;
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+    }, color);
+  }
+
+  // Translate them apart
+  const trans0 = subpanels.nth(0).locator(".slider-group").filter({ hasText: "T" }).locator(".panel-slider");
+  await trans0.nth(0).fill("-40");
+  const trans2 = subpanels.nth(2).locator(".slider-group").filter({ hasText: "T" }).locator(".panel-slider");
+  await trans2.nth(0).fill("40");
+
+  // Delete the middle shape
+  await subpanels.nth(1).locator(".del-btn").click();
+
+  await expectEditorScreenshot(page, "editor-delete");
+});
+
 test("scroll through many shape subpanels", async ({ page }) => {
   // Add many shapes so they overflow
   for (let i = 0; i < 8; i++) {
