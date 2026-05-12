@@ -136,7 +136,37 @@ function createSubpanel(shape: ShapeDef): SubpanelState {
   addScaleSliders(el, state, subpanels);
   addColorPicker(el, state, subpanels);
 
+  const dupBtn = document.createElement("button");
+  dupBtn.className = "dup-btn";
+  dupBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5"><rect x="3" y="7" width="12" height="12" rx="2"/><rect x="9" y="3" width="12" height="12" rx="2"/></svg>`;
+  dupBtn.title = "Duplicate";
+  dupBtn.addEventListener("click", () => {
+    duplicateSubpanel(state);
+  });
+  el.appendChild(dupBtn);
+
   return state;
+}
+
+function duplicateSubpanel(source: SubpanelState) {
+  const textarea = getTextarea();
+  const lines = textarea.value.split("\n");
+  const index = subpanels.indexOf(source);
+  const lineToDuplicate = lines[index] ?? source.shape.command;
+
+  // Insert duplicated line in textarea
+  lines.splice(index + 1, 0, lineToDuplicate);
+  textarea.value = lines.join("\n");
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+
+  // Create new subpanel with same shape
+  const newPanel = createSubpanel(source.shape);
+  subpanels.splice(index + 1, 0, newPanel);
+
+  // Insert DOM element after source
+  const container = document.getElementById("subpanels")!;
+  const nextSibling = source.element.nextSibling;
+  container.insertBefore(newPanel.element, nextSibling);
 }
 
 function showShapePopup(panel: SubpanelState, anchor: HTMLElement) {
