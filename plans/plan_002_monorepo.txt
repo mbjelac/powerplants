@@ -8,10 +8,10 @@ Introduction: "architect" is just one module of a bigger project. All project co
 - in root of this repo create a folder 'frontend'
 - initialise a new frontend app in this folder using p5.js for rendering
 - codebase should be in TypeScript
-- set up visual tests using Playwright just like in architect
+- set up visual tests using Playwright just like in architect module
 - set up unit testing using vitest
 
 #3 Frontend uses architect's code for rendering shapes
 - shapes rendered from text instructions (one line per shape) developed within the architect module have to be rendered in the frontend app in the same way
-- editing of those shapes will NOT be done in frontend, only in architect
+- editing of those shapes will NOT be done in frontend, only in architect module
 - set up codebase so the rendering code can be reused between architect & frontend modules
