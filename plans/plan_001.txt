@@ -244,3 +244,7 @@
 - [done] add visual test
     - add a line with the editor
     - change the text so subpanel is updated
+
+#19 load last text on startup
+- when text area is updated, this is automatically stored in browser's local storage
+    - on app start, the text area is loaded with stored text
