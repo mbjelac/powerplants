@@ -1,6 +1,6 @@
 import p5 from "p5";
 import {BLOCK_SIZE} from "../constants";
-import {colorToRgb} from "./shade";
+import { colorToRgb } from "./colorToRgb";
 
 export function drawPyramid(p: p5, sides: number, color?: string) {
   const h = BLOCK_SIZE / 2;
