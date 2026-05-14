@@ -2,7 +2,7 @@
 - [done] initialise scaffolding
     - add class Sektor in frontend/src/sektor
     - add test file createBuilding.spec.ts in frontend/src/sektor
-- create test "creates building on free location"
+- [done] create test "creates building on free location"
     - creates new Sektor instance
     - calls sektor.createBuilding({ type: "WaterPump", x: 8, y: 6 })
     - asserts that result of call (interface CreateBuildingResult) is { error: undefined, addedBuildings: [{ type: "WaterPump", x: 8, y: 6 }] }
