@@ -1,4 +1,4 @@
-import { test, expect, setup, expectScreenshot } from "./test-utils";
+import { test, expect, setup } from "./test-utils";
 
 setup();
 
