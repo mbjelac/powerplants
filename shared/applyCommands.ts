@@ -5,7 +5,7 @@ import {drawSphere} from "./primitive/drawSphere";
 import {drawCylinder} from "./primitive/drawCylinder";
 import {drawCone} from "./primitive/drawCone";
 import {drawTorus} from "./primitive/drawTorus";
-import {CreateBody} from "./readCommands";
+import {CreateBody} from "./parseCommands";
 import {BLOCK_SIZE} from "./constants";
 
 const pyrSides: Record<string, number> = {

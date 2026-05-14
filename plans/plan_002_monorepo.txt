@@ -12,10 +12,10 @@ Introduction: The current code is just one module of a bigger project. All proje
 - [done] set up unit testing using vitest
 - [done] configure that local run ("dev") does not run on same port as local run of architect module
 
-#3 Frontend uses architect's code for rendering shapes
-- shapes rendered from text instructions (one line per shape) developed within the architect module have to be rendered in the frontend app in the same way
-- editing of those shapes will NOT be done in frontend, only in architect module
-- set up codebase so the rendering code can be reused between architect & frontend modules
+#3 [done] Frontend uses architect's code for rendering shapes
+- [done] shapes rendered from text instructions (one line per shape) developed within the architect module have to be rendered in the frontend app in the same way
+- [done] editing of those shapes will NOT be done in frontend, only in architect module
+- [done] set up codebase so the rendering code can be reused between architect & frontend modules
 
 #4 Adjust CLAUDE.md content
 - root folder and module folders should have their own CLAUDE.md

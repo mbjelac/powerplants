@@ -1,8 +1,8 @@
 import p5 from "p5";
-import {drawFloor} from "./drawFloor";
+import {drawFloor} from "../../shared/drawFloor";
 import {readCommands} from "./readCommands";
-import {applyCommands} from "./applyCommands";
-import {BLOCK_SIZE} from "./constants";
+import {applyCommands} from "../../shared/applyCommands";
+import {BLOCK_SIZE} from "../../shared/constants";
 import {initEditorPanel} from "./editor/editorPanel";
 
 const sketch = (p: p5) => {
