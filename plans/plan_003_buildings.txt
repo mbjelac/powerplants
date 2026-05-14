@@ -22,7 +22,7 @@
         - each item has the building image (rendered with p5.js just like in architect) and the name beneath it (which is the building type, used prevously)
         - when the name or building image are clicked, a yellow rectangle is drawn around the building and name label
         - when the name or building which are selected are clicked again, they are unselected (the rectangle around them is removed)
-        - the list of buildings can be found in frontend/assets/buildings.md
+        - the list of buildings can be found in frontend/src/assets/buildings.md
             - the file is markdown and contains headings which have building names and below eatch heading is a code block with the building rendering code
             - the rendering code is the same one used in architect module
     - add building to map
