@@ -1,6 +1,7 @@
 import p5 from "p5";
 import {drawFloor} from "../../shared/drawFloor";
 import {BLOCK_SIZE} from "../../shared/constants";
+import {initToolbar} from "./toolbar";
 
 const GRID_SIZE = 10;
 
@@ -50,3 +51,4 @@ const sketch = (p: p5) => {
 };
 
 new p5(sketch);
+initToolbar();

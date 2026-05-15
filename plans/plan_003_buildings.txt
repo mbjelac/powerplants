@@ -17,7 +17,7 @@
         - web page contains p5.js canvas
         - canvas displays a 10x10 grid of "floor" elements in the center, just like the single floor in architect module
         - create initial visual test which asserts that empty grid of floors is displayed
-    - building toolbar
+    - [done] building toolbar
         - on the left side of canvas there is a vertical list of buildings
         - the list of buildings can be found in frontend/src/assets/buildings.md
             - the file is markdown and contains headings which have building names and below eatch heading is a code block with the building rendering code

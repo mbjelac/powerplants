@@ -9,10 +9,11 @@ export function setup() {
   });
 }
 
-export async function expectScreenshot(page: Page, name: string) {
+export async function expectScreenshot(page: Page, name: string, selector = "#canvas-container") {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   await page.waitForTimeout(100);
-  const canvas = page.locator("#canvas-container");
-  await expect(canvas).toHaveScreenshot(`${name}.png`, {
+  const element = page.locator(selector);
+  await expect(element).toHaveScreenshot(`${name}.png`, {
     maxDiffPixelRatio: 0.01,
   });
 }
