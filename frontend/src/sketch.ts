@@ -138,7 +138,14 @@ function findClickedTile(p: p5): { x: number; y: number } | null {
   return bestTile;
 }
 
+const CAM_DIST = 800;
+const CAM_ELEVATION = Math.PI / 6;
+
 const sketch = (p: p5) => {
+  let camAngleY = Math.PI / 4;
+  let isDragging = false;
+  let lastMouseX = 0;
+
   p.setup = () => {
     const container = document.getElementById("canvas-container")!;
     const canvas = p.createCanvas(container.offsetWidth, container.offsetHeight, p.WEBGL);
@@ -147,14 +154,28 @@ const sketch = (p: p5) => {
     const hh = container.offsetHeight * ZOOM / 2;
     p.ortho(-hw, hw, -hh, hh);
 
-    const camDist = 800;
-    const camAngleY = Math.PI / 4;
-    const camAngleX = Math.PI / 6;
-    const camX = camDist * Math.sin(camAngleY) * Math.cos(camAngleX);
-    const camY = -camDist * Math.sin(camAngleX);
-    const camZ = camDist * Math.cos(camAngleY) * Math.cos(camAngleX);
-    p.camera(camX, camY, camZ, 0, 0, 0, 0, 1, 0);
+    updateCamera(p);
+
+    canvas.elt.addEventListener("mousedown", (e: MouseEvent) => {
+      isDragging = true;
+      lastMouseX = e.clientX;
+    });
+    window.addEventListener("mouseup", () => { isDragging = false; });
+    window.addEventListener("mousemove", (e: MouseEvent) => {
+      if (!isDragging) return;
+      const dx = e.clientX - lastMouseX;
+      lastMouseX = e.clientX;
+      camAngleY -= dx * 0.005;
+      updateCamera(p);
+    });
   };
+
+  function updateCamera(p: p5) {
+    const camX = CAM_DIST * Math.sin(camAngleY) * Math.cos(CAM_ELEVATION);
+    const camY = -CAM_DIST * Math.sin(CAM_ELEVATION);
+    const camZ = CAM_DIST * Math.cos(camAngleY) * Math.cos(CAM_ELEVATION);
+    p.camera(camX, camY, camZ, 0, 0, 0, 0, 1, 0);
+  }
 
   p.mousePressed = () => {
     const selected = getSelectedBuilding();
@@ -189,7 +210,6 @@ const sketch = (p: p5) => {
     p.ambientLight(60);
     p.pointLight(255, 255, 255, 2 * BLOCK_SIZE, -3 * BLOCK_SIZE, -2 * BLOCK_SIZE);
 
-    p.orbitControl();
     p.stroke(150);
 
     for (let x = 0; x < GRID_SIZE; x++) {
