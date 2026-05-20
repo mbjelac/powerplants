@@ -37,3 +37,13 @@
         - if the CreateBuildingResult.error is not undefined, display error message in red letters on top of canvas
             - error text should be on the screen for 5 seconds and then disappear
             - create visual test which creates a building, then tries to create the building again on the same location and asserts that error message is displayed
+
+#2 Soil fertility
+- Sektor class has getSoilFertility() method which returns a matrix of soil fertility values
+    - one for each floor in the map, corresponding to the floors in the map
+    - each value is a number between 0 and 100
+    - the values are populated in Sektor constructor, randomly, and set to an immutable matrix in the class field
+- on init, the UI gets the soil fertility matrix and uses the number to shade the floor tile upper part
+    - soil fertility of 0 has color #E3CA86
+    - soil fertility of 100 has color #86E389
+    - soil fertility between 0 and 100 is interpolated between these colors
