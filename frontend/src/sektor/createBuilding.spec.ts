@@ -3,7 +3,7 @@ import { Sektor } from "./Sektor";
 
 describe("createBuilding", () => {
   it("creates building on free location", () => {
-    const sektor = new Sektor(10);
+    const sektor = new Sektor([[50]]);
 
     const result = sektor.createBuilding({ type: "WaterPump", x: 8, y: 6 });
 
@@ -14,7 +14,7 @@ describe("createBuilding", () => {
   });
 
   it("does not create building on occupied location", () => {
-    const sektor = new Sektor(10);
+    const sektor = new Sektor([[50]]);
 
     sektor.createBuilding({ type: "WaterPump", x: 8, y: 6 });
     const result = sektor.createBuilding({ type: "WaterPump", x: 8, y: 6 });

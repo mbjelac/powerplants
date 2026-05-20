@@ -15,10 +15,8 @@ export class Sektor {
   private buildings: BuildingCreation[] = [];
   private readonly soilFertility: SoilFertilityMatrix;
 
-  constructor(gridSize: number) {
-    this.soilFertility = Array.from({ length: gridSize }, () =>
-      Array.from({ length: gridSize }, () => Math.floor(Math.random() * 101))
-    );
+  constructor(soilFertility: SoilFertilityMatrix) {
+    this.soilFertility = soilFertility;
   }
 
   getSoilFertility(): SoilFertilityMatrix {

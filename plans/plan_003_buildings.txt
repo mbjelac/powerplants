@@ -38,7 +38,7 @@
             - error text should be on the screen for 5 seconds and then disappear
             - create visual test which creates a building, then tries to create the building again on the same location and asserts that error message is displayed
 
-#2 Soil fertility
+#2 [done] Soil fertility
 - [done] Sektor class has getSoilFertility() method which returns a matrix of soil fertility values
     - one for each floor in the map, corresponding to the floors in the map
     - each value is a number between 0 and 100

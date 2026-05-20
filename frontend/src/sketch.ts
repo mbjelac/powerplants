@@ -7,7 +7,20 @@ import {initToolbar, getSelectedBuilding, getBuildingCode} from "./toolbar";
 import {Sektor} from "./sektor/Sektor";
 
 const GRID_SIZE = 10;
-const sektor = new Sektor(GRID_SIZE);
+const isTestMode = new URLSearchParams(window.location.search).get("test") === "true";
+
+function createFertilityMatrix(gridSize: number): number[][] {
+  if (isTestMode) {
+    return Array.from({ length: gridSize }, (_, x) =>
+      Array.from({ length: gridSize }, (_, z) => ((x * 17 + z * 31) % 101))
+    );
+  }
+  return Array.from({ length: gridSize }, () =>
+    Array.from({ length: gridSize }, () => Math.floor(Math.random() * 101))
+  );
+}
+
+const sektor = new Sektor(createFertilityMatrix(GRID_SIZE));
 const soilFertility = sektor.getSoilFertility();
 const placedBuildings: { type: string; x: number; y: number; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;

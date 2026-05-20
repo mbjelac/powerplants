@@ -4,7 +4,7 @@ export { test, expect };
 
 export function setup() {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/?test=true");
     await page.waitForSelector("canvas");
   });
 }
