@@ -47,8 +47,9 @@
     - soil fertility of 0 has color #E3CA86
     - soil fertility of 100 has color #86E389
     - soil fertility between 0 and 100 is interpolated between these colors
-- fix test flakiness by removing randomness
+- [done] fix test flakiness by removing randomness
     - run playwright tests with url containing query string ?test=true
     - Sektor constructor accepts the soilFertilityMatrix as a param
     - sketch.ts sets a random fertility matrix if query string test=false
     - sketch.ts sets a dummy fertility matrix if query string test=true
+        - set dummy values based on the map element indices - the values need to vary, but deterministically
