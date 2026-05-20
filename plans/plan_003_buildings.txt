@@ -1,4 +1,4 @@
-#1 create a building
+#1 [done] create a building
 - [done] initialise scaffolding
     - add class Sektor in frontend/src/sektor
     - add test file createBuilding.spec.ts in frontend/src/sektor
@@ -39,7 +39,7 @@
             - create visual test which creates a building, then tries to create the building again on the same location and asserts that error message is displayed
 
 #2 Soil fertility
-- Sektor class has getSoilFertility() method which returns a matrix of soil fertility values
+- [done] Sektor class has getSoilFertility() method which returns a matrix of soil fertility values
     - one for each floor in the map, corresponding to the floors in the map
     - each value is a number between 0 and 100
     - the values are populated in Sektor constructor, randomly, and set to an immutable matrix in the class field

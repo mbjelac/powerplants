@@ -7,7 +7,7 @@ import {initToolbar, getSelectedBuilding, getBuildingCode} from "./toolbar";
 import {Sektor} from "./sektor/Sektor";
 
 const GRID_SIZE = 10;
-const sektor = new Sektor();
+const sektor = new Sektor(GRID_SIZE);
 const placedBuildings: { type: string; x: number; y: number; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
 

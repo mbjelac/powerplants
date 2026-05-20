@@ -9,8 +9,21 @@ export interface CreateBuildingResult {
   addedBuildings: BuildingCreation[];
 }
 
+export type SoilFertilityMatrix = ReadonlyArray<ReadonlyArray<number>>;
+
 export class Sektor {
   private buildings: BuildingCreation[] = [];
+  private readonly soilFertility: SoilFertilityMatrix;
+
+  constructor(gridSize: number) {
+    this.soilFertility = Array.from({ length: gridSize }, () =>
+      Array.from({ length: gridSize }, () => Math.floor(Math.random() * 101))
+    );
+  }
+
+  getSoilFertility(): SoilFertilityMatrix {
+    return this.soilFertility;
+  }
 
   createBuilding(building: BuildingCreation): CreateBuildingResult {
     if (this.buildings.some((b) => b.x === building.x && b.y === building.y)) {
