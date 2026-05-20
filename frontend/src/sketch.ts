@@ -8,8 +8,22 @@ import {Sektor} from "./sektor/Sektor";
 
 const GRID_SIZE = 10;
 const sektor = new Sektor(GRID_SIZE);
+const soilFertility = sektor.getSoilFertility();
 const placedBuildings: { type: string; x: number; y: number; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
+
+// Interpolate between #E3CA86 (fertility 0) and #86E389 (fertility 100)
+const COLOR_0: [number, number, number] = [0xE3, 0xCA, 0x86];
+const COLOR_100: [number, number, number] = [0x86, 0xE3, 0x89];
+
+function fertilityColor(value: number): [number, number, number] {
+  const t = value / 100;
+  return [
+    Math.round(COLOR_0[0] + (COLOR_100[0] - COLOR_0[0]) * t),
+    Math.round(COLOR_0[1] + (COLOR_100[1] - COLOR_0[1]) * t),
+    Math.round(COLOR_0[2] + (COLOR_100[2] - COLOR_0[2]) * t),
+  ];
+}
 
 const ZOOM = 1.2;
 
@@ -210,18 +224,17 @@ const sketch = (p: p5) => {
     p.ambientLight(60);
     p.pointLight(255, 255, 255, 2 * BLOCK_SIZE, -3 * BLOCK_SIZE, -2 * BLOCK_SIZE);
 
-    p.stroke(150);
+    p.stroke(150, 150, 150, 80);
 
     for (let x = 0; x < GRID_SIZE; x++) {
       for (let z = 0; z < GRID_SIZE; z++) {
         p.push();
         const { wx, wz } = gridToWorld(x, z);
         p.translate(wx, 0, wz);
-        drawFloor(p, BLOCK_SIZE);
+        drawFloor(p, BLOCK_SIZE, fertilityColor(soilFertility[x][z]));
         p.pop();
       }
     }
-
     p.noStroke();
     for (const building of placedBuildings) {
       p.push();
@@ -231,7 +244,6 @@ const sketch = (p: p5) => {
       applyCommands(p, commands);
       p.pop();
     }
-    p.stroke(150);
 
     document.getElementById("canvas-container")!.dataset.rendered = "true";
   };
