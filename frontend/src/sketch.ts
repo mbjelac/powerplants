@@ -130,14 +130,14 @@ function getCameraBasis(p: p5): {
   };
 }
 
-function findClickedTile(p: p5): { x: number; y: number } | null {
+function findClickedTile(p: p5, currentZoom: number): { x: number; y: number } | null {
   const { eyeX, eyeY, eyeZ, rightX, rightY, rightZ, upX, upY, upZ, fwdX, fwdY, fwdZ } = getCameraBasis(p);
 
   const ndcX = (p.mouseX / p.width) * 2 - 1;
   const ndcY = (p.mouseY / p.height) * 2 - 1;
 
-  const hw = p.width * ZOOM / 2;
-  const hh = p.height * ZOOM / 2;
+  const hw = p.width * currentZoom / 2;
+  const hh = p.height * currentZoom / 2;
 
   const ox = eyeX + rightX * ndcX * hw + upX * ndcY * hh;
   const oy = eyeY + rightY * ndcX * hw + upY * ndcY * hh;
@@ -170,37 +170,55 @@ const CAM_ELEVATION = Math.PI / 6;
 
 const sketch = (p: p5) => {
   let camAngleY = Math.PI / 4;
+  let camElevation = CAM_ELEVATION;
   let isDragging = false;
   let lastMouseX = 0;
+  let lastMouseY = 0;
+  let zoom = ZOOM;
+
+  function updateOrtho(container: HTMLElement) {
+    const hw = container.offsetWidth * zoom / 2;
+    const hh = container.offsetHeight * zoom / 2;
+    p.ortho(-hw, hw, -hh, hh);
+  }
 
   p.setup = () => {
     const container = document.getElementById("canvas-container")!;
     const canvas = p.createCanvas(container.offsetWidth, container.offsetHeight, p.WEBGL);
     canvas.parent(container);
-    const hw = container.offsetWidth * ZOOM / 2;
-    const hh = container.offsetHeight * ZOOM / 2;
-    p.ortho(-hw, hw, -hh, hh);
+    updateOrtho(container);
 
     updateCamera(p);
 
     canvas.elt.addEventListener("mousedown", (e: MouseEvent) => {
       isDragging = true;
       lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
     });
     window.addEventListener("mouseup", () => { isDragging = false; });
     window.addEventListener("mousemove", (e: MouseEvent) => {
       if (!isDragging) return;
       const dx = e.clientX - lastMouseX;
+      const dy = e.clientY - lastMouseY;
       lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
       camAngleY -= dx * 0.005;
+      camElevation += dy * 0.005;
+      camElevation = Math.max(0.05, Math.min(Math.PI / 2 - 0.05, camElevation));
       updateCamera(p);
     });
+    canvas.elt.addEventListener("wheel", (e: WheelEvent) => {
+      e.preventDefault();
+      zoom *= e.deltaY > 0 ? 1.05 : 0.95;
+      zoom = Math.max(0.3, Math.min(3, zoom));
+      updateOrtho(container);
+    }, { passive: false });
   };
 
   function updateCamera(p: p5) {
-    const camX = CAM_DIST * Math.sin(camAngleY) * Math.cos(CAM_ELEVATION);
-    const camY = -CAM_DIST * Math.sin(CAM_ELEVATION);
-    const camZ = CAM_DIST * Math.cos(camAngleY) * Math.cos(CAM_ELEVATION);
+    const camX = CAM_DIST * Math.sin(camAngleY) * Math.cos(camElevation);
+    const camY = -CAM_DIST * Math.sin(camElevation);
+    const camZ = CAM_DIST * Math.cos(camAngleY) * Math.cos(camElevation);
     p.camera(camX, camY, camZ, 0, 0, 0, 0, 1, 0);
   }
 
@@ -208,7 +226,7 @@ const sketch = (p: p5) => {
     const selected = getSelectedBuilding();
     if (!selected) return;
 
-    const grid = findClickedTile(p);
+    const grid = findClickedTile(p, zoom);
     if (!grid) return;
 
     const result = sektor.createBuilding({ type: selected, x: grid.x, y: grid.y });
