@@ -10,7 +10,7 @@ export function drawPrism(p: p5, sides: number, color?: string) {
   const bottomVerts: [number, number, number][] = [];
   const topVerts: [number, number, number][] = [];
   for (let i = 0; i < sides; i++) {
-    const angle = -Math.PI / 2 + (2 * Math.PI * i) / sides;
+    const angle = -Math.PI / 2 + Math.PI / 4 + (2 * Math.PI * i) / sides;
     const x = h * Math.cos(angle);
     const z = h * Math.sin(angle);
     bottomVerts.push([x, floorY, z]);
