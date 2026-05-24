@@ -8,23 +8,23 @@ test("renders empty grid of floors", async ({ page }) => {
 
 test("highlights selected building in toolbar", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
-  await page.locator('.building-item[data-building-name="WaterPump"]').click();
+  await page.locator('.building-item[data-building-name="WellField"]').click();
   await page.waitForTimeout(100);
   await expectScreenshot(page, "building-selected", "#toolbar");
 });
 
 test("removes highlight when selected building is clicked again", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
-  await page.locator('.building-item[data-building-name="WaterPump"]').click();
+  await page.locator('.building-item[data-building-name="WellField"]').click();
   await page.waitForTimeout(100);
-  await page.locator('.building-item[data-building-name="WaterPump"]').click();
+  await page.locator('.building-item[data-building-name="WellField"]').click();
   await page.waitForTimeout(100);
   await expectScreenshot(page, "building-deselected", "#toolbar");
 });
 
 test("renders building on floor after placement", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
-  await page.locator('.building-item[data-building-name="WaterPump"]').click();
+  await page.locator('.building-item[data-building-name="WellField"]').click();
   await page.waitForTimeout(100);
   // Click on center of the canvas (should hit a floor tile near the middle of the grid)
   const canvas = page.locator("#canvas-container canvas");
@@ -36,7 +36,7 @@ test("renders building on floor after placement", async ({ page }) => {
 
 test("shows error when placing building on occupied location", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
-  await page.locator('.building-item[data-building-name="WaterPump"]').click();
+  await page.locator('.building-item[data-building-name="WellField"]').click();
   await page.waitForTimeout(100);
   const canvas = page.locator("#canvas-container canvas");
   const box = await canvas.boundingBox();
