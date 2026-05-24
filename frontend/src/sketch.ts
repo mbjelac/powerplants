@@ -3,7 +3,7 @@ import {drawFloor} from "../../shared/drawFloor";
 import {parseCommands} from "../../shared/parseCommands";
 import {applyCommands} from "../../shared/applyCommands";
 import {BLOCK_SIZE} from "../../shared/constants";
-import {initToolbar, getSelectedBuilding, getBuildingCode} from "./toolbar";
+import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} from "./toolbar";
 import {Sektor} from "./sektor/Sektor";
 
 const GRID_SIZE = 10;
@@ -236,6 +236,10 @@ const sketch = (p: p5) => {
       if (code) {
         placedBuildings.push({ type: building.type, x: building.x, y: building.y, code });
       }
+    }
+
+    if (result.error === undefined) {
+      deselectBuilding();
     }
 
     if (result.error !== undefined) {

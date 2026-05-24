@@ -54,5 +54,5 @@
     - sketch.ts sets a dummy fertility matrix if query string test=true
         - set dummy values based on the map element indices - the values need to vary, but deterministically
 
-#3 when selected building succesfully built, deselect it
+#3 [done] when selected building succesfully built, deselect it
 
