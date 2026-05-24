@@ -33,6 +33,8 @@ END {
         replacement = "Add test"
       } else if (tl == "l") {
         replacement = "Learn"
+      } else if (tl == "ft") {
+        replacement = "Fix tests"
       }
       if (replacement != "") {
         lines[1] = prefix replacement rest
