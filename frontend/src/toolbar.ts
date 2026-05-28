@@ -1,11 +1,12 @@
 import p5 from "p5";
-import {loadBuildings} from "./buildings";
+import {loadBuildings, type BuildingFunction} from "./buildings";
 import {parseCommands} from "../../shared/parseCommands";
 import {applyCommands} from "../../shared/applyCommands";
 import {BLOCK_SIZE} from "../../shared/constants";
 
 let selectedBuilding: string | null = null;
 let buildingCodeMap: Map<string, string> = new Map();
+let buildingFunctionMap: Map<string, BuildingFunction | null> = new Map();
 
 export function getSelectedBuilding(): string | null {
   return selectedBuilding;
@@ -20,12 +21,17 @@ export function getBuildingCode(name: string): string | null {
   return buildingCodeMap.get(name) ?? null;
 }
 
+export function getBuildingFunction(name: string): BuildingFunction | null {
+  return buildingFunctionMap.get(name) ?? null;
+}
+
 export function initToolbar() {
   const toolbar = document.getElementById("toolbar")!;
   const buildings = loadBuildings();
 
   for (const building of buildings) {
     buildingCodeMap.set(building.name, building.code);
+    buildingFunctionMap.set(building.name, building.buildingFunction);
   }
 
   for (const building of buildings) {

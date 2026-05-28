@@ -3,8 +3,9 @@ import {drawFloor} from "../../shared/drawFloor";
 import {parseCommands} from "../../shared/parseCommands";
 import {applyCommands} from "../../shared/applyCommands";
 import {BLOCK_SIZE} from "../../shared/constants";
-import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} from "./toolbar";
+import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode, getBuildingFunction} from "./toolbar";
 import {Sektor} from "./sektor/Sektor";
+import {showBuildingFunction, hideBuildingFunction} from "./buildingFunctionPanel";
 
 const GRID_SIZE = 10;
 const isTestMode = new URLSearchParams(window.location.search).get("test") === "true";
@@ -224,10 +225,30 @@ const sketch = (p: p5) => {
 
   p.mousePressed = () => {
     const selected = getSelectedBuilding();
-    if (!selected) return;
 
     const grid = findClickedTile(p, zoom);
-    if (!grid) return;
+    if (!grid) {
+      hideBuildingFunction();
+      return;
+    }
+
+    if (!selected) {
+      // No building tool selected — check if there's a placed building to inspect
+      const placed = placedBuildings.find(b => b.x === grid.x && b.y === grid.y);
+      if (placed) {
+        const fn = getBuildingFunction(placed.type);
+        if (fn) {
+          const code = getBuildingCode(placed.type);
+          if (code) {
+            const floorColor = fertilityColor(soilFertility[placed.x][placed.y]);
+            showBuildingFunction(placed.type, code, fn, floorColor);
+          }
+        }
+      } else {
+        hideBuildingFunction();
+      }
+      return;
+    }
 
     const result = sektor.createBuilding({ type: selected, x: grid.x, y: grid.y });
 
