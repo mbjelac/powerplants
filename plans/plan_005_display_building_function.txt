@@ -20,3 +20,8 @@ For subsequent features it will be important that the user sees a function of th
         - column content is centered vertically
         - between columns there is an equals sign centered vertically
     - create visual test which adds a building, then clicks on it to display the building function
+- clicking somewhere else hides the function panel but dragging to rotate should not.
+    - create visual test which
+        - add building
+        - click building to display function panel
+        - rotate the view (function panel should still be there)
