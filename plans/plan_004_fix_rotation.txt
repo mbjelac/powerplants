@@ -1,4 +1,4 @@
-#1 Architect module is missing a 3rd rotation axis
+#1 [done] Architect module is missing a 3rd rotation axis
 - [done] add a 3rd parameter to the "r" function (Rotate) which rotates the body in 3rd axis
     - the one in which it is not yet able to rotate using the 1st & 2nd parameter
 - [done] update visual tests to add 3rd parameter to r function
