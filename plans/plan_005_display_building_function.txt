@@ -1,0 +1,20 @@
+Intro: Each building has a function defined as a set of inputs rpdocing a set of outputs.
+For subsequent features it will be important that the user sees a function of the building on the screen.
+
+#1 Display building function
+- when building tool is not selected and user clicks on a built building, the building function should be displayed
+    - display function should be displayed in the top-right corner of the screen
+        - the display canvas is separate from the map canvas, but floating in it's top-right corner
+    - display contains:
+        - building image & name (like in the building toolbar)
+        - two columns
+            - left: input names
+            - right: output names
+        - building function is defined in the buildings.md file immediately underneath the building display code block
+            - the function syntax is:
+                - one or more lines listing inputs, as "InputName <value>"
+                - line with equals sign "="
+                - one or more lines listing outputs, as "OutputName <value>"
+        - column content is centered vertically
+        - between columns there is an equals sign centered vertically
+    - create visual test which adds a building, then clicks on it to display the building function
