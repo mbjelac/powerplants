@@ -15,6 +15,7 @@ export function getSelectedBuilding(): string | null {
 export function deselectBuilding(): void {
   selectedBuilding = null;
   document.querySelectorAll(".building-item").forEach((el) => el.classList.remove("selected"));
+  hideToolbarFunctionPanel();
 }
 
 export function getBuildingCode(name: string): string | null {
@@ -23,6 +24,54 @@ export function getBuildingCode(name: string): string | null {
 
 export function getBuildingFunction(name: string): BuildingFunction | null {
   return buildingFunctionMap.get(name) ?? null;
+}
+
+let toolbarFnPanel: HTMLElement | null = null;
+
+function showToolbarFunctionPanel(fn: BuildingFunction, anchorEl: HTMLElement) {
+  hideToolbarFunctionPanel();
+
+  toolbarFnPanel = document.createElement("div");
+  toolbarFnPanel.id = "toolbar-function-panel";
+
+  const inputsCol = document.createElement("div");
+  inputsCol.className = "bf-col";
+  for (const input of fn.inputs) {
+    const row = document.createElement("div");
+    row.textContent = `${input.name} ${input.value}`;
+    inputsCol.appendChild(row);
+  }
+  toolbarFnPanel.appendChild(inputsCol);
+
+  const equalsEl = document.createElement("div");
+  equalsEl.className = "bf-equals";
+  equalsEl.textContent = "=";
+  toolbarFnPanel.appendChild(equalsEl);
+
+  const outputsCol = document.createElement("div");
+  outputsCol.className = "bf-col";
+  for (const output of fn.outputs) {
+    const row = document.createElement("div");
+    row.textContent = `${output.name} ${output.value}`;
+    outputsCol.appendChild(row);
+  }
+  toolbarFnPanel.appendChild(outputsCol);
+
+  document.body.appendChild(toolbarFnPanel);
+
+  // Position to the right of the toolbar, at the anchor's vertical position
+  const rect = anchorEl.getBoundingClientRect();
+  const toolbar = document.getElementById("toolbar")!;
+  const toolbarRect = toolbar.getBoundingClientRect();
+  toolbarFnPanel.style.left = `${toolbarRect.right + 4}px`;
+  toolbarFnPanel.style.top = `${rect.top}px`;
+}
+
+function hideToolbarFunctionPanel() {
+  if (toolbarFnPanel) {
+    toolbarFnPanel.remove();
+    toolbarFnPanel = null;
+  }
 }
 
 export function initToolbar() {
@@ -51,10 +100,14 @@ export function initToolbar() {
       if (selectedBuilding === building.name) {
         selectedBuilding = null;
         item.classList.remove("selected");
+        hideToolbarFunctionPanel();
       } else {
         toolbar.querySelectorAll(".building-item").forEach((el) => el.classList.remove("selected"));
         selectedBuilding = building.name;
         item.classList.add("selected");
+        if (building.buildingFunction) {
+          showToolbarFunctionPanel(building.buildingFunction, item);
+        }
       }
     });
 

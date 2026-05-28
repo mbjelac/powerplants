@@ -173,6 +173,7 @@ const sketch = (p: p5) => {
   let camAngleY = Math.PI / 4;
   let camElevation = CAM_ELEVATION;
   let isDragging = false;
+  let didDrag = false;
   let lastMouseX = 0;
   let lastMouseY = 0;
   let zoom = ZOOM;
@@ -193,6 +194,7 @@ const sketch = (p: p5) => {
 
     canvas.elt.addEventListener("mousedown", (e: MouseEvent) => {
       isDragging = true;
+      didDrag = false;
       lastMouseX = e.clientX;
       lastMouseY = e.clientY;
     });
@@ -201,6 +203,7 @@ const sketch = (p: p5) => {
       if (!isDragging) return;
       const dx = e.clientX - lastMouseX;
       const dy = e.clientY - lastMouseY;
+      if (Math.abs(dx) > 2 || Math.abs(dy) > 2) didDrag = true;
       lastMouseX = e.clientX;
       lastMouseY = e.clientY;
       camAngleY -= dx * 0.005;
@@ -223,7 +226,9 @@ const sketch = (p: p5) => {
     p.camera(camX, camY, camZ, 0, 0, 0, 0, 1, 0);
   }
 
-  p.mousePressed = () => {
+  p.mouseReleased = () => {
+    if (didDrag) return;
+
     const selected = getSelectedBuilding();
 
     const grid = findClickedTile(p, zoom);

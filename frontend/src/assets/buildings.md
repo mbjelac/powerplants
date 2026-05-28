@@ -1,4 +1,4 @@
-# WellField
+# WaterExtractor
 
 ```
 cyl c(#0d78ba) s(15,15,15) t(0,0,0)
@@ -26,7 +26,7 @@ WorkTechnical 3
 =
 WaterPottable 4
 
-# ResidentialSmall
+# Village
 
 ```
 pri4 s(11,11,8) t(20,15,7) r(0,90,0) c(#fff8e5)

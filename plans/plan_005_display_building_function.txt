@@ -1,7 +1,7 @@
 Intro: Each building has a function defined as a set of inputs rpdocing a set of outputs.
 For subsequent features it will be important that the user sees a function of the building on the screen.
 
-#1 Display building function
+#1 [done] Display building function
 - [done] when building tool is not selected and user clicks on a built building, the building function should be displayed
     - display function should be displayed in the top-right corner of the screen
         - the display canvas is separate from the map canvas, but floating in it's top-right corner
@@ -26,9 +26,9 @@ For subsequent features it will be important that the user sees a function of th
         - click building to display function panel
         - rotate the view (function panel should still be there)
 
-#2 building toolbar also displays function
-- when building tool selected display function panel
+#2 [done] building toolbar also displays function
+- [done] when building tool selected display function panel
     - function panel displays only data (not image, floor & name)
     - function panel is displayed to the right of the building toolbar, at the height of the selected tool
     - function panel floats above map canvas
-- create visual test which selectes the second building tool
+- [done] create visual test which selectes the second building tool
