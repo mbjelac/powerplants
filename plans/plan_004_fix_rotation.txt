@@ -2,5 +2,5 @@
 - [done] add a 3rd parameter to the "r" function (Rotate) which rotates the body in 3rd axis
     - the one in which it is not yet able to rotate using the 1st & 2nd parameter
 - [done] update visual tests to add 3rd parameter to r function
-- update existing building definitions in frontend/src/assets/buildings.md & frontend/src/assets/building_sketches.md
+- [done] update existing building definitions in frontend/src/assets/buildings.md & frontend/src/assets/building_sketches.md
     - add the 3rd rotation parameter to any r functions as value 0
