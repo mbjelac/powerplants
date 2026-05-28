@@ -7,6 +7,8 @@ For subsequent features it will be important that the user sees a function of th
         - the display canvas is separate from the map canvas, but floating in it's top-right corner
     - display contains:
         - building image & name (like in the building toolbar)
+        - building image also contains floor
+            - floor in the display has same color as floor on map
         - two columns
             - left: input names
             - right: output names
