@@ -201,7 +201,7 @@ test("typing in textarea updates editor subpanels", async ({ page }) => {
   await addShape(page);
 
   // Change the text so subpanel is updated
-  await page.locator(textarea).fill("sph t(30,0,0) r(0,45) c(#e03030)\npri5 s(150,100,80) t(-30,0,0) c(#3030e0)");
+  await page.locator(textarea).fill("sph t(30,0,0) r(0,45,0) c(#e03030)\npri5 s(150,100,80) t(-30,0,0) c(#3030e0)");
   await expectEditorScreenshot(page, "editor-textarea-sync");
 });
 

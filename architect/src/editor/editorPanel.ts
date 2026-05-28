@@ -16,6 +16,7 @@ export interface SubpanelState {
   shapeBtn: HTMLElement;
   rotateX: number;
   rotateY: number;
+  rotateZ: number;
   translateX: number;
   translateY: number;
   translateZ: number;
@@ -24,7 +25,7 @@ export interface SubpanelState {
   scaleZ: number;
   scaleLocked: boolean;
   color: string | null;
-  setRotation?: (x: number, y: number) => void;
+  setRotation?: (x: number, y: number, z: number) => void;
   setTranslation?: (x: number, y: number, z: number) => void;
   setScale?: (x: number, y: number, z: number) => void;
   setColor?: (hex: string | null) => void;
@@ -130,7 +131,7 @@ function createSubpanel(shape: ShapeDef): SubpanelState {
   label.textContent = shape.label;
   el.appendChild(label);
 
-  const state: SubpanelState = { shape, element: el, shapeBtn, rotateX: 0, rotateY: 0, translateX: 0, translateY: 0, translateZ: 0, scaleX: 100, scaleY: 100, scaleZ: 100, scaleLocked: false, color: null };
+  const state: SubpanelState = { shape, element: el, shapeBtn, rotateX: 0, rotateY: 0, rotateZ: 0, translateX: 0, translateY: 0, translateZ: 0, scaleX: 100, scaleY: 100, scaleZ: 100, scaleLocked: false, color: null };
 
   shapeBtn.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -195,8 +196,8 @@ function duplicateSubpanel(source: SubpanelState) {
 
   // Create new subpanel with same shape and sync widgets from line
   const newPanel = createSubpanel(source.shape);
-  const [rx, ry] = parseRotate(lineToDuplicate);
-  newPanel.setRotation?.(rx, ry);
+  const [rx, ry, rz] = parseRotate(lineToDuplicate);
+  newPanel.setRotation?.(rx, ry, rz);
   const [tx, ty, tz] = parseTranslate(lineToDuplicate);
   newPanel.setTranslation?.(tx, ty, tz);
   const [sx, sy, sz] = parseScale(lineToDuplicate);
@@ -247,9 +248,9 @@ function findShapeDef(command: string): ShapeDef | null {
   return shapes.find(s => s.command === command) ?? null;
 }
 
-function parseRotate(line: string): [number, number] {
-  const m = line.match(/r\(\s*(-?\d+)\s*,\s*(-?\d+)\s*\)/);
-  return m ? [parseInt(m[1]), parseInt(m[2])] : [0, 0];
+function parseRotate(line: string): [number, number, number] {
+  const m = line.match(/r\(\s*(-?\d+)\s*,\s*(-?\d+)\s*,\s*(-?\d+)\s*\)/);
+  return m ? [parseInt(m[1]), parseInt(m[2]), parseInt(m[3])] : [0, 0, 0];
 }
 
 function parseTranslate(line: string): [number, number, number] {
@@ -303,8 +304,8 @@ function syncSubpanelsFromTextarea() {
         panel.shapeBtn.innerHTML = shape.svg;
         panel.element.querySelector(".shape-label")!.textContent = shape.label;
       }
-      const [rx, ry] = parseRotate(line);
-      panel.setRotation?.(rx, ry);
+      const [rx, ry, rz] = parseRotate(line);
+      panel.setRotation?.(rx, ry, rz);
       const [tx, ty, tz] = parseTranslate(line);
       panel.setTranslation?.(tx, ty, tz);
       const [sx, sy, sz] = parseScale(line);
@@ -313,8 +314,8 @@ function syncSubpanelsFromTextarea() {
     } else {
       // Create new subpanel
       const panel = createSubpanel(shape);
-      const [rx, ry] = parseRotate(line);
-      panel.setRotation?.(rx, ry);
+      const [rx, ry, rz] = parseRotate(line);
+      panel.setRotation?.(rx, ry, rz);
       const [tx, ty, tz] = parseTranslate(line);
       panel.setTranslation?.(tx, ty, tz);
       const [sx, sy, sz] = parseScale(line);

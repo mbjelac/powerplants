@@ -6,7 +6,7 @@ export type BodyType =
 export interface CreateBody {
   type: BodyType;
   translate: [number, number, number] | null;
-  rotate: [number, number] | null;
+  rotate: [number, number, number] | null;
   scale: [number, number, number] | null;
   color: string | null;
 }
@@ -59,10 +59,10 @@ function parseTranslate(str: string): [number, number, number] | null {
   return [parseInt(match[1]), parseInt(match[2]), parseInt(match[3])];
 }
 
-function parseRotate(str: string): [number, number] | null {
-  const match = str.match(/r\(\s*(-?\d+)\s*,\s*(-?\d+)\s*\)/);
+function parseRotate(str: string): [number, number, number] | null {
+  const match = str.match(/r\(\s*(-?\d+)\s*,\s*(-?\d+)\s*,\s*(-?\d+)\s*\)/);
   if (!match) return null;
-  return [parseInt(match[1]), parseInt(match[2])];
+  return [parseInt(match[1]), parseInt(match[2]), parseInt(match[3])];
 }
 
 function parseScale(str: string): [number, number, number] | null {

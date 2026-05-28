@@ -1,7 +1,7 @@
 import type { SubpanelState } from "./editorPanel";
 import { createSlider, updateFunctionOnLine } from "./editorWidgets";
 
-const ROTATE_REGEX = /r\(\s*-?\d+\s*,\s*-?\d+\s*\)/;
+const ROTATE_REGEX = /r\(\s*-?\d+\s*,\s*-?\d+\s*,\s*-?\d+\s*\)/;
 
 export function addRotationSliders(
   el: HTMLElement,
@@ -21,8 +21,10 @@ export function addRotationSliders(
 
   const sliderX = createSliderWithReset(-180, 180, 0);
   const sliderY = createSliderWithReset(-180, 180, 0);
+  const sliderZ = createSliderWithReset(-180, 180, 0);
   slidersCol.appendChild(sliderX.row);
   slidersCol.appendChild(sliderY.row);
+  slidersCol.appendChild(sliderZ.row);
   rotGroup.appendChild(slidersCol);
   el.appendChild(rotGroup);
 
@@ -34,12 +36,18 @@ export function addRotationSliders(
     state.rotateY = parseInt(sliderY.slider.value);
     updateRotateOnLine(state, subpanels);
   });
+  sliderZ.slider.addEventListener("input", () => {
+    state.rotateZ = parseInt(sliderZ.slider.value);
+    updateRotateOnLine(state, subpanels);
+  });
 
-  state.setRotation = (x: number, y: number) => {
+  state.setRotation = (x: number, y: number, z: number) => {
     state.rotateX = x;
     state.rotateY = y;
+    state.rotateZ = z;
     sliderX.slider.value = String(x);
     sliderY.slider.value = String(y);
+    sliderZ.slider.value = String(z);
   };
 }
 
@@ -71,6 +79,6 @@ function updateRotateOnLine(panel: SubpanelState, subpanels: SubpanelState[]) {
     subpanels,
     panel,
     ROTATE_REGEX,
-    `r(${panel.rotateX},${panel.rotateY})`,
+    `r(${panel.rotateX},${panel.rotateY},${panel.rotateZ})`,
   );
 }

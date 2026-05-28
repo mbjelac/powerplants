@@ -31,6 +31,7 @@ export function applyCommands(p: p5, commands: CreateBody[]) {
       const toRad = Math.PI / 180;
       p.rotateY(command.rotate[0] * toRad);
       p.rotateX(command.rotate[1] * toRad);
+      p.rotateZ(command.rotate[2] * toRad);
     }
     if (command.scale) {
       const toFactor = (v: number) => Math.max(v, 1) / 100;
