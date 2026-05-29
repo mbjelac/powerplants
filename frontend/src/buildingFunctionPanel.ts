@@ -52,11 +52,16 @@ function ensurePreviewP5(parent: HTMLElement) {
   });
 }
 
-export function showBuildingFunctionSpec(name: string, code: string, fn: BuildingFunctionSpec | BuildingFunction, floorColor: [number, number, number]) {
+export function showBuildingFunctionSpec(name: string, code: string, fn: BuildingFunctionSpec | BuildingFunction, floorColor: [number, number, number], location: { x: number; y: number }) {
   hideBuildingFunctionSpec();
 
   panelEl = document.createElement("div");
   panelEl.id = "building-function-panel";
+
+  const locationEl = document.createElement("div");
+  locationEl.className = "bf-location";
+  locationEl.textContent = `Location: ${location.x} , ${location.y}`;
+  panelEl.appendChild(locationEl);
 
   // Building preview canvas + name
   const header = document.createElement("div");

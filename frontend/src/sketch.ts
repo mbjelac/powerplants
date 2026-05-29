@@ -246,7 +246,7 @@ const sketch = (p: p5) => {
           const code = getBuildingCode(placed.type);
           if (code) {
             const floorColor = fertilityColor(soilFertility[placed.x][placed.y]);
-            showBuildingFunctionSpec(placed.type, code, fn, floorColor);
+            showBuildingFunctionSpec(placed.type, code, fn, floorColor, { x: placed.x, y: placed.y });
           }
         }
       } else {

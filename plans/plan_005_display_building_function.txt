@@ -58,5 +58,5 @@ For subsequent features it will be important that the user sees a function of th
         - all currentValues set to 0
     - display the values from BuildingFunction in the same way as from BuildingFunctionSpec, only include currentValue in front of requiredValue like "ResourceName <icon> <currentValue>/<requiredValue>"
 
-#6 building function panel displays coordinates of selected building
-- on top of panel, display coordinates of selected building like "Location: X , Y" where X & Y are coordinates from BuildingCreation x & y properties
+#6 [done] building function panel displays coordinates of selected building
+- [done] on top of panel, display coordinates of selected building like "Location: X , Y" where X & Y are coordinates from BuildingCreation x & y properties

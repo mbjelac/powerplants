@@ -83,6 +83,13 @@ html, body {
   gap: 8px;
 }
 
+.bf-location {
+  color: #999;
+  font-family: sans-serif;
+  font-size: 11px;
+  text-align: center;
+}
+
 .bf-header {
   display: flex;
   flex-direction: column;
