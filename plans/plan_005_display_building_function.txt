@@ -38,7 +38,7 @@ For subsequent features it will be important that the user sees a function of th
     - resource icons are defined in frontend/src/assets/resources.md
     - each line in file is "ResourceName <icon>"
 
-#4 refactor
+#4 [done] refactor
 - [done] frontend/src/buildingFunctionPanel.ts has duplicate code for creating an input/output element
     - extract & reuse
 - [done] frontend/src/toolbar.ts has duplicate code for creating an input/output element
