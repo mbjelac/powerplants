@@ -1,6 +1,6 @@
 import p5 from "p5";
 import {loadBuildings, type BuildingFunction} from "./buildings";
-import {getResourceIcon} from "./resources";
+import {createFunctionDisplay} from "./functionDisplay";
 import {parseCommands} from "../../shared/parseCommands";
 import {applyCommands} from "../../shared/applyCommands";
 import {BLOCK_SIZE} from "../../shared/constants";
@@ -35,30 +35,7 @@ function showToolbarFunctionPanel(fn: BuildingFunction, anchorEl: HTMLElement) {
   toolbarFnPanel = document.createElement("div");
   toolbarFnPanel.id = "toolbar-function-panel";
 
-  const inputsCol = document.createElement("div");
-  inputsCol.className = "bf-col";
-  for (const input of fn.inputs) {
-    const row = document.createElement("div");
-    const icon = getResourceIcon(input.name);
-    row.textContent = `${input.name} ${icon ?? ""} ${input.value}`;
-    inputsCol.appendChild(row);
-  }
-  toolbarFnPanel.appendChild(inputsCol);
-
-  const equalsEl = document.createElement("div");
-  equalsEl.className = "bf-equals";
-  equalsEl.textContent = "=";
-  toolbarFnPanel.appendChild(equalsEl);
-
-  const outputsCol = document.createElement("div");
-  outputsCol.className = "bf-col";
-  for (const output of fn.outputs) {
-    const row = document.createElement("div");
-    const icon = getResourceIcon(output.name);
-    row.textContent = `${output.name} ${icon ?? ""} ${output.value}`;
-    outputsCol.appendChild(row);
-  }
-  toolbarFnPanel.appendChild(outputsCol);
+  toolbarFnPanel.appendChild(createFunctionDisplay(fn));
 
   document.body.appendChild(toolbarFnPanel);
 

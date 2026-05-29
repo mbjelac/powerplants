@@ -39,7 +39,7 @@ For subsequent features it will be important that the user sees a function of th
     - each line in file is "ResourceName <icon>"
 
 #4 refactor
-- frontend/src/buildingFunctionPanel.ts has duplicate code for creating an input/output element
+- [done] frontend/src/buildingFunctionPanel.ts has duplicate code for creating an input/output element
     - extract & reuse
-- frontend/src/toolbar.ts has duplicate code for creating an input/output element
+- [done] frontend/src/toolbar.ts has duplicate code for creating an input/output element
     - extract & reuse
