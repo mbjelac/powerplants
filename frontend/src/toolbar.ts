@@ -3,6 +3,7 @@ import {loadBuildings, type BuildingFunction} from "./buildings";
 import {createFunctionDisplay} from "./functionDisplay";
 import {parseCommands} from "../../shared/parseCommands";
 import {applyCommands} from "../../shared/applyCommands";
+import {drawFloor} from "../../shared/drawFloor";
 import {BLOCK_SIZE} from "../../shared/constants";
 
 let selectedBuilding: string | null = null;
@@ -69,6 +70,7 @@ export function initToolbar() {
     item.dataset.buildingName = building.name;
 
     const canvasContainer = document.createElement("div");
+    canvasContainer.style.height = "70px";
     item.appendChild(canvasContainer);
 
     const label = document.createElement("div");
@@ -94,12 +96,14 @@ export function initToolbar() {
     toolbar.appendChild(item);
 
     const size = 100;
+    const height = 70;
     new p5((p: p5) => {
       p.setup = () => {
-        const canvas = p.createCanvas(size, size, p.WEBGL);
+        const canvas = p.createCanvas(size, height, p.WEBGL);
         canvas.parent(canvasContainer);
         const viewSize = size / 0.7;
-        p.ortho(-viewSize / 2, viewSize / 2, -viewSize / 2, viewSize / 2);
+        const vh = viewSize * height / size;
+        p.ortho(-viewSize / 2, viewSize / 2, -vh / 2, vh / 2);
 
         const camDist = 800;
         const camAngleY = Math.PI / 4;
@@ -118,6 +122,7 @@ export function initToolbar() {
         p.noStroke();
 
         p.translate(0, BLOCK_SIZE * 0.3, 0);
+        drawFloor(p, BLOCK_SIZE, [162, 220, 134]);
         const commands = parseCommands(building.code);
         applyCommands(p, commands);
       };
