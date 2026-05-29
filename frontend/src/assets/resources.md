@@ -1,5 +1,5 @@
 EnergyElectric ⚡
 WorkTechnical 🛠️
 WaterPottable 💧
-FoodRaw 🍎
+FoodRaw 🥕
 EducationElementary 📖
