@@ -121,7 +121,7 @@ export function initToolbar() {
         p.pointLight(255, 255, 255, 2 * BLOCK_SIZE, -3 * BLOCK_SIZE, -2 * BLOCK_SIZE);
         p.noStroke();
 
-        p.translate(0, BLOCK_SIZE * 0.3, 0);
+        p.translate(0, BLOCK_SIZE * 0.15, 0);
         drawFloor(p, BLOCK_SIZE, [162, 220, 134]);
         const commands = parseCommands(building.code);
         applyCommands(p, commands);
