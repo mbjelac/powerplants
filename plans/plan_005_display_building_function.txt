@@ -32,3 +32,8 @@ For subsequent features it will be important that the user sees a function of th
     - function panel is displayed to the right of the building toolbar, at the height of the selected tool
     - function panel floats above map canvas
 - [done] create visual test which selectes the second building tool
+
+#3 resources have icons next to them
+- when displaying inputs and outputs, each item should have an icon between the name & the value
+    - resource icons are defined in frontend/src/assets/resources.md
+    - each line in file is "ResourceName <icon>"
