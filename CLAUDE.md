@@ -15,6 +15,10 @@
 11. User may nudge you forward  (approving your work) by instructions like "go", "proceed", "continue", etc. if unsure, ask the user does the instruction mean to continue with plan.
 12. When user approves a step, FIRST mark it [done] in the plan file, THEN start the next step. Never begin new work without marking the previous step done.
 
+## Code style
+
+- Functions should be ordered in the file in order of calling — callers before callees.
+
 ## Modules
 
 - **architect** — editor for designing 3D shapes from text instructions, with visual UI controls
