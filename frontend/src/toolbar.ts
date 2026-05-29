@@ -1,5 +1,6 @@
 import p5 from "p5";
 import {loadBuildings, type BuildingFunction} from "./buildings";
+import {getResourceIcon} from "./resources";
 import {parseCommands} from "../../shared/parseCommands";
 import {applyCommands} from "../../shared/applyCommands";
 import {BLOCK_SIZE} from "../../shared/constants";
@@ -38,7 +39,8 @@ function showToolbarFunctionPanel(fn: BuildingFunction, anchorEl: HTMLElement) {
   inputsCol.className = "bf-col";
   for (const input of fn.inputs) {
     const row = document.createElement("div");
-    row.textContent = `${input.name} ${input.value}`;
+    const icon = getResourceIcon(input.name);
+    row.textContent = `${input.name} ${icon ?? ""} ${input.value}`;
     inputsCol.appendChild(row);
   }
   toolbarFnPanel.appendChild(inputsCol);
@@ -52,7 +54,8 @@ function showToolbarFunctionPanel(fn: BuildingFunction, anchorEl: HTMLElement) {
   outputsCol.className = "bf-col";
   for (const output of fn.outputs) {
     const row = document.createElement("div");
-    row.textContent = `${output.name} ${output.value}`;
+    const icon = getResourceIcon(output.name);
+    row.textContent = `${output.name} ${icon ?? ""} ${output.value}`;
     outputsCol.appendChild(row);
   }
   toolbarFnPanel.appendChild(outputsCol);

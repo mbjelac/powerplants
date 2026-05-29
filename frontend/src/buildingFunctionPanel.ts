@@ -4,6 +4,7 @@ import { parseCommands } from "../../shared/parseCommands";
 import { applyCommands } from "../../shared/applyCommands";
 import { drawFloor } from "../../shared/drawFloor";
 import { BLOCK_SIZE } from "../../shared/constants";
+import { getResourceIcon } from "./resources";
 
 let panelEl: HTMLElement | null = null;
 let previewP5: p5 | null = null;
@@ -79,7 +80,8 @@ export function showBuildingFunction(name: string, code: string, fn: BuildingFun
   inputsCol.className = "bf-col";
   for (const input of fn.inputs) {
     const row = document.createElement("div");
-    row.textContent = `${input.name} ${input.value}`;
+    const icon = getResourceIcon(input.name);
+    row.textContent = `${input.name} ${icon ?? ""} ${input.value}`;
     inputsCol.appendChild(row);
   }
   fnDisplay.appendChild(inputsCol);
@@ -93,7 +95,8 @@ export function showBuildingFunction(name: string, code: string, fn: BuildingFun
   outputsCol.className = "bf-col";
   for (const output of fn.outputs) {
     const row = document.createElement("div");
-    row.textContent = `${output.name} ${output.value}`;
+    const icon = getResourceIcon(output.name);
+    row.textContent = `${output.name} ${icon ?? ""} ${output.value}`;
     outputsCol.appendChild(row);
   }
   fnDisplay.appendChild(outputsCol);
