@@ -1,5 +1,5 @@
 import p5 from "p5";
-import {loadBuildings, type BuildingFunction} from "./buildings";
+import {buildingDefinitions, type BuildingFunctionSpec} from "./buildings";
 import {createFunctionDisplay} from "./functionDisplay";
 import {parseCommands} from "../../shared/parseCommands";
 import {applyCommands} from "../../shared/applyCommands";
@@ -8,8 +8,6 @@ import {BLOCK_SIZE} from "../../shared/constants";
 
 let selectedBuilding: string | null = null;
 let buildingCodeMap: Map<string, string> = new Map();
-let buildingFunctionMap: Map<string, BuildingFunction | null> = new Map();
-
 export function getSelectedBuilding(): string | null {
   return selectedBuilding;
 }
@@ -24,13 +22,9 @@ export function getBuildingCode(name: string): string | null {
   return buildingCodeMap.get(name) ?? null;
 }
 
-export function getBuildingFunction(name: string): BuildingFunction | null {
-  return buildingFunctionMap.get(name) ?? null;
-}
-
 let toolbarFnPanel: HTMLElement | null = null;
 
-function showToolbarFunctionPanel(fn: BuildingFunction, anchorEl: HTMLElement) {
+function showToolbarFunctionPanel(fn: BuildingFunctionSpec, anchorEl: HTMLElement) {
   hideToolbarFunctionPanel();
 
   toolbarFnPanel = document.createElement("div");
@@ -57,11 +51,10 @@ function hideToolbarFunctionPanel() {
 
 export function initToolbar() {
   const toolbar = document.getElementById("toolbar")!;
-  const buildings = loadBuildings();
+  const buildings = buildingDefinitions;
 
   for (const building of buildings) {
     buildingCodeMap.set(building.name, building.code);
-    buildingFunctionMap.set(building.name, building.buildingFunction);
   }
 
   for (const building of buildings) {

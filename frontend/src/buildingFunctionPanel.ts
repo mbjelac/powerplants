@@ -1,5 +1,6 @@
 import p5 from "p5";
-import { type BuildingFunction } from "./buildings";
+import { type BuildingFunctionSpec } from "./buildings";
+import { type BuildingFunction } from "./sektor/Sektor";
 import { parseCommands } from "../../shared/parseCommands";
 import { applyCommands } from "../../shared/applyCommands";
 import { drawFloor } from "../../shared/drawFloor";
@@ -51,8 +52,8 @@ function ensurePreviewP5(parent: HTMLElement) {
   });
 }
 
-export function showBuildingFunction(name: string, code: string, fn: BuildingFunction, floorColor: [number, number, number]) {
-  hideBuildingFunction();
+export function showBuildingFunctionSpec(name: string, code: string, fn: BuildingFunctionSpec | BuildingFunction, floorColor: [number, number, number]) {
+  hideBuildingFunctionSpec();
 
   panelEl = document.createElement("div");
   panelEl.id = "building-function-panel";
@@ -82,7 +83,7 @@ export function showBuildingFunction(name: string, code: string, fn: BuildingFun
   previewP5!.redraw();
 }
 
-export function hideBuildingFunction() {
+export function hideBuildingFunctionSpec() {
   if (panelEl) {
     panelEl.remove();
     panelEl = null;

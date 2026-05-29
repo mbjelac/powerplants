@@ -1,7 +1,11 @@
-import { type BuildingFunction } from "./buildings";
+import { type BuildingFunctionSpec } from "./buildings";
+import { type BuildingFunction } from "./sektor/Sektor";
 import { getResourceIcon } from "./resources";
 
-export function createFunctionDisplay(fn: BuildingFunction): HTMLElement {
+type SpecEntry = { name: string; value: number };
+type CurrentEntry = { name: string; requiredValue: number; currentValue: number };
+
+export function createFunctionDisplay(fn: BuildingFunctionSpec | BuildingFunction): HTMLElement {
   const fnDisplay = document.createElement("div");
   fnDisplay.className = "bf-function";
 
@@ -17,13 +21,20 @@ export function createFunctionDisplay(fn: BuildingFunction): HTMLElement {
   return fnDisplay;
 }
 
-function createColumn(items: { name: string; value: number }[]): HTMLElement {
+function formatValue(item: SpecEntry | CurrentEntry): string {
+  if ("requiredValue" in item) {
+    return `${item.currentValue}/${item.requiredValue}`;
+  }
+  return `${item.value}`;
+}
+
+function createColumn(items: (SpecEntry | CurrentEntry)[]): HTMLElement {
   const col = document.createElement("div");
   col.className = "bf-col";
   for (const item of items) {
     const row = document.createElement("div");
     const icon = getResourceIcon(item.name);
-    row.textContent = `${item.name} ${icon ?? ""} ${item.value}`;
+    row.textContent = `${item.name} ${icon ?? ""} ${formatValue(item)}`;
     col.appendChild(row);
   }
   return col;

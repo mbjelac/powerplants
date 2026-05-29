@@ -44,16 +44,17 @@ For subsequent features it will be important that the user sees a function of th
 - [done] frontend/src/toolbar.ts has duplicate code for creating an input/output element
     - extract & reuse
 
-#5 display building function together with current values
-- refactor: BuildingFunction should be renamed to BuildingFunctionSpec
-- refactor: loadBuildings function in frontend/src/buildings.ts could be run on init and store data in a global variable, since this is configuration and is not going to change during the game
+#5 [done] display building function together with current values
+- [done] refactor: BuildingFunction should be renamed to BuildingFunctionSpec
+- [done] refactor: loadBuildings function in frontend/src/buildings.ts could be run on init and store data in a global variable, since this is configuration and is not going to change during the game
     - make loadBuildings private
     - call it on load of buildings.ts
     - store results in public global variable buildingDefinitions: BuildingDefinition[]
-- when displaying a function for a built building (not a selected building tool), the function should also display the current values of the inputs & outputs
+- [done] when displaying a function for a built building (not a selected building tool), the function should also display the current values of the inputs & outputs
     - the UI should get a BuildingFunction object from the Sektor instance
     - BuildingFunction is similar to BuildingFunctionSpec, only instead of { name: string; value: number } it has { name: string; requiredValue: number, currentValue: number }
     - Sektor instance assembles BuildingFunction from BuildingFunctionSpec
         - use global variable buildingDefinitions
         - all currentValues set to 0
     - display the values from BuildingFunction in the same way as from BuildingFunctionSpec, only include currentValue in front of requiredValue like "ResourceName <icon> <currentValue>/<requiredValue>"
+

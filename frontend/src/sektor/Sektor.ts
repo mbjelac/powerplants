@@ -1,3 +1,16 @@
+import { buildingDefinitions } from "../buildings";
+
+export interface BuildingFunctionEntry {
+  name: string;
+  requiredValue: number;
+  currentValue: number;
+}
+
+export interface BuildingFunction {
+  inputs: BuildingFunctionEntry[];
+  outputs: BuildingFunctionEntry[];
+}
+
 export interface BuildingCreation {
   type: string;
   x: number;
@@ -21,6 +34,15 @@ export class Sektor {
 
   getSoilFertility(): SoilFertilityMatrix {
     return this.soilFertility;
+  }
+
+  getBuildingFunction(type: string): BuildingFunction | null {
+    const def = buildingDefinitions.find(b => b.name === type);
+    if (!def?.buildingFunction) return null;
+    return {
+      inputs: def.buildingFunction.inputs.map(i => ({ name: i.name, requiredValue: i.value, currentValue: 0 })),
+      outputs: def.buildingFunction.outputs.map(o => ({ name: o.name, requiredValue: o.value, currentValue: 0 })),
+    };
   }
 
   createBuilding(building: BuildingCreation): CreateBuildingResult {

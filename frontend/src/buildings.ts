@@ -1,6 +1,6 @@
 import buildingsMd from "./assets/buildings.md?raw";
 
-export interface BuildingFunction {
+export interface BuildingFunctionSpec {
   inputs: { name: string; value: number }[];
   outputs: { name: string; value: number }[];
 }
@@ -8,10 +8,10 @@ export interface BuildingFunction {
 export interface BuildingDefinition {
   name: string;
   code: string;
-  buildingFunction: BuildingFunction | null;
+  buildingFunction: BuildingFunctionSpec | null;
 }
 
-function parseBuildingFunction(lines: string[]): BuildingFunction | null {
+function parseBuildingFunctionSpec(lines: string[]): BuildingFunctionSpec | null {
   const inputs: { name: string; value: number }[] = [];
   const outputs: { name: string; value: number }[] = [];
   let seenEquals = false;
@@ -37,7 +37,7 @@ function parseBuildingFunction(lines: string[]): BuildingFunction | null {
   return { inputs, outputs };
 }
 
-export function loadBuildings(): BuildingDefinition[] {
+function loadBuildings(): BuildingDefinition[] {
   const buildings: BuildingDefinition[] = [];
   const lines = buildingsMd.split("\n");
 
@@ -52,7 +52,7 @@ export function loadBuildings(): BuildingDefinition[] {
       buildings.push({
         name: currentName,
         code: codeLines.join("\n"),
-        buildingFunction: parseBuildingFunction(functionLines),
+        buildingFunction: parseBuildingFunctionSpec(functionLines),
       });
     }
   }
@@ -90,3 +90,5 @@ export function loadBuildings(): BuildingDefinition[] {
 
   return buildings;
 }
+
+export const buildingDefinitions: BuildingDefinition[] = loadBuildings();
