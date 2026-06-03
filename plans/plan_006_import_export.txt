@@ -1,5 +1,5 @@
 #1 imports and exports are automatically calculated
-- Sektor has method getImportsExports() returning an ImportsExports object
+- [done] Sektor has method getImportsExports() returning an ImportsExports object
     - ImportsExports object has two arrays:
         - imports:ResourceThroughput[]
         - exports:ResourceThroughput[]
@@ -17,6 +17,8 @@
             - same for export and outputs
     - first write tests for this in importsExports.spec.ts
     - implement the calculation
+- refactor: Sektor class should not reference the global buildingDefinitions
+    - pass BuildingDefinition[] to the constructor
 
 #2 display import-export panel
 - in bottom right corner of the screen display a panel
