@@ -4,7 +4,7 @@
         - imports:ResourceThroughput[]
         - exports:ResourceThroughput[]
     - initially the arrays are empty
-- when there are buildings added to the Sektor, imports and exports are calculated
+- [done] when there are buildings added to the Sektor, imports and exports are calculated
     - calculation:
         - imports is a list of all buildings inputs
         - exports is a list of all buildings outputs
