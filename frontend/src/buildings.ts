@@ -53,7 +53,7 @@ function loadBuildings(): BuildingDefinition[] {
     if (currentName && codeLines.length > 0) {
       buildings.push({
         name: currentName,
-        code: codeLines.join("\n"),
+        renderingCode: codeLines.join("\n"),
         buildingFunction: parseBuildingFunctionSpec(functionLines),
       });
     }
