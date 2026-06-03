@@ -1,0 +1,28 @@
+#1 imports and exports are automatically calculated
+- Sektor has method getImportsExports() returning an ImportsExports object
+    - ImportsExports object has two arrays:
+        - imports:ResourceThroughput[]
+        - exports:ResourceThroughput[]
+    - initially the arrays are empty
+- when there are buildings added to the Sektor, imports and exports are calculated
+    - calculation:
+        - imports is a list of all buildings inputs
+        - exports is a list of all buildings outputs
+        - the resource throughputs are aggregated by resource name (ResourceThroughput.name)
+        - example:
+            - for 2 buildings in the sektor
+                - building 1 has inputs WaterPottable 4 and EnergyElectrical 3
+                - building 2 has only one input EnergyElectrical 7
+                - import list is: WaterPottable 4, EnergyElectrical 10
+            - same for export and outputs
+    - first write tests for this in importsExports.spec.ts
+    - implement the calculation
+
+#2 display import-export panel
+- in bottom right corner of the screen display a panel
+    - has two columns
+        - left column
+            - has a list of all imports
+        - right column
+            - has a list of all exports
+    - items in columns displayed similar to function display: name, icon, value
