@@ -1,4 +1,4 @@
-import { buildingDefinitions } from "../buildings";
+import { buildingDefinitions, ResourceThroughput } from "../buildings";
 
 export interface BuildingFunctionEntry {
   name: string;
@@ -9,6 +9,11 @@ export interface BuildingFunctionEntry {
 export interface BuildingFunction {
   inputs: BuildingFunctionEntry[];
   outputs: BuildingFunctionEntry[];
+}
+
+export interface ImportsExports {
+  imports: ResourceThroughput[];
+  exports: ResourceThroughput[];
 }
 
 export interface BuildingCreation {
@@ -43,6 +48,10 @@ export class Sektor {
       inputs: def.buildingFunction.inputs.map(i => ({ name: i.name, requiredValue: i.value, currentValue: 0 })),
       outputs: def.buildingFunction.outputs.map(o => ({ name: o.name, requiredValue: o.value, currentValue: 0 })),
     };
+  }
+
+  getImportsExports(): ImportsExports {
+    return { imports: [], exports: [] };
   }
 
   createBuilding(building: BuildingCreation): CreateBuildingResult {
