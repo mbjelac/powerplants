@@ -54,7 +54,7 @@ export function initToolbar() {
   const buildings = buildingDefinitions;
 
   for (const building of buildings) {
-    buildingCodeMap.set(building.name, building.code);
+    buildingCodeMap.set(building.name, building.renderingCode);
   }
 
   for (const building of buildings) {
@@ -116,7 +116,7 @@ export function initToolbar() {
 
         p.translate(0, BLOCK_SIZE * 0.15, 0);
         drawFloor(p, BLOCK_SIZE, [162, 220, 134]);
-        const commands = parseCommands(building.code);
+        const commands = parseCommands(building.renderingCode);
         applyCommands(p, commands);
       };
     });

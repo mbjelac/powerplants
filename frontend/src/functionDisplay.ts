@@ -2,7 +2,6 @@ import { type BuildingFunctionSpec } from "./buildings";
 import { type BuildingFunction } from "./sektor/Sektor";
 import { getResourceIcon } from "./resources";
 
-type SpecEntry = { name: string; value: number };
 type CurrentEntry = { name: string; requiredValue: number; currentValue: number };
 
 export function createFunctionDisplay(fn: BuildingFunctionSpec | BuildingFunction): HTMLElement {

@@ -1,19 +1,21 @@
 import buildingsMd from "./assets/buildings.md?raw";
 
+export type ResourceThroughput = { name: string; value: number };
+
 export interface BuildingFunctionSpec {
-  inputs: { name: string; value: number }[];
-  outputs: { name: string; value: number }[];
+  inputs: ResourceThroughput[];
+  outputs: ResourceThroughput[];
 }
 
 export interface BuildingDefinition {
   name: string;
-  code: string;
+  renderingCode: string;
   buildingFunction: BuildingFunctionSpec | null;
 }
 
 function parseBuildingFunctionSpec(lines: string[]): BuildingFunctionSpec | null {
-  const inputs: { name: string; value: number }[] = [];
-  const outputs: { name: string; value: number }[] = [];
+  const inputs: ResourceThroughput[] = [];
+  const outputs: ResourceThroughput[] = [];
   let seenEquals = false;
 
   for (const line of lines) {
