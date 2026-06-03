@@ -20,8 +20,8 @@
 - [done] refactor: Sektor class should not reference the global buildingDefinitions
     - pass BuildingDefinition[] to the constructor
 
-#2 display import-export panel
-- in bottom right corner of the screen display a panel
+#2 [done] display import-export panel
+- [done] in bottom right corner of the screen display a panel
     - has two columns
         - left column
             - has a list of all imports

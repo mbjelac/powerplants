@@ -7,6 +7,7 @@ import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} fro
 import {Sektor} from "./sektor/Sektor";
 import {buildingDefinitions} from "./buildings";
 import {showBuildingFunctionSpec, hideBuildingFunctionSpec} from "./buildingFunctionPanel";
+import {updateImportExportPanel} from "./importExportPanel";
 
 const GRID_SIZE = 10;
 const isTestMode = new URLSearchParams(window.location.search).get("test") === "true";
@@ -267,6 +268,7 @@ const sketch = (p: p5) => {
 
     if (result.error === undefined) {
       deselectBuilding();
+      updateImportExportPanel(sektor.getImportsExports());
     }
 
     if (result.error !== undefined) {
