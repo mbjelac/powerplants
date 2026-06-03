@@ -19,6 +19,10 @@
 
 - Functions should be ordered in the file in order of calling — callers before callees.
 
+## Testing
+
+- Use `toEqual(<expected>)` for assertions, not `expect.arrayContaining` or similar matchers.
+
 ## Modules
 
 - **architect** — editor for designing 3D shapes from text instructions, with visual UI controls
