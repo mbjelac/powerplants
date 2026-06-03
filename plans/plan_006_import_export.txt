@@ -17,7 +17,7 @@
             - same for export and outputs
     - first write tests for this in importsExports.spec.ts
     - implement the calculation
-- refactor: Sektor class should not reference the global buildingDefinitions
+- [done] refactor: Sektor class should not reference the global buildingDefinitions
     - pass BuildingDefinition[] to the constructor
 
 #2 display import-export panel

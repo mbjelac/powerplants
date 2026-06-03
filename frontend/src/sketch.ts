@@ -5,6 +5,7 @@ import {applyCommands} from "../../shared/applyCommands";
 import {BLOCK_SIZE} from "../../shared/constants";
 import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} from "./toolbar";
 import {Sektor} from "./sektor/Sektor";
+import {buildingDefinitions} from "./buildings";
 import {showBuildingFunctionSpec, hideBuildingFunctionSpec} from "./buildingFunctionPanel";
 
 const GRID_SIZE = 10;
@@ -21,7 +22,7 @@ function createFertilityMatrix(gridSize: number): number[][] {
   );
 }
 
-const sektor = new Sektor(createFertilityMatrix(GRID_SIZE));
+const sektor = new Sektor(createFertilityMatrix(GRID_SIZE), buildingDefinitions);
 const soilFertility = sektor.getSoilFertility();
 const placedBuildings: { type: string; x: number; y: number; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;

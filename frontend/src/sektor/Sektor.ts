@@ -1,4 +1,4 @@
-import { buildingDefinitions, ResourceThroughput } from "../buildings";
+import { BuildingDefinition, ResourceThroughput } from "../buildings";
 
 export interface BuildingFunctionEntry {
   name: string;
@@ -32,9 +32,11 @@ export type SoilFertilityMatrix = ReadonlyArray<ReadonlyArray<number>>;
 export class Sektor {
   private buildings: BuildingCreation[] = [];
   private readonly soilFertility: SoilFertilityMatrix;
+  private readonly buildingDefinitions: BuildingDefinition[];
 
-  constructor(soilFertility: SoilFertilityMatrix) {
+  constructor(soilFertility: SoilFertilityMatrix, buildingDefinitions: BuildingDefinition[]) {
     this.soilFertility = soilFertility;
+    this.buildingDefinitions = buildingDefinitions;
   }
 
   getSoilFertility(): SoilFertilityMatrix {
@@ -42,7 +44,7 @@ export class Sektor {
   }
 
   getBuildingFunction(type: string): BuildingFunction | null {
-    const def = buildingDefinitions.find(b => b.name === type);
+    const def = this.buildingDefinitions.find(b => b.name === type);
     if (!def?.buildingFunction) return null;
     return {
       inputs: def.buildingFunction.inputs.map(i => ({ name: i.name, requiredValue: i.value, currentValue: 0 })),
@@ -57,12 +59,12 @@ export class Sektor {
   }
 
   private getInputs(type: string): ResourceThroughput[] {
-    const def = buildingDefinitions.find(b => b.name === type);
+    const def = this.buildingDefinitions.find(b => b.name === type);
     return def?.buildingFunction?.inputs ?? [];
   }
 
   private getOutputs(type: string): ResourceThroughput[] {
-    const def = buildingDefinitions.find(b => b.name === type);
+    const def = this.buildingDefinitions.find(b => b.name === type);
     return def?.buildingFunction?.outputs ?? [];
   }
 

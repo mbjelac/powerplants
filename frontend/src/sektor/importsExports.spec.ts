@@ -1,9 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { Sektor } from "./Sektor";
+import { buildingDefinitions } from "../buildings";
 
 describe("getImportsExports", () => {
   it("returns empty imports and exports when there are no buildings", () => {
-    const sektor = new Sektor([[50]]);
+    const sektor = new Sektor([[50]], buildingDefinitions);
 
     const result = sektor.getImportsExports();
 
@@ -14,7 +15,7 @@ describe("getImportsExports", () => {
   });
 
   it("returns imports and exports for a single building", () => {
-    const sektor = new Sektor([[50]]);
+    const sektor = new Sektor([[50]], buildingDefinitions);
     sektor.createBuilding({ type: "WaterExtractor", x: 0, y: 0 });
 
     const result = sektor.getImportsExports();
@@ -31,7 +32,7 @@ describe("getImportsExports", () => {
   });
 
   it("aggregates imports and exports by resource name across buildings", () => {
-    const sektor = new Sektor([[50]]);
+    const sektor = new Sektor([[50]], buildingDefinitions);
     sektor.createBuilding({ type: "WaterExtractor", x: 0, y: 0 });
     sektor.createBuilding({ type: "Agriplot", x: 1, y: 0 });
 
