@@ -1,7 +1,7 @@
 import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  fullyParallel: true,
+  workers: 1,
   testDir: "./tests",
   snapshotPathTemplate: "{testDir}/snapshots/{arg}{ext}",
   use: {
