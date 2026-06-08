@@ -6,7 +6,7 @@ import {BLOCK_SIZE} from "../../shared/constants";
 import {initEditorPanel} from "./editor/editorPanel";
 
 const sketch = (p: p5) => {
-  let wireframeOn = true;
+  let wireframeOn = false;
 
   p.setup = () => {
     const container = document.getElementById("canvas-container")!;
