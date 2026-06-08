@@ -5,7 +5,7 @@ import {applyCommands} from "../../shared/applyCommands";
 import {BLOCK_SIZE} from "../../shared/constants";
 import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} from "./toolbar";
 import {Sektor} from "./sektor/Sektor";
-import {buildingDefinitions} from "./buildings";
+import { buildingDefinitions, getBuildingFunction } from "./buildings";
 import {showBuildingFunctionSpec, hideBuildingFunctionSpec} from "./buildingFunctionPanel";
 import {updateImportExportPanel} from "./importExportPanel";
 
@@ -243,7 +243,7 @@ const sketch = (p: p5) => {
       // No building tool selected — check if there's a placed building to inspect
       const placed = placedBuildings.find(b => b.x === grid.x && b.y === grid.y);
       if (placed) {
-        const fn = sektor.getBuildingFunction(placed.type);
+        const fn = getBuildingFunction(placed.type);
         if (fn) {
           const code = getBuildingCode(placed.type);
           if (code) {

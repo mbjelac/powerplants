@@ -43,15 +43,6 @@ export class Sektor {
     return this.soilFertility;
   }
 
-  getBuildingFunction(type: string): BuildingFunction | null {
-    const def = this.buildingDefinitions.find(b => b.name === type);
-    if (!def?.buildingFunction) return null;
-    return {
-      inputs: def.buildingFunction.inputs.map(i => ({ name: i.name, requiredValue: i.value, currentValue: 0 })),
-      outputs: def.buildingFunction.outputs.map(o => ({ name: o.name, requiredValue: o.value, currentValue: 0 })),
-    };
-  }
-
   getImportsExports(): ImportsExports {
     const imports = this.aggregateThroughputs(this.buildings.map(b => this.getInputs(b.type)).flat());
     const exports = this.aggregateThroughputs(this.buildings.map(b => this.getOutputs(b.type)).flat());
