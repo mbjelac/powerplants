@@ -7,6 +7,7 @@ import {initEditorPanel} from "./editor/editorPanel";
 
 const sketch = (p: p5) => {
   let wireframeOn = false;
+  let floorOn = true;
 
   p.setup = () => {
     const container = document.getElementById("canvas-container")!;
@@ -22,10 +23,16 @@ const sketch = (p: p5) => {
     const camZ = camDist * Math.cos(camAngleY) * Math.cos(camAngleX);
     p.camera(camX, camY, camZ, 0, 0, 0, 0, 1, 0);
 
-    const toggle = document.getElementById("wireframe-toggle")!;
-    toggle.addEventListener("click", () => {
+    const wireframeToggle = document.getElementById("wireframe-toggle")!;
+    wireframeToggle.addEventListener("click", () => {
       wireframeOn = !wireframeOn;
-      toggle.classList.toggle("on", wireframeOn);
+      wireframeToggle.classList.toggle("on", wireframeOn);
+    });
+
+    const floorToggle = document.getElementById("floor-toggle")!;
+    floorToggle.addEventListener("click", () => {
+      floorOn = !floorOn;
+      floorToggle.classList.toggle("on", floorOn);
     });
   };
 
@@ -44,7 +51,9 @@ const sketch = (p: p5) => {
     } else {
       p.noStroke();
     }
-    drawFloor(p, BLOCK_SIZE);
+    if (floorOn) {
+      drawFloor(p, BLOCK_SIZE);
+    }
 
     const commands = readCommands();
     applyCommands(p, commands);

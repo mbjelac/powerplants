@@ -32,9 +32,8 @@ body { margin: 0; display: flex; height: 100vh; background: #1a1a1a; }
 #shape-popup .shape-option svg { width: 24px; height: 24px; }
 #editor textarea { width: 100%; height: 50%; box-sizing: border-box; background: #2a2a2a; color: #eee; font-family: monospace; font-size: 14px; padding: 12px; border: none; resize: none; outline: none; }
 #canvas-container { width: 50%; height: 100%; position: relative; }
-#wireframe-toggle {
+#canvas-container .toggle {
   position: absolute;
-  top: 12px;
   right: 12px;
   z-index: 10;
   display: flex;
@@ -43,12 +42,12 @@ body { margin: 0; display: flex; height: 100vh; background: #1a1a1a; }
   cursor: pointer;
   user-select: none;
 }
-#wireframe-toggle .icon {
+#canvas-container .toggle .icon {
   width: 20px;
   height: 20px;
   opacity: 0.7;
 }
-#wireframe-toggle .switch {
+#canvas-container .toggle .switch {
   width: 36px;
   height: 20px;
   background: #555;
@@ -56,7 +55,7 @@ body { margin: 0; display: flex; height: 100vh; background: #1a1a1a; }
   position: relative;
   transition: background 0.2s;
 }
-#wireframe-toggle .switch .knob {
+#canvas-container .toggle .switch .knob {
   width: 16px;
   height: 16px;
   background: #fff;
@@ -66,5 +65,7 @@ body { margin: 0; display: flex; height: 100vh; background: #1a1a1a; }
   left: 2px;
   transition: left 0.2s;
 }
-#wireframe-toggle.on .switch { background: #777; }
-#wireframe-toggle.on .switch .knob { left: 18px; }
+#canvas-container .toggle.on .switch { background: #777; }
+#canvas-container .toggle.on .switch .knob { left: 18px; }
+#floor-toggle { top: 12px; }
+#wireframe-toggle { top: 44px; }
