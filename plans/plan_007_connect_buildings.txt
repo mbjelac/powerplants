@@ -1,0 +1,3 @@
+#1 Sektor can tell you how much of a building's input is imported
+
+#2 Connect a building's input to another building's output
