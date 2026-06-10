@@ -8,10 +8,15 @@ export interface BuildingFunctionSpec {
   outputs: ResourceThroughput[];
 }
 
+export interface BuildingProperties {
+  showFloor?: boolean;
+}
+
 export interface BuildingDefinition {
   name: string;
   renderingCode: string;
   buildingFunction: BuildingFunctionSpec | null;
+  properties: BuildingProperties;
 }
 
 function parseBuildingFunctionSpec(lines: string[]): BuildingFunctionSpec | null {
@@ -40,6 +45,20 @@ function parseBuildingFunctionSpec(lines: string[]): BuildingFunctionSpec | null
   return { inputs, outputs };
 }
 
+function parseProperties(lines: string[]): BuildingProperties {
+  const props: BuildingProperties = {};
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    const match = trimmed.match(/^(\w+)=(.+)$/);
+    if (!match) continue;
+    if (match[1] === "showFloor" && match[2] === "false") {
+      props.showFloor = false;
+    }
+  }
+  return props;
+}
+
 function loadBuildings(): BuildingDefinition[] {
   const buildings: BuildingDefinition[] = [];
   const lines = buildingsMd.split("\n");
@@ -48,7 +67,9 @@ function loadBuildings(): BuildingDefinition[] {
   let inCodeBlock = false;
   let codeLines: string[] = [];
   let functionLines: string[] = [];
+  let propertyLines: string[] = [];
   let codeBlockDone = false;
+  let inProperties = false;
 
   function pushBuilding() {
     if (currentName && codeLines.length > 0) {
@@ -56,6 +77,7 @@ function loadBuildings(): BuildingDefinition[] {
         name: currentName,
         renderingCode: codeLines.join("\n"),
         buildingFunction: parseBuildingFunctionSpec(functionLines),
+        properties: parseProperties(propertyLines),
       });
     }
   }
@@ -67,8 +89,15 @@ function loadBuildings(): BuildingDefinition[] {
       currentName = headingMatch[1].trim();
       codeLines = [];
       functionLines = [];
+      propertyLines = [];
       inCodeBlock = false;
       codeBlockDone = false;
+      inProperties = false;
+      continue;
+    }
+
+    if (line.match(/^##\s+Properties/)) {
+      inProperties = true;
       continue;
     }
 
@@ -84,6 +113,8 @@ function loadBuildings(): BuildingDefinition[] {
 
     if (inCodeBlock) {
       codeLines.push(line);
+    } else if (inProperties) {
+      propertyLines.push(line);
     } else if (codeBlockDone) {
       functionLines.push(line);
     }

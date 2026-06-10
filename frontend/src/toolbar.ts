@@ -115,7 +115,9 @@ export function initToolbar() {
         p.noStroke();
 
         p.translate(0, BLOCK_SIZE * 0.15, 0);
-        drawFloor(p, BLOCK_SIZE, [162, 220, 134]);
+        if (building.properties.showFloor !== false) {
+          drawFloor(p, BLOCK_SIZE, [162, 220, 134]);
+        }
         const commands = parseCommands(building.renderingCode);
         applyCommands(p, commands);
       };

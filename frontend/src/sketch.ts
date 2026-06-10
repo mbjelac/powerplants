@@ -292,6 +292,11 @@ const sketch = (p: p5) => {
 
     for (let x = 0; x < GRID_SIZE; x++) {
       for (let z = 0; z < GRID_SIZE; z++) {
+        const placed = placedBuildings.find(b => b.x === x && b.y === z);
+        if (placed) {
+          const def = buildingDefinitions.find(d => d.name === placed.type);
+          if (def?.properties.showFloor === false) continue;
+        }
         p.push();
         const { wx, wz } = gridToWorld(x, z);
         p.translate(wx, 0, wz);
