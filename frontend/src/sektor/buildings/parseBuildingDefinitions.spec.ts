@@ -96,7 +96,7 @@ describe("parseBuildingDefinitions", () => {
     });
   });
 
-  it("ignores blank lines in rendering code section", () => {
+  it("accepts blank lines in rendering code section", () => {
     const result = parseBuildingDefinitions([
       "# MyBuilding",
       "",
