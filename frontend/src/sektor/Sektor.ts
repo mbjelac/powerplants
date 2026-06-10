@@ -1,9 +1,14 @@
 
-import { BuildingDefinition, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
+import { BuildingDefinition, BuildingFunction, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
 
 export interface ImportsExports {
   imports: ResourceThroughput[];
   exports: ResourceThroughput[];
+}
+
+export interface BuildingState {
+  buildingFunction: BuildingFunction;
+  imports: ResourceThroughput[];
 }
 
 export interface BuildingCreation {
@@ -31,6 +36,17 @@ export class Sektor {
 
   getSoilFertility(): SoilFertilityMatrix {
     return this.soilFertility;
+  }
+
+  getBuildingState(x: number, y: number): BuildingState | null {
+    const building = this.buildings.find(b => b.x === x && b.y === y);
+    if (!building) return null;
+    const def = this.buildingDefinitions.find(b => b.name === building.type);
+    if (!def) return null;
+    return {
+      buildingFunction: def.buildingFunction,
+      imports: def.buildingFunction.inputs.map(i => ({ name: i.name, value: i.value })),
+    };
   }
 
   getImportsExports(): ImportsExports {
