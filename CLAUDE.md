@@ -22,6 +22,7 @@
 ## Testing
 
 - Use `toEqual(<expected>)` for assertions, not `expect.arrayContaining` or similar matchers.
+- Use simple made-up test data instead of real data from asset files. When dependencies are injected (e.g. `BuildingDefinition[]` into Sektor), define minimal inline test data with readable names.
 
 ## Modules
 
