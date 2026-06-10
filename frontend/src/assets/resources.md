@@ -3,3 +3,4 @@ WorkTechnical 🛠️
 WaterPottable 💧
 FoodRaw 🥕
 EducationElementary 📖
+Ore 🪨
