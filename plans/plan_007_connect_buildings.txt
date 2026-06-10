@@ -6,10 +6,12 @@
 }
     - initially imports has same values as function.inputs
         - this is because when a building is created, all it's inputs are automatically obtained from imports
+    - create Sektor test which verifies all that
 - in the building function panel, under each input there is a row
     - the row contains a label with a number on the right-hand side
     - the number is the amount of the building's input that is imported
     - when a placed building is clicked, the data for it's panel should be odtained by calling Sektor.getBuildingState
     - the number in the row is equal to value of the BuildingState.imports element which has the same name as that row's input
+    - create visual test for the building function panel
 
 #2 Connect a building's input to another building's output
