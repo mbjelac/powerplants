@@ -5,7 +5,7 @@ import {applyCommands} from "../../shared/applyCommands";
 import {BLOCK_SIZE} from "../../shared/constants";
 import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} from "./toolbar";
 import {Sektor} from "./sektor/Sektor";
-import { buildingDefinitions, getBuildingFunction } from "./buildings";
+import { buildingDefinitions } from "./buildings";
 import {showBuildingFunctionSpec, hideBuildingFunctionSpec} from "./buildingFunctionPanel";
 import {updateImportExportPanel} from "./importExportPanel";
 
@@ -243,12 +243,12 @@ const sketch = (p: p5) => {
       // No building tool selected — check if there's a placed building to inspect
       const placed = placedBuildings.find(b => b.x === grid.x && b.y === grid.y);
       if (placed) {
-        const fn = getBuildingFunction(placed.type);
-        if (fn) {
+        const def = buildingDefinitions.find(b => b.name === placed.type);
+        if (def?.buildingFunction) {
           const code = getBuildingCode(placed.type);
           if (code) {
             const floorColor = fertilityColor(soilFertility[placed.x][placed.y]);
-            showBuildingFunctionSpec(placed.type, code, fn, floorColor, { x: placed.x, y: placed.y });
+            showBuildingFunctionSpec(placed.type, code, def.buildingFunction, floorColor, { x: placed.x, y: placed.y });
           }
         }
       } else {

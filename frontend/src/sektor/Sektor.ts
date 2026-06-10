@@ -1,16 +1,5 @@
 import { BuildingDefinition, ResourceThroughput } from "../buildings";
 
-export interface BuildingFunctionEntry {
-  name: string;
-  requiredValue: number;
-  currentValue: number;
-}
-
-export interface BuildingFunction {
-  inputs: BuildingFunctionEntry[];
-  outputs: BuildingFunctionEntry[];
-}
-
 export interface ImportsExports {
   imports: ResourceThroughput[];
   exports: ResourceThroughput[];

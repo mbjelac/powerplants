@@ -1,5 +1,4 @@
 import buildingsMd from "./assets/buildings.md?raw";
-import { BuildingFunction } from "./sektor/Sektor";
 
 export type ResourceThroughput = { name: string; value: number };
 
@@ -126,12 +125,3 @@ function loadBuildings(): BuildingDefinition[] {
 }
 
 export const buildingDefinitions: BuildingDefinition[] = loadBuildings();
-
-export function getBuildingFunction(type: string): BuildingFunction | null {
-  const def = buildingDefinitions.find(b => b.name === type);
-  if (!def?.buildingFunction) return null;
-  return {
-    inputs: def.buildingFunction.inputs.map(i => ({ name: i.name, requiredValue: i.value, currentValue: 0 })),
-    outputs: def.buildingFunction.outputs.map(o => ({ name: o.name, requiredValue: o.value, currentValue: 0 })),
-  };
-}
