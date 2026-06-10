@@ -24,8 +24,7 @@ export function parseBuildingDefinitions(lines: string[]): BuildingDefinition[] 
   let codeLines: string[] = [];
   let functionLines: string[] = [];
   let propertyLines: string[] = [];
-  let codeBlockDone = false;
-  let inProperties = false;
+  let section: "none" | "render" | "function" | "properties" = "none";
 
   function pushBuilding() {
     if (currentName && codeLines.length > 0) {
@@ -47,31 +46,35 @@ export function parseBuildingDefinitions(lines: string[]): BuildingDefinition[] 
       functionLines = [];
       propertyLines = [];
       inCodeBlock = false;
-      codeBlockDone = false;
-      inProperties = false;
+      section = "none";
+      continue;
+    }
+
+    if (line.match(/^##\s+Render/)) {
+      section = "render";
+      continue;
+    }
+
+    if (line.match(/^##\s+Function/)) {
+      section = "function";
       continue;
     }
 
     if (line.match(/^##\s+Properties/)) {
-      inProperties = true;
+      section = "properties";
       continue;
     }
 
     if (line.trim().startsWith("```")) {
-      if (inCodeBlock) {
-        inCodeBlock = false;
-        codeBlockDone = true;
-      } else {
-        inCodeBlock = true;
-      }
+      inCodeBlock = !inCodeBlock;
       continue;
     }
 
-    if (inCodeBlock) {
+    if (inCodeBlock && section === "render") {
       codeLines.push(line);
-    } else if (inProperties) {
+    } else if (section === "properties") {
       propertyLines.push(line);
-    } else if (codeBlockDone) {
+    } else if (section === "function") {
       functionLines.push(line);
     }
   }

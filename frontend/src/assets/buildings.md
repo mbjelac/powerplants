@@ -1,5 +1,7 @@
 # WaterExtractor
 
+## Render
+
 ```
 cyl c(#0d78ba) s(15,15,15) t(0,0,0)
 pri4 c(#c7c2a9) s(23,23,10) t(0,0,0)
@@ -21,12 +23,16 @@ cyl c(#0d78ba) s(15,15,15) t(-30,30,0)
 pri4 c(#c7c2a9) s(23,23,10) t(-30,30,0)
 ```
 
+## Function
+
 EnergyElectric 8
 WorkTechnical 3
 =
 WaterPottable 4
 
 # Village
+
+## Render
 
 ```
 pri4 s(11,11,8) t(20,15,7) r(0,90,0) c(#fff8e5)
@@ -63,6 +69,8 @@ sph s(5,5,5) t(-29,-4,7) c(#248f3e)
 sph s(3,3,4) t(-26,-8,7) c(#248f3e)
 ```
 
+## Function
+
 WaterPottable 1
 FoodRaw 5
 EnergyElectric 4
@@ -71,6 +79,8 @@ EducationElementary 2
 WorkTechnical 3
 
 # Agriplot
+
+## Render
 
 ```
 pri4 s(13,13,8) t(-11,-11,0) c(#d3c097) r(0,0,0)
@@ -131,6 +141,8 @@ pri4 r(90,90,0) s(4,4,30) t(17,7,8) c(#1c750b)
 pri4 r(90,90,0) s(4,4,30) t(17,12,8) c(#1c750b)
 ```
 
+## Function
+
 WaterPottable 3
 EnergyElectric 1
 WorkTechnical 5
@@ -138,6 +150,8 @@ WorkTechnical 5
 FoodRaw 5
 
 # OreExtractor
+
+## Render
 
 ```
 pri4 s(141,28,40) t(0,-40,-35) c(#7d6c5e)
@@ -163,6 +177,8 @@ pri3 c(#ffd500) s(4,4,41) t(20,-21,6) r(-168,49,39)
 pri4 s(14,14,9) t(20,-22,0) c(#ffd500) r(56,0,0)
 cyl s(1,1,45) c(#000000) t(0,8,-22)
 ```
+
+## Function
 
 EnergyElectric 4
 WorkTechnical 1

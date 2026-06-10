@@ -17,6 +17,7 @@ describe("parseBuildingDefinitions", () => {
   it("parses a building with code only and no function", () => {
     const result = parseBuildingDefinitions([
       "# MyBuilding",
+      "## Render",
       "```",
       "box s(10,10,10)",
       "```",
@@ -33,6 +34,7 @@ describe("parseBuildingDefinitions", () => {
   it("parses rendering code with multiple lines", () => {
     const result = parseBuildingDefinitions([
       "# MyBuilding",
+      "## Render",
       "```",
       "box s(10,10,10)",
       "cyl s(5,5,5)",
@@ -45,9 +47,11 @@ describe("parseBuildingDefinitions", () => {
   it("parses building function with inputs and outputs", () => {
     const result = parseBuildingDefinitions([
       "# Factory",
+      "## Render",
       "```",
       "box s(10,10,10)",
       "```",
+      "## Function",
       "Iron 3",
       "Coal 2",
       "=",
@@ -68,9 +72,11 @@ describe("parseBuildingDefinitions", () => {
   it("parses building function with inputs only", () => {
     const result = parseBuildingDefinitions([
       "# Consumer",
+      "## Render",
       "```",
       "box s(10,10,10)",
       "```",
+      "## Function",
       "Water 5",
     ]);
 
@@ -83,9 +89,11 @@ describe("parseBuildingDefinitions", () => {
   it("parses building function with outputs only", () => {
     const result = parseBuildingDefinitions([
       "# Source",
+      "## Render",
       "```",
       "box s(10,10,10)",
       "```",
+      "## Function",
       "=",
       "Energy 10",
     ]);
@@ -100,12 +108,12 @@ describe("parseBuildingDefinitions", () => {
     const result = parseBuildingDefinitions([
       "# MyBuilding",
       "",
+      "## Render",
       "```",
       "box s(10,10,10)",
       "",
       "cyl s(5,5,5)",
       "```",
-      "",
     ]);
 
     expect(result[0].renderingCode).toEqual("box s(10,10,10)\n\ncyl s(5,5,5)");
@@ -114,9 +122,11 @@ describe("parseBuildingDefinitions", () => {
   it("ignores blank lines in function section", () => {
     const result = parseBuildingDefinitions([
       "# Factory",
+      "## Render",
       "```",
       "box s(10,10,10)",
       "```",
+      "## Function",
       "",
       "Iron 3",
       "",
@@ -135,9 +145,11 @@ describe("parseBuildingDefinitions", () => {
   it("ignores lines that don't match resource format", () => {
     const result = parseBuildingDefinitions([
       "# Factory",
+      "## Render",
       "```",
       "box s(10,10,10)",
       "```",
+      "## Function",
       "some random text",
       "Iron 3",
       "=",
@@ -153,9 +165,11 @@ describe("parseBuildingDefinitions", () => {
   it("parses showFloor=false property", () => {
     const result = parseBuildingDefinitions([
       "# Mine",
+      "## Render",
       "```",
       "box s(10,10,10)",
       "```",
+      "## Function",
       "Iron 3",
       "=",
       "Ore 5",
@@ -169,6 +183,7 @@ describe("parseBuildingDefinitions", () => {
   it("returns empty properties when no Properties section exists", () => {
     const result = parseBuildingDefinitions([
       "# Factory",
+      "## Render",
       "```",
       "box s(10,10,10)",
       "```",
@@ -180,6 +195,7 @@ describe("parseBuildingDefinitions", () => {
   it("returns empty properties when Properties section has no recognized properties", () => {
     const result = parseBuildingDefinitions([
       "# Factory",
+      "## Render",
       "```",
       "box s(10,10,10)",
       "```",
@@ -193,6 +209,7 @@ describe("parseBuildingDefinitions", () => {
   it("ignores blank lines in properties section", () => {
     const result = parseBuildingDefinitions([
       "# Mine",
+      "## Render",
       "```",
       "box s(10,10,10)",
       "```",
@@ -208,16 +225,20 @@ describe("parseBuildingDefinitions", () => {
   it("parses multiple buildings", () => {
     const result = parseBuildingDefinitions([
       "# BuildingA",
+      "## Render",
       "```",
       "box s(1,1,1)",
       "```",
+      "## Function",
       "Water 2",
       "=",
       "Steam 1",
       "# BuildingB",
+      "## Render",
       "```",
       "cyl s(5,5,5)",
       "```",
+      "## Function",
       "Iron 4",
       "=",
       "Steel 3",
@@ -248,6 +269,7 @@ describe("parseBuildingDefinitions", () => {
   it("trims whitespace from building name", () => {
     const result = parseBuildingDefinitions([
       "#   SpacedName  ",
+      "## Render",
       "```",
       "box s(1,1,1)",
       "```",
@@ -256,22 +278,32 @@ describe("parseBuildingDefinitions", () => {
     expect(result[0].name).toEqual("SpacedName");
   });
 
-  it("properties section stops function line collection", () => {
+  it("ignores code block outside of Render section", () => {
     const result = parseBuildingDefinitions([
-      "# Mine",
+      "# MyBuilding",
+      "```",
+      "box s(10,10,10)",
+      "```",
+    ]);
+
+    expect(result).toEqual([]);
+  });
+
+  it("ignores resource lines outside of Function section", () => {
+    const result = parseBuildingDefinitions([
+      "# MyBuilding",
+      "## Render",
       "```",
       "box s(10,10,10)",
       "```",
       "Iron 3",
       "=",
-      "Ore 5",
-      "## Properties",
-      "showFloor=false",
+      "Steel 5",
     ]);
 
     expect(result[0].buildingFunction).toEqual({
-      inputs: [{ name: "Iron", value: 3 }],
-      outputs: [{ name: "Ore", value: 5 }],
+      inputs: [],
+      outputs: [],
     });
   });
 });
