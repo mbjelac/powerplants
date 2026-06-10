@@ -1,10 +1,11 @@
 import p5 from "p5";
-import {buildingDefinitions, type BuildingFunctionSpec} from "./buildings";
+import {buildingDefinitions} from "./sektor/buildings/buildings";
 import {createFunctionDisplay} from "./functionDisplay";
 import {parseCommands} from "../../shared/parseCommands";
 import {applyCommands} from "../../shared/applyCommands";
 import {drawFloor} from "../../shared/drawFloor";
 import {BLOCK_SIZE} from "../../shared/constants";
+import { BuildingFunction } from "./sektor/buildings/parseBuildingDefinitions";
 
 let selectedBuilding: string | null = null;
 let buildingCodeMap: Map<string, string> = new Map();
@@ -24,7 +25,7 @@ export function getBuildingCode(name: string): string | null {
 
 let toolbarFnPanel: HTMLElement | null = null;
 
-function showToolbarFunctionPanel(fn: BuildingFunctionSpec, anchorEl: HTMLElement) {
+function showToolbarFunctionPanel(fn: BuildingFunction, anchorEl: HTMLElement) {
   hideToolbarFunctionPanel();
 
   toolbarFnPanel = document.createElement("div");

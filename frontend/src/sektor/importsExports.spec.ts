@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { Sektor } from "./Sektor";
-import { buildingDefinitions } from "../buildings";
+import { buildingDefinitions } from "./buildings/buildings";
 
 describe("getImportsExports", () => {
   it("returns empty imports and exports when there are no buildings", () => {

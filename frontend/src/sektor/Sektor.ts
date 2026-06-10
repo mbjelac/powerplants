@@ -1,4 +1,5 @@
-import { BuildingDefinition, ResourceThroughput } from "../buildings";
+
+import { BuildingDefinition, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
 
 export interface ImportsExports {
   imports: ResourceThroughput[];

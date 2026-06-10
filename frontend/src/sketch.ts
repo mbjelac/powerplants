@@ -5,8 +5,8 @@ import {applyCommands} from "../../shared/applyCommands";
 import {BLOCK_SIZE} from "../../shared/constants";
 import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} from "./toolbar";
 import {Sektor} from "./sektor/Sektor";
-import { buildingDefinitions } from "./buildings";
-import {showBuildingFunctionSpec, hideBuildingFunctionSpec} from "./buildingFunctionPanel";
+import { buildingDefinitions } from "./sektor/buildings/buildings";
+import {showBuildingFunctionSpec, hideBuildingFunctionSpec} from "./sektor/buildings/buildingFunctionPanel";
 import {updateImportExportPanel} from "./importExportPanel";
 
 const GRID_SIZE = 10;

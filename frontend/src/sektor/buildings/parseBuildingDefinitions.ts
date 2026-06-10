@@ -1,8 +1,6 @@
-import buildingsMd from "./assets/buildings.md?raw";
-
 export type ResourceThroughput = { name: string; value: number };
 
-export interface BuildingFunctionSpec {
+export interface BuildingFunction {
   inputs: ResourceThroughput[];
   outputs: ResourceThroughput[];
 }
@@ -14,53 +12,12 @@ export interface BuildingProperties {
 export interface BuildingDefinition {
   name: string;
   renderingCode: string;
-  buildingFunction: BuildingFunctionSpec | null;
+  buildingFunction: BuildingFunction;
   properties: BuildingProperties;
 }
 
-function parseBuildingFunctionSpec(lines: string[]): BuildingFunctionSpec | null {
-  const inputs: ResourceThroughput[] = [];
-  const outputs: ResourceThroughput[] = [];
-  let seenEquals = false;
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    if (trimmed === "=") {
-      seenEquals = true;
-      continue;
-    }
-    const match = trimmed.match(/^(\S+)\s+(\d+)$/);
-    if (!match) continue;
-    const entry = { name: match[1], value: parseInt(match[2]) };
-    if (seenEquals) {
-      outputs.push(entry);
-    } else {
-      inputs.push(entry);
-    }
-  }
-
-  if (inputs.length === 0 && outputs.length === 0) return null;
-  return { inputs, outputs };
-}
-
-function parseProperties(lines: string[]): BuildingProperties {
-  const props: BuildingProperties = {};
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    const match = trimmed.match(/^(\w+)=(.+)$/);
-    if (!match) continue;
-    if (match[1] === "showFloor" && match[2] === "false") {
-      props.showFloor = false;
-    }
-  }
-  return props;
-}
-
-function loadBuildings(): BuildingDefinition[] {
+export function parseBuildingDefinitions(lines: string[]): BuildingDefinition[] {
   const buildings: BuildingDefinition[] = [];
-  const lines = buildingsMd.split("\n");
 
   let currentName: string | null = null;
   let inCodeBlock = false;
@@ -75,7 +32,7 @@ function loadBuildings(): BuildingDefinition[] {
       buildings.push({
         name: currentName,
         renderingCode: codeLines.join("\n"),
-        buildingFunction: parseBuildingFunctionSpec(functionLines),
+        buildingFunction: parseBuildingFunction(functionLines),
         properties: parseProperties(propertyLines),
       });
     }
@@ -124,4 +81,46 @@ function loadBuildings(): BuildingDefinition[] {
   return buildings;
 }
 
-export const buildingDefinitions: BuildingDefinition[] = loadBuildings();
+function parseProperties(lines: string[]): BuildingProperties {
+  const props: BuildingProperties = {};
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    const match = trimmed.match(/^(\w+)=(.+)$/);
+    if (!match) continue;
+    if (match[1] === "showFloor" && match[2] === "false") {
+      props.showFloor = false;
+    }
+  }
+  return props;
+}
+
+function parseBuildingFunction(lines: string[]): BuildingFunction {
+  const inputs: ResourceThroughput[] = [];
+  const outputs: ResourceThroughput[] = [];
+  let seenEquals = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    if (trimmed === "=") {
+      seenEquals = true;
+      continue;
+    }
+    const match = trimmed.match(/^(\S+)\s+(\d+)$/);
+    if (!match) continue;
+    const entry = { name: match[1], value: parseInt(match[2]) };
+    if (seenEquals) {
+      outputs.push(entry);
+    } else {
+      inputs.push(entry);
+    }
+  }
+
+  if (inputs.length === 0 && outputs.length === 0) {
+    console.error("Building function has no inputs or outputs:", lines.join("\n"));
+    return { inputs: [], outputs: [] };
+  }
+
+  return { inputs, outputs };
+}

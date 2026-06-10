@@ -1,10 +1,10 @@
 import p5 from "p5";
-import { type BuildingFunctionSpec } from "./buildings";
-import { parseCommands } from "../../shared/parseCommands";
-import { applyCommands } from "../../shared/applyCommands";
-import { drawFloor } from "../../shared/drawFloor";
-import { BLOCK_SIZE } from "../../shared/constants";
-import { createFunctionDisplay } from "./functionDisplay";
+import { parseCommands } from "../../../../shared/parseCommands";
+import { applyCommands } from "../../../../shared/applyCommands";
+import { drawFloor } from "../../../../shared/drawFloor";
+import { BLOCK_SIZE } from "../../../../shared/constants";
+import { createFunctionDisplay } from "../../functionDisplay";
+import { BuildingFunction } from "./parseBuildingDefinitions";
 
 let panelEl: HTMLElement | null = null;
 let previewP5: p5 | null = null;
@@ -51,7 +51,7 @@ function ensurePreviewP5(parent: HTMLElement) {
   });
 }
 
-export function showBuildingFunctionSpec(name: string, code: string, fn: BuildingFunctionSpec, floorColor: [number, number, number], location: { x: number; y: number }) {
+export function showBuildingFunctionSpec(name: string, code: string, fn: BuildingFunction, floorColor: [number, number, number], location: { x: number; y: number }) {
   hideBuildingFunctionSpec();
 
   panelEl = document.createElement("div");

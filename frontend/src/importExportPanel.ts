@@ -1,6 +1,6 @@
-import { type ResourceThroughput } from "./buildings";
 import { type ImportsExports } from "./sektor/Sektor";
 import { getResourceIcon } from "./resources";
+import { ResourceThroughput } from "./sektor/buildings/parseBuildingDefinitions";
 
 let panelEl: HTMLElement | null = null;
 

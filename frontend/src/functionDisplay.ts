@@ -1,7 +1,8 @@
-import { type BuildingFunctionSpec, type ResourceThroughput } from "./buildings";
-import { getResourceIcon } from "./resources";
 
-export function createFunctionDisplay(fn: BuildingFunctionSpec): HTMLElement {
+import { getResourceIcon } from "./resources";
+import { BuildingFunction, ResourceThroughput } from "./sektor/buildings/parseBuildingDefinitions";
+
+export function createFunctionDisplay(fn: BuildingFunction): HTMLElement {
   const fnDisplay = document.createElement("div");
   fnDisplay.className = "bf-function";
 
