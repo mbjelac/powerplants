@@ -18,6 +18,7 @@
 ## Code style
 
 - Functions should be ordered in the file in order of calling — callers before callees.
+- Always use full, domain-specific variable names — no abbreviations (e.g. `building` not `b`, `buildingDefinition` not `def`, `buildingFunction` not `fn`).
 
 ## Testing
 
