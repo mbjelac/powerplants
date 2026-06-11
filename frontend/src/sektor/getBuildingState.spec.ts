@@ -23,14 +23,14 @@ describe("getBuildingState", () => {
   it("returns null when no building at location", () => {
     const sektor = new Sektor([[50]], testDefinitions);
 
-    expect(sektor.getBuildingState(0, 0)).toEqual(null);
+    expect(sektor.getBuildingState({ x: 0, y: 0 })).toEqual(null);
   });
 
   it("returns building function and imports for a placed building", () => {
     const sektor = new Sektor([[50]], testDefinitions);
-    sektor.createBuilding({ type: "Mill", x: 3, y: 5 });
+    sektor.createBuilding({ type: "Mill", location: { x: 3, y: 5 } });
 
-    const state = sektor.getBuildingState(3, 5);
+    const state = sektor.getBuildingState({ x: 3, y: 5 });
 
     expect(state).toEqual({
       buildingFunction: {

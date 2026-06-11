@@ -11,10 +11,14 @@ export interface BuildingState {
   imports: ResourceThroughput[];
 }
 
-export interface BuildingCreation {
-  type: string;
+export interface BuildingLocation {
   x: number;
   y: number;
+}
+
+export interface BuildingCreation {
+  type: string;
+  location: BuildingLocation;
 }
 
 export interface CreateBuildingResult {
@@ -38,8 +42,8 @@ export class Sektor {
     return this.soilFertility;
   }
 
-  getBuildingState(x: number, y: number): BuildingState | null {
-    const building = this.buildings.find(b => b.x === x && b.y === y);
+  getBuildingState(location: BuildingLocation): BuildingState | null {
+    const building = this.buildings.find(b => b.location.x === location.x && b.location.y === location.y);
     if (!building) return null;
     const def = this.buildingDefinitions.find(b => b.name === building.type);
     if (!def) return null;
@@ -50,8 +54,8 @@ export class Sektor {
   }
 
   getImportsExports(): ImportsExports {
-    const imports = this.aggregateThroughputs(this.buildings.map(b => this.getInputs(b.type)).flat());
-    const exports = this.aggregateThroughputs(this.buildings.map(b => this.getOutputs(b.type)).flat());
+    const imports = this.aggregateThroughputs(this.buildings.map(building => this.getInputs(building.type)).flat());
+    const exports = this.aggregateThroughputs(this.buildings.map(building => this.getOutputs(building.type)).flat());
     return { imports, exports };
   }
 
@@ -74,7 +78,7 @@ export class Sektor {
   }
 
   createBuilding(building: BuildingCreation): CreateBuildingResult {
-    if (this.buildings.some((b) => b.x === building.x && b.y === building.y)) {
+    if (this.buildings.some((existing) => existing.location.x === building.location.x && existing.location.y === building.location.y)) {
       return { error: "locationOccupied", addedBuildings: [] };
     }
 

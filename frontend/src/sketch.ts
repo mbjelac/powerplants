@@ -4,7 +4,7 @@ import {parseCommands} from "../../shared/parseCommands";
 import {applyCommands} from "../../shared/applyCommands";
 import {BLOCK_SIZE} from "../../shared/constants";
 import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} from "./toolbar";
-import {Sektor} from "./sektor/Sektor";
+import { BuildingLocation, Sektor } from "./sektor/Sektor";
 import { buildingDefinitions } from "./sektor/buildings/buildings";
 import {showBuildingPanel, hideBuildingPanel} from "./sektor/buildings/buildingPanel";
 import {updateImportExportPanel} from "./importExportPanel";
@@ -25,7 +25,7 @@ function createFertilityMatrix(gridSize: number): number[][] {
 
 const sektor = new Sektor(createFertilityMatrix(GRID_SIZE), buildingDefinitions);
 const soilFertility = sektor.getSoilFertility();
-const placedBuildings: { type: string; x: number; y: number; code: string }[] = [];
+const placedBuildings: { type: string; location: BuildingLocation; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
 
 // Interpolate between #E3CA86 (fertility 0) and #86E389 (fertility 100)
@@ -241,14 +241,14 @@ const sketch = (p: p5) => {
 
     if (!selected) {
       // No building tool selected — check if there's a placed building to inspect
-      const placed = placedBuildings.find(b => b.x === grid.x && b.y === grid.y);
+      const placed = placedBuildings.find(b => b.location.x === grid.x && b.location.y === grid.y);
       if (placed) {
-        const buildingState = sektor.getBuildingState(placed.x, placed.y);
+        const buildingState = sektor.getBuildingState(placed.location);
         if (buildingState) {
           const code = getBuildingCode(placed.type);
           if (code) {
-            const floorColor = fertilityColor(soilFertility[placed.x][placed.y]);
-            showBuildingPanel(placed.type, code, buildingState.buildingFunction, buildingState.imports, floorColor, { x: placed.x, y: placed.y });
+            const floorColor = fertilityColor(soilFertility[placed.location.x][placed.location.y]);
+            showBuildingPanel(placed.type, code, buildingState.buildingFunction, buildingState.imports, floorColor, placed.location);
           }
         }
       } else {
@@ -257,12 +257,12 @@ const sketch = (p: p5) => {
       return;
     }
 
-    const result = sektor.createBuilding({ type: selected, x: grid.x, y: grid.y });
+    const result = sektor.createBuilding({ type: selected, location: { x: grid.x, y: grid.y } });
 
     for (const building of result.addedBuildings) {
       const code = getBuildingCode(building.type);
       if (code) {
-        placedBuildings.push({ type: building.type, x: building.x, y: building.y, code });
+        placedBuildings.push({ type: building.type, location: building.location, code });
       }
     }
 
@@ -292,7 +292,7 @@ const sketch = (p: p5) => {
 
     for (let x = 0; x < GRID_SIZE; x++) {
       for (let z = 0; z < GRID_SIZE; z++) {
-        const placed = placedBuildings.find(b => b.x === x && b.y === z);
+        const placed = placedBuildings.find(b => b.location.x === x && b.location.y === z);
         if (placed) {
           const def = buildingDefinitions.find(d => d.name === placed.type);
           if (def?.properties.showFloor === false) continue;
@@ -307,7 +307,7 @@ const sketch = (p: p5) => {
     p.noStroke();
     for (const building of placedBuildings) {
       p.push();
-      const { wx, wz } = gridToWorld(building.x, building.y);
+      const { wx, wz } = gridToWorld(building.location.x, building.location.y);
       p.translate(wx, 0, wz);
       const commands = parseCommands(building.code);
       applyCommands(p, commands);

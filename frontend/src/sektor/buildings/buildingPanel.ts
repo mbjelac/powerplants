@@ -5,6 +5,7 @@ import { drawFloor } from "../../../../shared/drawFloor";
 import { BLOCK_SIZE } from "../../../../shared/constants";
 import { createFunctionDisplay } from "../../functionDisplay";
 import { BuildingFunction, ResourceThroughput } from "./parseBuildingDefinitions";
+import { BuildingLocation } from "../Sektor";
 
 let panelEl: HTMLElement | null = null;
 let previewP5: p5 | null = null;
@@ -51,7 +52,7 @@ function ensurePreviewP5(parent: HTMLElement) {
   });
 }
 
-export function showBuildingPanel(name: string, code: string, buildingFunction: BuildingFunction, imports: ResourceThroughput[], floorColor: [number, number, number], location: { x: number; y: number }) {
+export function showBuildingPanel(name: string, code: string, buildingFunction: BuildingFunction, imports: ResourceThroughput[], floorColor: [number, number, number], location: BuildingLocation) {
   hideBuildingPanel();
 
   panelEl = document.createElement("div");

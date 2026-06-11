@@ -48,7 +48,7 @@ describe("getImportsExports", () => {
 
   it("returns imports and exports for a single building", () => {
     const sektor = new Sektor([[50]], testDefinitions);
-    sektor.createBuilding({ type: "Well", x: 0, y: 0 });
+    sektor.createBuilding({ type: "Well", location: { x: 0, y: 0 } });
 
     const result = sektor.getImportsExports();
 
@@ -65,8 +65,8 @@ describe("getImportsExports", () => {
 
   it("aggregates imports and exports by resource name across buildings", () => {
     const sektor = new Sektor([[50]], testDefinitions);
-    sektor.createBuilding({ type: "Well", x: 0, y: 0 });
-    sektor.createBuilding({ type: "Farm", x: 1, y: 0 });
+    sektor.createBuilding({ type: "Well", location: { x: 0, y: 0 } });
+    sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
 
     const result = sektor.getImportsExports();
 
