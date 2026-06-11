@@ -21,6 +21,18 @@ export interface BuildingCreation {
   location: BuildingLocation;
 }
 
+export interface AddConnectionResult {
+  success: boolean;
+  error?: string;
+}
+
+interface Connection {
+  target: BuildingLocation;
+  source: BuildingLocation;
+  resourceType: string;
+  amount: number;
+}
+
 export interface CreateBuildingResult {
   error: undefined | string;
   addedBuildings: BuildingCreation[];
@@ -30,6 +42,7 @@ export type SoilFertilityMatrix = ReadonlyArray<ReadonlyArray<number>>;
 
 export class Sektor {
   private buildings: BuildingCreation[] = [];
+  private connections: Connection[] = [];
   private readonly soilFertility: SoilFertilityMatrix;
   private readonly buildingDefinitions: BuildingDefinition[];
 
@@ -69,12 +82,57 @@ export class Sektor {
     return def?.buildingFunction?.outputs ?? [];
   }
 
+  private getRemainingImport(location: BuildingLocation, resourceType: string): number {
+    const building = this.buildings.find(b => b.location.x === location.x && b.location.y === location.y);
+    if (!building) return 0;
+    const input = this.getInputs(building.type).find(i => i.name === resourceType);
+    if (!input) return 0;
+    const connectedAmount = this.connections
+      .filter(c => c.target.x === location.x && c.target.y === location.y && c.resourceType === resourceType)
+      .reduce((sum, c) => sum + c.amount, 0);
+    return input.value - connectedAmount;
+  }
+
+  private getRemainingExport(location: BuildingLocation, resourceType: string): number {
+    const building = this.buildings.find(b => b.location.x === location.x && b.location.y === location.y);
+    if (!building) return 0;
+    const output = this.getOutputs(building.type).find(o => o.name === resourceType);
+    if (!output) return 0;
+    const connectedAmount = this.connections
+      .filter(c => c.source.x === location.x && c.source.y === location.y && c.resourceType === resourceType)
+      .reduce((sum, c) => sum + c.amount, 0);
+    return output.value - connectedAmount;
+  }
+
   private aggregateThroughputs(throughputs: ResourceThroughput[]): ResourceThroughput[] {
     const map = new Map<string, number>();
     for (const t of throughputs) {
       map.set(t.name, (map.get(t.name) ?? 0) + t.value);
     }
     return Array.from(map.entries()).map(([name, value]) => ({ name, value }));
+  }
+
+  addConnection(target: BuildingLocation, source: BuildingLocation, resourceType: string): AddConnectionResult {
+    const targetBuilding = this.buildings.find(b => b.location.x === target.x && b.location.y === target.y);
+    if (!targetBuilding) return { success: false, error: "targetBuildingNotFound" };
+
+    const sourceBuilding = this.buildings.find(b => b.location.x === source.x && b.location.y === source.y);
+    if (!sourceBuilding) return { success: false, error: "sourceBuildingNotFound" };
+
+    const targetInput = this.getInputs(targetBuilding.type).find(input => input.name === resourceType);
+    if (!targetInput) return { success: false, error: "targetHasNoMatchingInput" };
+
+    const sourceOutput = this.getOutputs(sourceBuilding.type).find(output => output.name === resourceType);
+    if (!sourceOutput) return { success: false, error: "sourceHasNoMatchingOutput" };
+
+    const remainingImport = this.getRemainingImport(target, resourceType);
+    if (remainingImport <= 0) return { success: false, error: "targetInputFull" };
+
+    const remainingExport = this.getRemainingExport(source, resourceType);
+    if (remainingExport <= 0) return { success: false, error: "sourceOutputExhausted" };
+
+    this.connections.push({ target, source, resourceType, amount: 1 });
+    return { success: true };
   }
 
   getPossibleConnectionsForInput(target: BuildingLocation, resourceType: string): BuildingLocation[] {
