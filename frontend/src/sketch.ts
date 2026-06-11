@@ -243,12 +243,12 @@ const sketch = (p: p5) => {
       // No building tool selected — check if there's a placed building to inspect
       const placed = placedBuildings.find(b => b.x === grid.x && b.y === grid.y);
       if (placed) {
-        const def = buildingDefinitions.find(b => b.name === placed.type);
-        if (def?.buildingFunction) {
+        const buildingState = sektor.getBuildingState(placed.x, placed.y);
+        if (buildingState) {
           const code = getBuildingCode(placed.type);
           if (code) {
             const floorColor = fertilityColor(soilFertility[placed.x][placed.y]);
-            showBuildingFunctionSpec(placed.type, code, def.buildingFunction, floorColor, { x: placed.x, y: placed.y });
+            showBuildingFunctionSpec(placed.type, code, buildingState.buildingFunction, buildingState.imports, floorColor, { x: placed.x, y: placed.y });
           }
         }
       } else {

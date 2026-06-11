@@ -4,7 +4,7 @@ import { applyCommands } from "../../../../shared/applyCommands";
 import { drawFloor } from "../../../../shared/drawFloor";
 import { BLOCK_SIZE } from "../../../../shared/constants";
 import { createFunctionDisplay } from "../../functionDisplay";
-import { BuildingFunction } from "./parseBuildingDefinitions";
+import { BuildingFunction, ResourceThroughput } from "./parseBuildingDefinitions";
 
 let panelEl: HTMLElement | null = null;
 let previewP5: p5 | null = null;
@@ -51,7 +51,7 @@ function ensurePreviewP5(parent: HTMLElement) {
   });
 }
 
-export function showBuildingFunctionSpec(name: string, code: string, fn: BuildingFunction, floorColor: [number, number, number], location: { x: number; y: number }) {
+export function showBuildingFunctionSpec(name: string, code: string, buildingFunction: BuildingFunction, imports: ResourceThroughput[], floorColor: [number, number, number], location: { x: number; y: number }) {
   hideBuildingFunctionSpec();
 
   panelEl = document.createElement("div");
@@ -77,7 +77,7 @@ export function showBuildingFunctionSpec(name: string, code: string, fn: Buildin
 
   panelEl.appendChild(header);
 
-  panelEl.appendChild(createFunctionDisplay(fn));
+  panelEl.appendChild(createFunctionDisplay(buildingFunction, imports));
 
   document.getElementById("canvas-container")!.appendChild(panelEl);
 

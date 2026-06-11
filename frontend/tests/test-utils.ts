@@ -14,6 +14,6 @@ export async function expectScreenshot(page: Page, name: string, selector = "#ca
   await page.waitForTimeout(100);
   const element = page.locator(selector);
   await expect(element).toHaveScreenshot(`${name}.png`, {
-    maxDiffPixelRatio: 0.01,
+    maxDiffPixelRatio: 0,
   });
 }

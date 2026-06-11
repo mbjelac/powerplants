@@ -47,7 +47,7 @@ test("displays building function when clicking on placed building", async ({ pag
   // Building tool is auto-deselected after placement, click on the placed building
   await canvas.click({ position: { x: box!.width / 2, y: box!.height / 2 } });
   await page.waitForTimeout(200);
-  await expectScreenshot(page, "building-function-panel", "body");
+  await expectScreenshot(page, "building-function-panel", "#building-function-panel");
 });
 
 test("function panel persists after rotating the view", async ({ page }) => {
