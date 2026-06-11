@@ -18,7 +18,7 @@
 - [done] refactor: introduce BuildingLocation
     - x & y are used to find buildings by location
     - replace usages with interface BuildingLocation = { x: number, y: number }
-- Sektor has a method "getPossibleConnectionsForInput(target: BuildingLocation, resourceType: string): BuildingLocation[]"
+- [done] Sektor has a method "getPossibleConnectionsForInput(target: BuildingLocation, resourceType: string): BuildingLocation[]"
     - method returns all buildings which:
         - are not on target location (building can't be connected to itself)
         - have an output with the same resource type as resourceType
