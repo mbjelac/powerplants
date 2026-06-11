@@ -23,7 +23,7 @@
         - are not on target location (building can't be connected to itself)
         - have an output with the same resource type as resourceType
     - create Sektor test which verifies all that
-- Sektor has a method "addConnection(target: BuildingLocation, source: BuildingLocation, resourceType: string): AddConnectionResult"
+- [done] Sektor has a method "addConnection(target: BuildingLocation, source: BuildingLocation, resourceType: string): AddConnectionResult"
     - AddConnectionResult is { success: boolean, error?: string }
     - adding connection succeeds if:
         - target building has an input with the same resource type as resourceType
