@@ -77,6 +77,15 @@ export class Sektor {
     return Array.from(map.entries()).map(([name, value]) => ({ name, value }));
   }
 
+  getPossibleConnectionsForInput(target: BuildingLocation, resourceType: string): BuildingLocation[] {
+    return this.buildings
+      .filter(building => {
+        if (building.location.x === target.x && building.location.y === target.y) return false;
+        return this.getOutputs(building.type).some(output => output.name === resourceType);
+      })
+      .map(building => building.location);
+  }
+
   createBuilding(building: BuildingCreation): CreateBuildingResult {
     if (this.buildings.some((existing) => existing.location.x === building.location.x && existing.location.y === building.location.y)) {
       return { error: "locationOccupied", addedBuildings: [] };
