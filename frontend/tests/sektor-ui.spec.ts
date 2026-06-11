@@ -8,23 +8,23 @@ test("renders empty grid of floors", async ({ page }) => {
 
 test("highlights selected building in toolbar", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
-  await page.locator('.building-item[data-building-name="WaterExtractor"]').click();
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
   await page.waitForTimeout(100);
   await expectScreenshot(page, "building-selected", "#toolbar");
 });
 
 test("removes highlight when selected building is clicked again", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
-  await page.locator('.building-item[data-building-name="WaterExtractor"]').click();
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
   await page.waitForTimeout(100);
-  await page.locator('.building-item[data-building-name="WaterExtractor"]').click();
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
   await page.waitForTimeout(100);
   await expectScreenshot(page, "building-deselected", "#toolbar");
 });
 
 test("renders building on floor after placement", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
-  await page.locator('.building-item[data-building-name="WaterExtractor"]').click();
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
   await page.waitForTimeout(100);
   // Click on center of the canvas (should hit a floor tile near the middle of the grid)
   const canvas = page.locator("#canvas-container canvas");
@@ -36,8 +36,7 @@ test("renders building on floor after placement", async ({ page }) => {
 
 test("displays building function when clicking on placed building", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
-  // Select a building with a function (Agriplot)
-  await page.locator('.building-item[data-building-name="Agriplot"]').click();
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
   await page.waitForTimeout(100);
   // Place it on the canvas center
   const canvas = page.locator("#canvas-container canvas");
@@ -53,7 +52,7 @@ test("displays building function when clicking on placed building", async ({ pag
 test("function panel persists after rotating the view", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   // Place and click a building
-  await page.locator('.building-item[data-building-name="Agriplot"]').click();
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
   await page.waitForTimeout(100);
   const canvas = page.locator("#canvas-container canvas");
   const box = await canvas.boundingBox();
@@ -73,19 +72,19 @@ test("function panel persists after rotating the view", async ({ page }) => {
 
 test("displays function panel when building tool is selected", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
-  await page.locator('.building-item[data-building-name="Village"]').click();
+  await page.locator('.building-item[data-building-name="TestHouse"]').click();
   await page.waitForTimeout(100);
   const panel = page.locator("#toolbar-function-panel");
   await expect(panel).toBeVisible();
   await expect(panel).toHaveScreenshot("toolbar-function-panel.png", {
-    maxDiffPixelRatio: 0.01,
+    maxDiffPixelRatio: 0,
     timeout: 10000,
   });
 });
 
 test("shows error when placing building on occupied location", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
-  await page.locator('.building-item[data-building-name="WaterExtractor"]').click();
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
   await page.waitForTimeout(100);
   const canvas = page.locator("#canvas-container canvas");
   const box = await canvas.boundingBox();
