@@ -92,6 +92,9 @@ test("shows error when placing building on occupied location", async ({ page }) 
   // Place first building
   await canvas.click({ position: clickPos });
   await page.waitForTimeout(200);
+  // Re-select the building tool (it gets deselected after successful placement)
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.waitForTimeout(100);
   // Try to place again on same spot
   await canvas.click({ position: clickPos });
   await page.waitForTimeout(200);

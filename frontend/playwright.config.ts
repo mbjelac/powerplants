@@ -6,6 +6,9 @@ export default defineConfig({
   snapshotPathTemplate: "{testDir}/snapshots/{arg}{ext}",
   use: {
     baseURL: "http://localhost:5174",
+    launchOptions: {
+      args: ["--use-angle=default"],
+    },
   },
   webServer: {
     command: "npm run dev",

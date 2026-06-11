@@ -12,6 +12,10 @@ html, body {
   display: flex;
 }
 
+body > main {
+  display: none;
+}
+
 #toolbar {
   width: 120px;
   min-width: 120px;
