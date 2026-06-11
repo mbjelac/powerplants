@@ -46,3 +46,22 @@ Food 2
 Water 1
 =
 Work 3
+
+# TestRefinery
+
+## Render
+
+```
+pri4 s(25,25,35) t(0,0,0) c(#aa5533)
+```
+
+## Function
+
+Ore 5
+Water 4
+Energy 3
+Wood 2
+Stone 1
+=
+Metal 6
+Fuel 3

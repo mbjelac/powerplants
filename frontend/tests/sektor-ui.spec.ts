@@ -34,19 +34,30 @@ test("renders building on floor after placement", async ({ page }) => {
   await expectScreenshot(page, "building-placed");
 });
 
-test("displays building function when clicking on placed building", async ({ page }) => {
+test("displays building function panel with few inputs", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
-  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.locator('.building-item[data-building-name="TestMine"]').click();
   await page.waitForTimeout(100);
-  // Place it on the canvas center
   const canvas = page.locator("#canvas-container canvas");
   const box = await canvas.boundingBox();
   await canvas.click({ position: { x: box!.width / 2, y: box!.height / 2 } });
   await page.waitForTimeout(200);
-  // Building tool is auto-deselected after placement, click on the placed building
   await canvas.click({ position: { x: box!.width / 2, y: box!.height / 2 } });
   await page.waitForTimeout(200);
-  await expectScreenshot(page, "building-function-panel", "#building-function-panel");
+  await expectScreenshot(page, "building-function-panel-small", "#building-function-panel");
+});
+
+test("displays building function panel with many inputs", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+  await page.locator('.building-item[data-building-name="TestRefinery"]').click();
+  await page.waitForTimeout(100);
+  const canvas = page.locator("#canvas-container canvas");
+  const box = await canvas.boundingBox();
+  await canvas.click({ position: { x: box!.width / 2, y: box!.height / 2 } });
+  await page.waitForTimeout(200);
+  await canvas.click({ position: { x: box!.width / 2, y: box!.height / 2 } });
+  await page.waitForTimeout(200);
+  await expectScreenshot(page, "building-function-panel-large", "#building-function-panel");
 });
 
 test("function panel persists after rotating the view", async ({ page }) => {
