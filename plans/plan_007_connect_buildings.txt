@@ -7,7 +7,7 @@
     - initially imports has same values as function.inputs
         - this is because when a building is created, all it's inputs are automatically obtained from imports
     - create Sektor test which verifies all that
-- in the building function panel, under each input there is a row
+- [done] in the building function panel, under each input there is a row
     - the row contains a label with a number on the right-hand side
     - the number is the amount of the building's input that is imported
     - when a placed building is clicked, the data for it's panel should be odtained by calling Sektor.getBuildingState
