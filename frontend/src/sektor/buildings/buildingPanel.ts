@@ -51,11 +51,11 @@ function ensurePreviewP5(parent: HTMLElement) {
   });
 }
 
-export function showBuildingFunctionSpec(name: string, code: string, buildingFunction: BuildingFunction, imports: ResourceThroughput[], floorColor: [number, number, number], location: { x: number; y: number }) {
-  hideBuildingFunctionSpec();
+export function showBuildingPanel(name: string, code: string, buildingFunction: BuildingFunction, imports: ResourceThroughput[], floorColor: [number, number, number], location: { x: number; y: number }) {
+  hideBuildingPanel();
 
   panelEl = document.createElement("div");
-  panelEl.id = "building-function-panel";
+  panelEl.id = "building-panel";
 
   const locationEl = document.createElement("div");
   locationEl.className = "bf-location";
@@ -87,7 +87,7 @@ export function showBuildingFunctionSpec(name: string, code: string, buildingFun
   previewP5!.redraw();
 }
 
-export function hideBuildingFunctionSpec() {
+export function hideBuildingPanel() {
   if (panelEl) {
     panelEl.remove();
     panelEl = null;

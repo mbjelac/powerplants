@@ -6,7 +6,7 @@ import {BLOCK_SIZE} from "../../shared/constants";
 import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} from "./toolbar";
 import {Sektor} from "./sektor/Sektor";
 import { buildingDefinitions } from "./sektor/buildings/buildings";
-import {showBuildingFunctionSpec, hideBuildingFunctionSpec} from "./sektor/buildings/buildingFunctionPanel";
+import {showBuildingPanel, hideBuildingPanel} from "./sektor/buildings/buildingPanel";
 import {updateImportExportPanel} from "./importExportPanel";
 
 const GRID_SIZE = 10;
@@ -235,7 +235,7 @@ const sketch = (p: p5) => {
 
     const grid = findClickedTile(p, zoom);
     if (!grid) {
-      hideBuildingFunctionSpec();
+      hideBuildingPanel();
       return;
     }
 
@@ -248,11 +248,11 @@ const sketch = (p: p5) => {
           const code = getBuildingCode(placed.type);
           if (code) {
             const floorColor = fertilityColor(soilFertility[placed.x][placed.y]);
-            showBuildingFunctionSpec(placed.type, code, buildingState.buildingFunction, buildingState.imports, floorColor, { x: placed.x, y: placed.y });
+            showBuildingPanel(placed.type, code, buildingState.buildingFunction, buildingState.imports, floorColor, { x: placed.x, y: placed.y });
           }
         }
       } else {
-        hideBuildingFunctionSpec();
+        hideBuildingPanel();
       }
       return;
     }

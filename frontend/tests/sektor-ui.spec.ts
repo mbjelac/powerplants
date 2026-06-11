@@ -34,7 +34,7 @@ test("renders building on floor after placement", async ({ page }) => {
   await expectScreenshot(page, "building-placed");
 });
 
-test("displays building function panel with few inputs", async ({ page }) => {
+test("displays building panel with few inputs", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   await page.locator('.building-item[data-building-name="TestMine"]').click();
   await page.waitForTimeout(100);
@@ -44,10 +44,10 @@ test("displays building function panel with few inputs", async ({ page }) => {
   await page.waitForTimeout(200);
   await canvas.click({ position: { x: box!.width / 2, y: box!.height / 2 } });
   await page.waitForTimeout(200);
-  await expectScreenshot(page, "building-function-panel-small", "#building-function-panel");
+  await expectScreenshot(page, "building-panel-small", "#building-panel");
 });
 
-test("displays building function panel with many inputs", async ({ page }) => {
+test("displays building panel with many inputs", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   await page.locator('.building-item[data-building-name="TestRefinery"]').click();
   await page.waitForTimeout(100);
@@ -57,10 +57,10 @@ test("displays building function panel with many inputs", async ({ page }) => {
   await page.waitForTimeout(200);
   await canvas.click({ position: { x: box!.width / 2, y: box!.height / 2 } });
   await page.waitForTimeout(200);
-  await expectScreenshot(page, "building-function-panel-large", "#building-function-panel");
+  await expectScreenshot(page, "building-panel-large", "#building-panel");
 });
 
-test("function panel persists after rotating the view", async ({ page }) => {
+test("building panel persists after rotating the view", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   // Place and click a building
   await page.locator('.building-item[data-building-name="TestFactory"]').click();
@@ -77,8 +77,8 @@ test("function panel persists after rotating the view", async ({ page }) => {
   await page.mouse.move(box!.x + box!.width / 2 + 80, box!.y + box!.height / 2 - 40, { steps: 5 });
   await page.mouse.up();
   await page.waitForTimeout(200);
-  // Function panel should still be visible
-  await expectScreenshot(page, "function-panel-after-rotate", "body");
+  // Building panel should still be visible
+  await expectScreenshot(page, "building-panel-after-rotate", "body");
 });
 
 test("displays function panel when building tool is selected", async ({ page }) => {
