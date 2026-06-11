@@ -15,3 +15,75 @@
     - create visual test for the building function panel
 
 #2 Connect a building's input to another building's output
+- refactor: introduce BuildingLocation
+    - x & y are used to find buildings by location
+    - replace usages with interface BuildingLocation = { x: number, y: number }
+- Sektor has a method "getPossibleConnectionsForInput(target: BuildingLocation, resourceType: string): BuildingLocation[]"
+    - method returns all buildings which:
+        - are not on target location (building can't be connected to itself)
+        - have an output with the same resource type as resourceType
+    - create Sektor test which verifies all that
+- Sektor has a method "addConnection(target: BuildingLocation, source: BuildingLocation, resourceType: string): AddConnectionResult"
+    - AddConnectionResult is { success: boolean, error?: string }
+    - adding connection succeeds if:
+        - target building has an input with the same resource type as resourceType
+        - source building has an output with the same resource type as resourceType
+        - target building's input has it's import > 0
+        - source building's output has it's export > 0
+    - create Sektor test which verifies all that
+- when getBuildingState returns BuildingState, it has a property inputConnections: BuildingConnection[]
+    - BuildingConnection is { to: BuildingLocation, recourceType: string, amount: number }
+    - when a connection is added:
+        - the added connection's BuildingConnection is returned in the array
+        - it's amount is initially 1
+    - create Sektor test which verifies all that
+- when a connection is added, it is added with the initial amount of 1
+    - this modifies imports & exports:
+        - the connection source building's export contribution is decreased by 1
+        - the connection target building's import contribution is decreased by 1
+        - example:
+            - building A has function with input X 5
+            - building B has function with output X 7
+            -  whent A & B are built, imports are X 5, exports are X 7
+            -  when A (target) connects to B (source), imports are X 4, exports are X 6
+            - this is because A no longer requires so much import and B no longer supplies so much export
+     - create Sektor test which verifies all that
+- each input values row (the row beneath each input in a selected building's function panel) has a "+" button
+    - when clicked
+        - possible connections are retreived by sending the location & resource type of that row's input
+        - the map goes into "select building" mode in which:
+            - a select message is displayed on the top of the screen "Select building" with an "X" button on the right-hand side
+            - the UI doesn't respond to any user actions except:
+                - drag to rotate
+                - zoom
+                - clicking a building
+                    - only clicking buildings on the list of possible connections is accepted
+                    - clicking a building which is not on the list is ignored
+            - all buildings on the map which are NOT in the list of possible connections are displayed with all their colors darkened
+            - create a visual test for selection mode
+                - test has to create at least two buildings
+                - test has to have at least 1 building in possible connections
+                - test has to have at least 1 building not in possible connections
+        - when the "X" button is clicked:
+            - the UI exits "select building" mode
+            - the select message is removed
+            - create a visual test for cancelling selection
+        - when a building is clicked:
+            - it's building panel is NOT displayed
+            - the UI exits "select building" mode
+            - the select message is removed
+            - a connection is added with Sektor.addConnection
+                - the source is the selected building location
+                - the target is the building location of the building which panel is displayed
+                - the resource type is the same as the panel input's resource type
+            - if adding a connection fails (success=false), display error message on the top of the screen same as for locationOccupied (message dissapears automatically)
+            - if adding a connection succeeds, display label "1" in the input row on the left-hand side
+                - this shows a connection has been made for this resource type with the amount of 1
+
+#3 Display connection on map
+
+#4 Increase connection amount
+
+#5 Decrease connection amount
+
+#6 Remove connection
