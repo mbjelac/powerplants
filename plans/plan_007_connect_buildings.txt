@@ -1,4 +1,4 @@
-#1 Player sees how much of a building's input is imported
+[done] #1 Player sees how much of a building's input is imported
 - [done] Sektor has a method "getBuildingState" which returns a BuildingState object:
 {
     function: BuildingFunction,
