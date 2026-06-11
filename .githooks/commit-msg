@@ -25,6 +25,8 @@ END {
         replacement = "Implement"
       } else if (tl == "p") {
         replacement = "Plan"
+      } else if (tl == "us") {
+        replacement = "Plan"
       } else if (tl == "r") {
         replacement = "Refactor"
       } else if (tl == "f") {
