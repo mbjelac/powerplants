@@ -15,7 +15,7 @@
     - create visual test for the building panel
 
 #2 Connect a building's input to another building's output
-- refactor: introduce BuildingLocation
+- [done] refactor: introduce BuildingLocation
     - x & y are used to find buildings by location
     - replace usages with interface BuildingLocation = { x: number, y: number }
 - Sektor has a method "getPossibleConnectionsForInput(target: BuildingLocation, resourceType: string): BuildingLocation[]"
