@@ -37,6 +37,10 @@
         - the added connection's BuildingConnection is returned in the array
         - it's amount is initially 1
     - create Sektor test which verifies all that
+- display input connections in building panel
+    - each input row has one label per connection for that input, before the "+" button
+    - each label displays the amount from input connection
+
 - when a connection is added, it is added with the initial amount of 1
     - this modifies imports & exports:
         - the connection source building's export contribution is decreased by 1
@@ -77,8 +81,19 @@
                 - the target is the building location of the building which panel is displayed
                 - the resource type is the same as the panel input's resource type
             - if adding a connection fails (success=false), display error message on the top of the screen same as for locationOccupied (message dissapears automatically)
-            - if adding a connection succeeds, display label "1" in the input row on the left-hand side
+            - if adding a connection succeeds, display label "1" in the input row on the left-hand side to the left of the "+" button
                 - this shows a connection has been made for this resource type with the amount of 1
+- additional restrictions with full connections structure
+    - getPossibleConnectionsForInput should return all buildings which:
+        - are not on target location (building can't be connected to itself)
+        - have at least 1 amount of output to spare
+            - sum of amounts of all existing connections to that output is less than that building function's output amount
+            - example:
+                - building has output X 6
+                - one connection uses that building as source for output X, amount 2
+                - another connection uses that building as source for output X, amount 4
+                - that building is NOT a possible connection: it's output is already depleted
+    - addConnection should run the same validations for the source building as those for deciding whether to put a building in possible connections list
 
 #3 Display connection on map
 
