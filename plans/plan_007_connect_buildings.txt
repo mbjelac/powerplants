@@ -41,7 +41,7 @@
     - each input row has one label per connection for that input, before the "+" button
     - each label displays the amount from input connection
 
-- when a connection is added, it is added with the initial amount of 1
+- [done] when a connection is added, it is added with the initial amount of 1
     - this modifies imports & exports:
         - the connection source building's export contribution is decreased by 1
         - the connection target building's import contribution is decreased by 1
@@ -54,9 +54,19 @@
      - create Sektor test which verifies all that
 - each input values row (the row beneath each input in a selected building's function panel) has a "+" button
     - when clicked
-        - possible connections are retreived by sending the location & resource type of that row's input
-        - the map goes into "select building" mode in which:
+        - possible connections are retreived with getPossibleConnectionsForInput
+            - params are: currrently selected building location, resource type of that row's input
+        - if possible connections are empty
+            - display error message "noPossibleConnections"
+            - same styling and behaviour as other error messages
+        - if possible connections are not empty, the map goes into "select building" mode in which:
+            - building panel is still displayed
             - a select message is displayed on the top of the screen "Select building" with an "X" button on the right-hand side
+                - message is in a toast (a rounded recangle border)
+                - text: yellow, centered
+                - X button: right-aligned, gray
+                - background: same as canvas background
+                - border: gray
             - the UI doesn't respond to any user actions except:
                 - drag to rotate
                 - zoom
