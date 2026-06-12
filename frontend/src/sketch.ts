@@ -28,6 +28,77 @@ const soilFertility = sektor.getSoilFertility();
 const placedBuildings: { type: string; location: BuildingLocation; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
 
+let selectMode: {
+  possibleConnections: BuildingLocation[];
+  targetLocation: BuildingLocation;
+  resourceType: string;
+} | null = null;
+
+function enterSelectMode(targetLocation: BuildingLocation, resourceType: string) {
+  const possibleConnections = sektor.getPossibleConnectionsForInput(targetLocation, resourceType);
+  if (possibleConnections.length === 0) {
+    showError("noPossibleConnections");
+    return;
+  }
+  selectMode = { possibleConnections, targetLocation, resourceType };
+
+  const banner = document.createElement("div");
+  banner.id = "select-banner";
+  banner.textContent = "Select building";
+
+  const closeButton = document.createElement("button");
+  closeButton.className = "select-banner-close";
+  closeButton.textContent = "X";
+  closeButton.addEventListener("click", exitSelectMode);
+  banner.appendChild(closeButton);
+
+  document.getElementById("canvas-container")!.appendChild(banner);
+}
+
+function exitSelectMode() {
+  selectMode = null;
+  const banner = document.getElementById("select-banner");
+  if (banner) banner.remove();
+}
+
+function isInPossibleConnections(location: BuildingLocation): boolean {
+  if (!selectMode) return false;
+  return selectMode.possibleConnections.some(
+    possible => possible.x === location.x && possible.y === location.y
+  );
+}
+
+function openBuildingPanel(placed: { type: string; location: BuildingLocation; code: string }) {
+  const buildingState = sektor.getBuildingState(placed.location);
+  if (!buildingState) return;
+  const code = getBuildingCode(placed.type);
+  if (!code) return;
+  const floorColor = fertilityColor(soilFertility[placed.location.x][placed.location.y]);
+  showBuildingPanel({
+    name: placed.type,
+    code: code,
+    buildingFunction: buildingState.buildingFunction,
+    imports: buildingState.imports,
+    inputConnections: buildingState.inputConnections,
+    floorColor: floorColor,
+    location: placed.location,
+    onAddInputConnection: (resourceType: string) => {
+      console.log("add input connection", resourceType);
+      enterSelectMode(placed.location, resourceType)
+    }
+  });
+}
+
+function showError(message: string) {
+  const errorEl = document.getElementById("error-message")!;
+  errorEl.textContent = message;
+  errorEl.style.display = "block";
+  if (errorTimeout) clearTimeout(errorTimeout);
+  errorTimeout = setTimeout(() => {
+    errorEl.style.display = "none";
+  }, 5000);
+}
+
 // Interpolate between #E3CA86 (fertility 0) and #86E389 (fertility 100)
 const COLOR_0: [number, number, number] = [0xE3, 0xCA, 0x86];
 const COLOR_100: [number, number, number] = [0x86, 0xE3, 0x89];
@@ -176,6 +247,7 @@ const sketch = (p: p5) => {
   let camElevation = CAM_ELEVATION;
   let isDragging = false;
   let didDrag = false;
+  let mouseDownOnCanvas = false;
   let lastMouseX = 0;
   let lastMouseY = 0;
   let zoom = ZOOM;
@@ -197,6 +269,7 @@ const sketch = (p: p5) => {
     canvas.elt.addEventListener("mousedown", (e: MouseEvent) => {
       isDragging = true;
       didDrag = false;
+      mouseDownOnCanvas = true;
       lastMouseX = e.clientX;
       lastMouseY = e.clientY;
     });
@@ -229,28 +302,46 @@ const sketch = (p: p5) => {
   }
 
   p.mouseReleased = () => {
+    if (!mouseDownOnCanvas) return;
+    mouseDownOnCanvas = false;
     if (didDrag) return;
 
-    const selected = getSelectedBuilding();
-
     const grid = findClickedTile(p, zoom);
+
+    if (selectMode) {
+      if (!grid) return;
+      const clickedLocation = { x: grid.x, y: grid.y };
+      if (!isInPossibleConnections(clickedLocation)) return;
+
+      const targetLocation = selectMode.targetLocation;
+      const resourceType = selectMode.resourceType;
+      exitSelectMode();
+
+      const connectionResult = sektor.addConnection(targetLocation, clickedLocation, resourceType);
+
+      if (!connectionResult.success) {
+        showError(connectionResult.error ?? "Connection failed");
+        return;
+      }
+
+      const targetPlaced = placedBuildings.find(b => b.location.x === targetLocation.x && b.location.y === targetLocation.y);
+      if (targetPlaced) openBuildingPanel(targetPlaced);
+      updateImportExportPanel(sektor.getImportsExports());
+      return;
+    }
+
     if (!grid) {
       hideBuildingPanel();
       return;
     }
 
+    const selected = getSelectedBuilding();
+
     if (!selected) {
       // No building tool selected — check if there's a placed building to inspect
       const placed = placedBuildings.find(b => b.location.x === grid.x && b.location.y === grid.y);
       if (placed) {
-        const buildingState = sektor.getBuildingState(placed.location);
-        if (buildingState) {
-          const code = getBuildingCode(placed.type);
-          if (code) {
-            const floorColor = fertilityColor(soilFertility[placed.location.x][placed.location.y]);
-            showBuildingPanel(placed.type, code, buildingState.buildingFunction, buildingState.imports, buildingState.inputConnections, floorColor, placed.location);
-          }
-        }
+        openBuildingPanel(placed);
       } else {
         hideBuildingPanel();
       }
@@ -272,13 +363,7 @@ const sketch = (p: p5) => {
     }
 
     if (result.error !== undefined) {
-      const errorEl = document.getElementById("error-message")!;
-      errorEl.textContent = result.error;
-      errorEl.style.display = "block";
-      if (errorTimeout) clearTimeout(errorTimeout);
-      errorTimeout = setTimeout(() => {
-        errorEl.style.display = "none";
-      }, 5000);
+      showError(result.error);
     }
   };
 
@@ -311,6 +396,14 @@ const sketch = (p: p5) => {
       p.translate(wx, 0, wz);
       const commands = parseCommands(building.code);
       applyCommands(p, commands);
+
+      if (selectMode && !isInPossibleConnections(building.location)) {
+        p.fill(0, 0, 0, 160);
+        p.noStroke();
+        p.translate(0, -BLOCK_SIZE * 0.25, 0);
+        p.box(BLOCK_SIZE, BLOCK_SIZE * 0.5, BLOCK_SIZE);
+      }
+
       p.pop();
     }
 

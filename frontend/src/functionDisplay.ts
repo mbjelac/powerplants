@@ -3,11 +3,16 @@ import { getResourceIcon } from "./resources";
 import { BuildingConnection } from "./sektor/Sektor";
 import { BuildingFunction, ResourceThroughput } from "./sektor/buildings/parseBuildingDefinitions";
 
-export function createFunctionDisplay(buildingFunction: BuildingFunction, imports: ResourceThroughput[], inputConnections: BuildingConnection[] = []): HTMLElement {
+export function createFunctionDisplay({ buildingFunction, imports, inputConnections = [], onAddInputConnection }: {
+  buildingFunction: BuildingFunction,
+  imports: ResourceThroughput[],
+  inputConnections?: BuildingConnection[],
+  onAddInputConnection?: (resourceType: string) => void
+}): HTMLElement {
   const functionDisplay = document.createElement("div");
   functionDisplay.className = "bf-function";
 
-  functionDisplay.appendChild(createInputsColumn(buildingFunction.inputs, imports, inputConnections));
+  functionDisplay.appendChild(createInputsColumn({ inputs: buildingFunction.inputs, imports: imports, connections: inputConnections, onAddConnection: onAddInputConnection }));
 
   const equalsEl = document.createElement("div");
   equalsEl.className = "bf-equals";
@@ -19,7 +24,12 @@ export function createFunctionDisplay(buildingFunction: BuildingFunction, import
   return functionDisplay;
 }
 
-function createInputsColumn(inputs: ResourceThroughput[], imports: ResourceThroughput[], inputConnections: BuildingConnection[]): HTMLElement {
+function createInputsColumn({ inputs, imports, connections, onAddConnection }: {
+  inputs: ResourceThroughput[],
+  imports: ResourceThroughput[],
+  connections: BuildingConnection[],
+  onAddConnection?: (resourceType: string) => void
+}): HTMLElement {
   const column = document.createElement("div");
   column.className = "bf-col";
   for (const input of inputs) {
@@ -33,12 +43,20 @@ function createInputsColumn(inputs: ResourceThroughput[], imports: ResourceThrou
       const importRow = document.createElement("div");
       importRow.className = "bf-import";
 
-      const connectionsForInput = inputConnections.filter(connection => connection.resourceType === input.name);
+      const connectionsForInput = connections.filter(connection => connection.resourceType === input.name);
       for (const connection of connectionsForInput) {
         const connectionLabel = document.createElement("span");
         connectionLabel.className = "bf-connection";
         connectionLabel.textContent = `${connection.amount}`;
         importRow.appendChild(connectionLabel);
+      }
+
+      if (onAddConnection) {
+        const addButton = document.createElement("button");
+        addButton.className = "bf-add-connection";
+        addButton.textContent = "+";
+        addButton.addEventListener("click", () => onAddConnection(input.name));
+        importRow.appendChild(addButton);
       }
 
       const importLabel = document.createElement("span");

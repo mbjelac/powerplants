@@ -52,7 +52,16 @@ function ensurePreviewP5(parent: HTMLElement) {
   });
 }
 
-export function showBuildingPanel(name: string, code: string, buildingFunction: BuildingFunction, imports: ResourceThroughput[], inputConnections: BuildingConnection[], floorColor: [number, number, number], location: BuildingLocation) {
+export function showBuildingPanel({ name, code, buildingFunction, imports, inputConnections, floorColor, location, onAddInputConnection }: {
+  name: string,
+  code: string,
+  buildingFunction: BuildingFunction,
+  imports: ResourceThroughput[],
+  inputConnections: BuildingConnection[],
+  floorColor: [number, number, number],
+  location: BuildingLocation,
+  onAddInputConnection?: (resourceType: string) => void
+}) {
   hideBuildingPanel();
 
   panelEl = document.createElement("div");
@@ -78,7 +87,7 @@ export function showBuildingPanel(name: string, code: string, buildingFunction: 
 
   panelEl.appendChild(header);
 
-  panelEl.appendChild(createFunctionDisplay(buildingFunction, imports, inputConnections));
+  panelEl.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, imports: imports, inputConnections: inputConnections, onAddInputConnection: onAddInputConnection }));
 
   document.getElementById("canvas-container")!.appendChild(panelEl);
 

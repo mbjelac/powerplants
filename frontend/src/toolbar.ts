@@ -31,7 +31,7 @@ function showToolbarFunctionPanel(fn: BuildingFunction, anchorEl: HTMLElement) {
   toolbarFnPanel = document.createElement("div");
   toolbarFnPanel.id = "toolbar-function-panel";
 
-  toolbarFnPanel.appendChild(createFunctionDisplay(fn, []));
+  toolbarFnPanel.appendChild(createFunctionDisplay({ buildingFunction: fn, imports: [] }));
 
   document.body.appendChild(toolbarFnPanel);
 
