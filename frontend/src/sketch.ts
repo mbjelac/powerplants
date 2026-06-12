@@ -4,8 +4,8 @@ import {parseCommands} from "../../shared/parseCommands";
 import {applyCommands} from "../../shared/applyCommands";
 import {BLOCK_SIZE} from "../../shared/constants";
 import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} from "./toolbar";
-import { BuildingLocation, PossibleConnection, Sektor } from "./sektor/Sektor";
-import { getResourceIcon } from "./resources";
+import { BuildingConnection, BuildingLocation, PossibleConnection, Sektor } from "./sektor/Sektor";
+import { getResourceColor, getResourceIcon } from "./resources";
 import { buildingDefinitions } from "./sektor/buildings/buildings";
 import {showBuildingPanel, hideBuildingPanel} from "./sektor/buildings/buildingPanel";
 import {updateImportExportPanel} from "./importExportPanel";
@@ -28,6 +28,7 @@ const sektor = new Sektor(createFertilityMatrix(GRID_SIZE), buildingDefinitions)
 const soilFertility = sektor.getSoilFertility();
 const placedBuildings: { type: string; location: BuildingLocation; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
+let displayedConnections: { connections: BuildingConnection[]; buildingLocation: BuildingLocation; labels: HTMLElement[] } | null = null;
 
 let selectMode: {
   possibleConnections: PossibleConnection[];
@@ -132,12 +133,67 @@ function updateConnectButtonPositions(p: p5, currentZoom: number) {
   }
 }
 
+function parseHexColor(hex: string): [number, number, number] {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return [r, g, b];
+}
+
+const MAX_GRID_DISTANCE = Math.sqrt((GRID_SIZE - 1) ** 2 + (GRID_SIZE - 1) ** 2);
+const MIN_ARC_HEIGHT = BLOCK_SIZE * 0.15;
+const MAX_ARC_HEIGHT = BLOCK_SIZE * 0.15 * 3;
+
+function drawConnectionArc(p: p5, source: BuildingLocation, target: BuildingLocation, resourceType: string, amount: number) {
+  const { wx: sourceX, wz: sourceZ } = gridToWorld(source.x, source.y);
+  const { wx: targetX, wz: targetZ } = gridToWorld(target.x, target.y);
+
+  const distance = Math.sqrt((source.x - target.x) ** 2 + (source.y - target.y) ** 2);
+  const normalizedDistance = distance / MAX_GRID_DISTANCE;
+  const arcHeight = MIN_ARC_HEIGHT + normalizedDistance * (MAX_ARC_HEIGHT - MIN_ARC_HEIGHT);
+
+  const colorHex = getResourceColor(resourceType);
+  const [r, g, b] = parseHexColor(colorHex);
+
+  p.push();
+  p.noFill();
+  p.stroke(r, g, b);
+  p.strokeWeight(2);
+
+  const segments = 20;
+  p.beginShape();
+  for (let i = 0; i <= segments; i++) {
+    const t = i / segments;
+    const x = sourceX + (targetX - sourceX) * t;
+    const z = sourceZ + (targetZ - sourceZ) * t;
+    const y = -arcHeight * 4 * t * (1 - t);
+    p.vertex(x, y, z);
+  }
+  p.endShape();
+  p.pop();
+}
+
 function openBuildingPanel(placed: { type: string; location: BuildingLocation; code: string }) {
   const buildingState = sektor.getBuildingState(placed.location);
   if (!buildingState) return;
   const code = getBuildingCode(placed.type);
   if (!code) return;
   const floorColor = fertilityColor(soilFertility[placed.location.x][placed.location.y]);
+  if (displayedConnections) {
+    for (const label of displayedConnections.labels) label.remove();
+  }
+  const container = document.getElementById("canvas-container")!;
+  const labels: HTMLElement[] = [];
+  for (const connection of buildingState.inputConnections) {
+    const label = document.createElement("div");
+    label.className = "connection-label";
+    const colorHex = getResourceColor(connection.resourceType);
+    label.style.color = colorHex;
+    label.textContent = `${connection.amount}`;
+    container.appendChild(label);
+    labels.push(label);
+  }
+  displayedConnections = { connections: buildingState.inputConnections, buildingLocation: placed.location, labels };
   showBuildingPanel({
     name: placed.type,
     code: code,
@@ -147,7 +203,6 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
     floorColor: floorColor,
     location: placed.location,
     onAddInputConnection: (resourceType: string) => {
-      console.log("add input connection", resourceType);
       enterSelectMode(placed.location, resourceType)
     }
   });
@@ -376,6 +431,10 @@ const sketch = (p: p5) => {
 
     if (!grid) {
       hideBuildingPanel();
+      if (displayedConnections) {
+        for (const label of displayedConnections.labels) label.remove();
+      }
+      displayedConnections = null;
       return;
     }
 
@@ -388,6 +447,10 @@ const sketch = (p: p5) => {
         openBuildingPanel(placed);
       } else {
         hideBuildingPanel();
+      if (displayedConnections) {
+        for (const label of displayedConnections.labels) label.remove();
+      }
+      displayedConnections = null;
       }
       return;
     }
@@ -441,6 +504,28 @@ const sketch = (p: p5) => {
       const commands = parseCommands(building.code);
       applyCommands(p, commands);
       p.pop();
+    }
+
+    if (displayedConnections) {
+      for (let i = 0; i < displayedConnections.connections.length; i++) {
+        const connection = displayedConnections.connections[i];
+        const source = connection.to;
+        const target = displayedConnections.buildingLocation;
+        drawConnectionArc(p, source, target, connection.resourceType, connection.amount);
+
+        const { wx: sourceX, wz: sourceZ } = gridToWorld(source.x, source.y);
+        const { wx: targetX, wz: targetZ } = gridToWorld(target.x, target.y);
+        const distance = Math.sqrt((source.x - target.x) ** 2 + (source.y - target.y) ** 2);
+        const normalizedDistance = distance / MAX_GRID_DISTANCE;
+        const arcHeight = MIN_ARC_HEIGHT + normalizedDistance * (MAX_ARC_HEIGHT - MIN_ARC_HEIGHT);
+        const midX = (sourceX + targetX) / 2;
+        const midY = -arcHeight;
+        const midZ = (sourceZ + targetZ) / 2;
+        const { screenX, screenY } = worldToScreen(p, midX, midY, midZ, zoom);
+        const label = displayedConnections.labels[i];
+        label.style.left = `${screenX}px`;
+        label.style.top = `${screenY}px`;
+      }
     }
 
     if (selectMode) {

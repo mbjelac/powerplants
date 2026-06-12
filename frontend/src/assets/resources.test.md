@@ -1,9 +1,9 @@
-Water 💧
-Energy ⚡
-Food 🥕
-Ore 🪨
-Work 🛠️
-Metal ⚙️
-Fuel 🛢️
-Wood 🪵
-Stone 🧱
+Water 💧 #4488ff
+Energy ⚡ #ffcc00
+Food 🥕 #ff8844
+Ore 🪨 #888888
+Work 🛠️ #cc8844
+Metal ⚙️ #aaaacc
+Fuel 🛢️ #884422
+Wood 🪵 #66aa44
+Stone 🧱 #aa8866
