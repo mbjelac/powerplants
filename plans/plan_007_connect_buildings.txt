@@ -67,13 +67,14 @@
                 - X button: right-aligned, gray
                 - background: same as canvas background
                 - border: gray
+            - on the map display a small connect button floating on each building in possible connections list
+                - button has label with:
+                    - resource type icon
+                    - current amount of that output exported by that building
             - the UI doesn't respond to any user actions except:
                 - drag to rotate
                 - zoom
-                - clicking a building
-                    - only clicking buildings on the list of possible connections is accepted
-                    - clicking a building which is not on the list is ignored
-            - all buildings on the map which are NOT in the list of possible connections are displayed with all their colors darkened
+                - clicking the connect button
             - create a visual test for selection mode
                 - test has to create at least two buildings
                 - test has to have at least 1 building in possible connections
@@ -82,7 +83,7 @@
             - the UI exits "select building" mode
             - the select message is removed
             - create a visual test for cancelling selection
-        - when a building is clicked:
+        - when a connect button is clicked:
             - it's building panel is NOT displayed
             - the UI exits "select building" mode
             - the select message is removed
