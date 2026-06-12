@@ -141,8 +141,8 @@ function parseHexColor(hex: string): [number, number, number] {
 }
 
 const MAX_GRID_DISTANCE = Math.sqrt((GRID_SIZE - 1) ** 2 + (GRID_SIZE - 1) ** 2);
-const MIN_ARC_HEIGHT = BLOCK_SIZE * 0.15;
-const MAX_ARC_HEIGHT = BLOCK_SIZE * 0.15 * 3;
+const MIN_ARC_HEIGHT = BLOCK_SIZE * 0.15 * 3;
+const MAX_ARC_HEIGHT = BLOCK_SIZE * 0.15 * 9;
 
 function drawConnectionArc(p: p5, source: BuildingLocation, target: BuildingLocation, resourceType: string, amount: number) {
   const { wx: sourceX, wz: sourceZ } = gridToWorld(source.x, source.y);
