@@ -70,9 +70,13 @@ export class Sektor {
     const inputConnections = this.connections
       .filter(c => c.target.x === location.x && c.target.y === location.y)
       .map(c => ({ to: c.source, resourceType: c.resourceType, amount: c.amount }));
+    const imports = def.buildingFunction.inputs.map(input => ({
+      name: input.name,
+      value: this.getRemainingImport(location, input.name),
+    }));
     return {
       buildingFunction: def.buildingFunction,
-      imports: def.buildingFunction.inputs.map(i => ({ name: i.name, value: i.value })),
+      imports,
       inputConnections,
     };
   }
@@ -80,6 +84,14 @@ export class Sektor {
   getImportsExports(): ImportsExports {
     const imports = this.aggregateThroughputs(this.buildings.map(building => this.getInputs(building.type)).flat());
     const exports = this.aggregateThroughputs(this.buildings.map(building => this.getOutputs(building.type)).flat());
+
+    for (const connection of this.connections) {
+      const importEntry = imports.find(entry => entry.name === connection.resourceType);
+      if (importEntry) importEntry.value -= connection.amount;
+      const exportEntry = exports.find(entry => entry.name === connection.resourceType);
+      if (exportEntry) exportEntry.value -= connection.amount;
+    }
+
     return { imports, exports };
   }
 

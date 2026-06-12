@@ -70,15 +70,38 @@ describe("getImportsExports", () => {
 
     const result = sektor.getImportsExports();
 
-    expect(result.imports).toEqual([
-      { name: "Energy", value: 9 },
-      { name: "Work", value: 8 },
-      { name: "Water", value: 3 },
-    ]);
+    expect(result).toEqual({
+      imports: [
+        { name: "Energy", value: 9 },
+        { name: "Work", value: 8 },
+        { name: "Water", value: 3 },
+      ],
+      exports: [
+        { name: "Water", value: 4 },
+        { name: "Food", value: 5 },
+      ],
+    });
+  });
 
-    expect(result.exports).toEqual([
-      { name: "Water", value: 4 },
-      { name: "Food", value: 5 },
-    ]);
+  it("decreases imports and exports when a connection is added", () => {
+    const sektor = new Sektor([[50]], testDefinitions);
+    sektor.createBuilding({ type: "Well", location: { x: 0, y: 0 } });
+    sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
+
+    sektor.addConnection({ x: 1, y: 0 }, { x: 0, y: 0 }, "Water");
+
+    const result = sektor.getImportsExports();
+
+    expect(result).toEqual({
+      imports: [
+        { name: "Energy", value: 9 },
+        { name: "Work", value: 8 },
+        { name: "Water", value: 2 },
+      ],
+      exports: [
+        { name: "Water", value: 3 },
+        { name: "Food", value: 5 },
+      ],
+    });
   });
 });
