@@ -1,0 +1,9 @@
+Water 💧
+Energy ⚡
+Food 🥕
+Ore 🪨
+Work 🛠️
+Metal ⚙️
+Fuel 🛢️
+Wood 🪵
+Stone 🧱
