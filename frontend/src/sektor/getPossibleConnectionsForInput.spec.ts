@@ -82,6 +82,21 @@ describe("getPossibleConnectionsForInput", () => {
     expect(result).toEqual([]);
   });
 
+  it("excludes buildings already connected to target with same resource type", () => {
+    const sektor = new Sektor([[50]], testDefinitions);
+    sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
+    sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
+    sektor.createBuilding({ type: "Farm", location: { x: 2, y: 0 } });
+
+    sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");
+
+    const result = sektor.getPossibleConnectionsForInput({ x: 0, y: 0 }, "Wheat");
+
+    expect(result).toEqual([
+      { location: { x: 2, y: 0 }, totalOutput: 5, remainingOutput: 5 },
+    ]);
+  });
+
   it("returns multiple buildings when several have matching output", () => {
     const sektor = new Sektor([[50]], testDefinitions);
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });

@@ -105,6 +105,7 @@
                 - one connection uses that building as source for output X, amount 2
                 - another connection uses that building as source for output X, amount 4
                 - that building is NOT a possible connection: it's output is already depleted
+        - is not already connected to the target building with the same resource type
     - addConnection should run the same validations for the source building as those for deciding whether to put a building in possible connections list
 
 #3 Display connection on map

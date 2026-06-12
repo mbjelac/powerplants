@@ -97,4 +97,15 @@ describe("addConnection", () => {
 
     expect(result).toEqual({ success: false, error: "sourceOutputExhausted" });
   });
+
+  it("fails when source is already connected to target with same resource type", () => {
+    const sektor = new Sektor([[50]], testDefinitions);
+    sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
+    sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
+
+    sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");
+    const result = sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");
+
+    expect(result).toEqual({ success: false, error: "alreadyConnected" });
+  });
 });

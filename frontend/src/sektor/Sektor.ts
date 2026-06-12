@@ -133,6 +133,14 @@ export class Sektor {
     return output.value - connectedAmount;
   }
 
+  private isAlreadyConnected(target: BuildingLocation, source: BuildingLocation, resourceType: string): boolean {
+    return this.connections.some(
+      connection => connection.target.x === target.x && connection.target.y === target.y
+        && connection.source.x === source.x && connection.source.y === source.y
+        && connection.resourceType === resourceType
+    );
+  }
+
   private aggregateThroughputs(throughputs: ResourceThroughput[]): ResourceThroughput[] {
     const map = new Map<string, number>();
     for (const t of throughputs) {
@@ -154,6 +162,8 @@ export class Sektor {
     const sourceOutput = this.getOutputs(sourceBuilding.type).find(output => output.name === resourceType);
     if (!sourceOutput) return { success: false, error: "sourceHasNoMatchingOutput" };
 
+    if (this.isAlreadyConnected(target, source, resourceType)) return { success: false, error: "alreadyConnected" };
+
     const remainingImport = this.getRemainingImport(target, resourceType);
     if (remainingImport <= 0) return { success: false, error: "targetInputFull" };
 
@@ -169,6 +179,7 @@ export class Sektor {
       .filter(building => {
         if (building.location.x === target.x && building.location.y === target.y) return false;
         if (!this.getOutputs(building.type).some(output => output.name === resourceType)) return false;
+        if (this.isAlreadyConnected(target, building.location, resourceType)) return false;
         return this.getRemainingExport(building.location, resourceType) > 0;
       })
       .map(building => ({
