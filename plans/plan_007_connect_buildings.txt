@@ -71,6 +71,7 @@
                 - button has label with:
                     - resource type icon
                     - current amount of that output exported by that building
+                - buttons move with zoom and rotate to remain above their respective buildings
             - the UI doesn't respond to any user actions except:
                 - drag to rotate
                 - zoom
