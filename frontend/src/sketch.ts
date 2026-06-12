@@ -53,12 +53,14 @@ function enterSelectMode(targetLocation: BuildingLocation, resourceType: string)
   banner.appendChild(closeButton);
 
   document.getElementById("canvas-container")!.appendChild(banner);
+  document.getElementById("toolbar")!.style.pointerEvents = "none";
 }
 
 function exitSelectMode() {
   selectMode = null;
   const banner = document.getElementById("select-banner");
   if (banner) banner.remove();
+  document.getElementById("toolbar")!.style.pointerEvents = "";
 }
 
 function isInPossibleConnections(location: BuildingLocation): boolean {
