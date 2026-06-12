@@ -14,7 +14,7 @@
     - the number in the row is equal to value of the BuildingState.imports element which has the same name as that row's input
     - create visual test for the building panel
 
-#2 Connect a building's input to another building's output
+#2 [done] Connect a building's input to another building's output
 - [done] refactor: introduce BuildingLocation
     - x & y are used to find buildings by location
     - replace usages with interface BuildingLocation = { x: number, y: number }
