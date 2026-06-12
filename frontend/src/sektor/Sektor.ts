@@ -28,6 +28,12 @@ export interface BuildingCreation {
   location: BuildingLocation;
 }
 
+export interface PossibleConnection {
+  location: BuildingLocation;
+  totalOutput: number;
+  remainingOutput: number;
+}
+
 export interface AddConnectionResult {
   success: boolean;
   error?: string;
@@ -151,20 +157,24 @@ export class Sektor {
     const remainingImport = this.getRemainingImport(target, resourceType);
     if (remainingImport <= 0) return { success: false, error: "targetInputFull" };
 
-    const remainingExport = this.getRemainingExport(source, resourceType);
-    if (remainingExport <= 0) return { success: false, error: "sourceOutputExhausted" };
+    const remainingOutput = this.getRemainingExport(source, resourceType);
+    if (remainingOutput <= 0) return { success: false, error: "sourceOutputExhausted" };
 
     this.connections.push({ target, source, resourceType, amount: 1 });
     return { success: true };
   }
 
-  getPossibleConnectionsForInput(target: BuildingLocation, resourceType: string): BuildingLocation[] {
+  getPossibleConnectionsForInput(target: BuildingLocation, resourceType: string): PossibleConnection[] {
     return this.buildings
       .filter(building => {
         if (building.location.x === target.x && building.location.y === target.y) return false;
         return this.getOutputs(building.type).some(output => output.name === resourceType);
       })
-      .map(building => building.location);
+      .map(building => ({
+        location: building.location,
+        totalOutput: this.getOutputs(building.type).find(output => output.name === resourceType)!.value,
+        remainingOutput: this.getRemainingExport(building.location, resourceType),
+      }));
   }
 
   createBuilding(building: BuildingCreation): CreateBuildingResult {

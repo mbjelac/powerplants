@@ -40,7 +40,7 @@ describe("getPossibleConnectionsForInput", () => {
 
     const result = sektor.getPossibleConnectionsForInput({ x: 0, y: 0 }, "Wheat");
 
-    expect(result).toEqual([{ x: 1, y: 0 }]);
+    expect(result).toEqual([{ location: { x: 1, y: 0 }, totalOutput: 5, remainingOutput: 5 }]);
   });
 
   it("excludes the target building itself", () => {
@@ -70,6 +70,9 @@ describe("getPossibleConnectionsForInput", () => {
 
     const result = sektor.getPossibleConnectionsForInput({ x: 0, y: 0 }, "Wheat");
 
-    expect(result).toEqual([{ x: 1, y: 0 }, { x: 2, y: 0 }]);
+    expect(result).toEqual([
+      { location: { x: 1, y: 0 }, totalOutput: 5, remainingOutput: 5 },
+      { location: { x: 2, y: 0 }, totalOutput: 5, remainingOutput: 5 },
+    ]);
   });
 });
