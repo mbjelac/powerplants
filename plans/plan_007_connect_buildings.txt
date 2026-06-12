@@ -31,7 +31,7 @@
         - target building's input has it's import > 0
         - source building's output has it's export > 0
     - create Sektor test which verifies all that
-- when getBuildingState returns BuildingState, it has a property inputConnections: BuildingConnection[]
+- [done] when getBuildingState returns BuildingState, it has a property inputConnections: BuildingConnection[]
     - BuildingConnection is { to: BuildingLocation, recourceType: string, amount: number }
     - when a connection is added:
         - the added connection's BuildingConnection is returned in the array
