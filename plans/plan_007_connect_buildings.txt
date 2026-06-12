@@ -52,7 +52,7 @@
             -  when A (target) connects to B (source), imports are X 4, exports are X 6
             - this is because A no longer requires so much import and B no longer supplies so much export
      - create Sektor test which verifies all that
-- each input values row (the row beneath each input in a selected building's function panel) has a "+" button
+- [done] each input values row (the row beneath each input in a selected building's function panel) has a "+" button
     - when clicked
         - possible connections are retreived with getPossibleConnectionsForInput
             - params are: currrently selected building location, resource type of that row's input
