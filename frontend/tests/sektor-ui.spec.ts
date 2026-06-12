@@ -161,6 +161,50 @@ test("cancels selection mode when X is clicked", async ({ page }) => {
   await expectScreenshot(page, "selection-cancelled", "body");
 });
 
+test("displays connection arc on map after connecting buildings", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+  const canvas = page.locator("#canvas-container canvas");
+  const box = await canvas.boundingBox();
+  const centerX = box!.width / 2;
+  const centerY = box!.height / 2;
+
+  // Place first TestFactory (outputs Food) — nearby
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX - 60, y: centerY - 20 } });
+  await page.waitForTimeout(200);
+
+  // Place second TestFactory (outputs Food) — further away
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX + 100, y: centerY - 60 } });
+  await page.waitForTimeout(200);
+
+  // Place TestHouse (inputs Food 2) — target building
+  await page.locator('.building-item[data-building-name="TestHouse"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+
+  // Click TestHouse to open panel
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+
+  // Connect Food from first TestFactory
+  await page.locator(".bf-add-connection").first().click();
+  await page.waitForTimeout(300);
+  await page.locator(".connect-button").first().click();
+  await page.waitForTimeout(300);
+
+  // Connect Food from second TestFactory (further away)
+  await page.locator(".bf-add-connection").first().click();
+  await page.waitForTimeout(300);
+  await page.locator(".connect-button").last().click();
+  await page.waitForTimeout(300);
+
+  await expectScreenshot(page, "connection-arc", "body");
+});
+
 test("shows error when placing building on occupied location", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   await page.locator('.building-item[data-building-name="TestFactory"]').click();

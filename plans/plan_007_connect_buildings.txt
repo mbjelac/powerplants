@@ -108,7 +108,7 @@
     - addConnection should run the same validations for the source building as those for deciding whether to put a building in possible connections list
 
 #3 Display connection on map
-- when a connection is added, it is displayed on the map
+- [done] when a connection is added, it is displayed on the map
     - the connection is displayed as an arc from the center of the source building to the center of the target building
     - the height of the arc should range from one floor width to three floor widths, depending on the distance between buildings
     - if buildings have a maximum distance between them (for example locations 0,0 & 9,9) then the arc height is 3 floor widths
@@ -117,9 +117,9 @@
         - after the icon (emoji) there is a space and a hex code for the arc color
         - if color is missing in the file, use white
     - on the top of the arc, display the amount of the connection, in the arc color with a black background
-- when a building is selected, all it's input connections are displayed on the map
+- [done] when a building is selected, all it's input connections are displayed on the map
     - display all connections as previously described
-- create visual tests for connection display
+- [done] create visual tests for connection display
 
 #4 Increase connection amount
 
