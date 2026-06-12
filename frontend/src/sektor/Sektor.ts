@@ -168,7 +168,8 @@ export class Sektor {
     return this.buildings
       .filter(building => {
         if (building.location.x === target.x && building.location.y === target.y) return false;
-        return this.getOutputs(building.type).some(output => output.name === resourceType);
+        if (!this.getOutputs(building.type).some(output => output.name === resourceType)) return false;
+        return this.getRemainingExport(building.location, resourceType) > 0;
       })
       .map(building => ({
         location: building.location,

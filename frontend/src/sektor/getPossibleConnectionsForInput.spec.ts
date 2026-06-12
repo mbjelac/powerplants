@@ -62,6 +62,26 @@ describe("getPossibleConnectionsForInput", () => {
     expect(result).toEqual([]);
   });
 
+  it("excludes buildings with depleted output", () => {
+    const sektor = new Sektor([[50]], testDefinitions);
+    sektor.createBuilding({ type: "Farm", location: { x: 0, y: 0 } });
+    sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
+    sektor.createBuilding({ type: "Farm", location: { x: 2, y: 0 } });
+    sektor.createBuilding({ type: "Farm", location: { x: 3, y: 0 } });
+    sektor.createBuilding({ type: "Farm", location: { x: 4, y: 0 } });
+    sektor.createBuilding({ type: "Well", location: { x: 5, y: 0 } });
+
+    // Well has Water output 4, deplete it with 4 connections
+    sektor.addConnection({ x: 0, y: 0 }, { x: 5, y: 0 }, "Water");
+    sektor.addConnection({ x: 1, y: 0 }, { x: 5, y: 0 }, "Water");
+    sektor.addConnection({ x: 2, y: 0 }, { x: 5, y: 0 }, "Water");
+    sektor.addConnection({ x: 3, y: 0 }, { x: 5, y: 0 }, "Water");
+
+    const result = sektor.getPossibleConnectionsForInput({ x: 4, y: 0 }, "Water");
+
+    expect(result).toEqual([]);
+  });
+
   it("returns multiple buildings when several have matching output", () => {
     const sektor = new Sektor([[50]], testDefinitions);
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
