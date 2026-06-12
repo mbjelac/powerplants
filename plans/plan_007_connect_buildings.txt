@@ -119,6 +119,7 @@
     - on the top of the arc, display the amount of the connection, in the arc color with a black background
 - when a building is selected, all it's input connections are displayed on the map
     - display all connections as previously described
+- create visual tests for connection display
 
 #4 Increase connection amount
 
