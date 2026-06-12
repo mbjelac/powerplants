@@ -37,7 +37,7 @@
         - the added connection's BuildingConnection is returned in the array
         - it's amount is initially 1
     - create Sektor test which verifies all that
-- display input connections in building panel
+- [done] display input connections in building panel
     - each input row has one label per connection for that input, before the "+" button
     - each label displays the amount from input connection
 
