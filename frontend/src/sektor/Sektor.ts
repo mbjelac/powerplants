@@ -6,9 +6,16 @@ export interface ImportsExports {
   exports: ResourceThroughput[];
 }
 
+export interface BuildingConnection {
+  to: BuildingLocation;
+  resourceType: string;
+  amount: number;
+}
+
 export interface BuildingState {
   buildingFunction: BuildingFunction;
   imports: ResourceThroughput[];
+  inputConnections: BuildingConnection[];
 }
 
 export interface BuildingLocation {
@@ -60,9 +67,13 @@ export class Sektor {
     if (!building) return null;
     const def = this.buildingDefinitions.find(b => b.name === building.type);
     if (!def) return null;
+    const inputConnections = this.connections
+      .filter(c => c.target.x === location.x && c.target.y === location.y)
+      .map(c => ({ to: c.source, resourceType: c.resourceType, amount: c.amount }));
     return {
       buildingFunction: def.buildingFunction,
       imports: def.buildingFunction.inputs.map(i => ({ name: i.name, value: i.value })),
+      inputConnections,
     };
   }
 
