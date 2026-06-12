@@ -248,7 +248,7 @@ const sketch = (p: p5) => {
           const code = getBuildingCode(placed.type);
           if (code) {
             const floorColor = fertilityColor(soilFertility[placed.location.x][placed.location.y]);
-            showBuildingPanel(placed.type, code, buildingState.buildingFunction, buildingState.imports, floorColor, placed.location);
+            showBuildingPanel(placed.type, code, buildingState.buildingFunction, buildingState.imports, buildingState.inputConnections, floorColor, placed.location);
           }
         }
       } else {

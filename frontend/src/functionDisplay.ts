@@ -1,12 +1,13 @@
 
 import { getResourceIcon } from "./resources";
+import { BuildingConnection } from "./sektor/Sektor";
 import { BuildingFunction, ResourceThroughput } from "./sektor/buildings/parseBuildingDefinitions";
 
-export function createFunctionDisplay(buildingFunction: BuildingFunction, imports: ResourceThroughput[]): HTMLElement {
+export function createFunctionDisplay(buildingFunction: BuildingFunction, imports: ResourceThroughput[], inputConnections: BuildingConnection[] = []): HTMLElement {
   const functionDisplay = document.createElement("div");
   functionDisplay.className = "bf-function";
 
-  functionDisplay.appendChild(createInputsColumn(buildingFunction.inputs, imports));
+  functionDisplay.appendChild(createInputsColumn(buildingFunction.inputs, imports, inputConnections));
 
   const equalsEl = document.createElement("div");
   equalsEl.className = "bf-equals";
@@ -18,7 +19,7 @@ export function createFunctionDisplay(buildingFunction: BuildingFunction, import
   return functionDisplay;
 }
 
-function createInputsColumn(inputs: ResourceThroughput[], imports: ResourceThroughput[]): HTMLElement {
+function createInputsColumn(inputs: ResourceThroughput[], imports: ResourceThroughput[], inputConnections: BuildingConnection[]): HTMLElement {
   const column = document.createElement("div");
   column.className = "bf-col";
   for (const input of inputs) {
@@ -31,7 +32,19 @@ function createInputsColumn(inputs: ResourceThroughput[], imports: ResourceThrou
     if (importEntry) {
       const importRow = document.createElement("div");
       importRow.className = "bf-import";
-      importRow.textContent = `${importEntry.value}`;
+
+      const connectionsForInput = inputConnections.filter(connection => connection.resourceType === input.name);
+      for (const connection of connectionsForInput) {
+        const connectionLabel = document.createElement("span");
+        connectionLabel.className = "bf-connection";
+        connectionLabel.textContent = `${connection.amount}`;
+        importRow.appendChild(connectionLabel);
+      }
+
+      const importLabel = document.createElement("span");
+      importLabel.textContent = `${importEntry.value}`;
+      importRow.appendChild(importLabel);
+
       column.appendChild(importRow);
     }
   }
