@@ -186,6 +186,21 @@ body > main {
   padding: 0 4px;
 }
 
+.connect-button {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  background: rgb(30, 30, 30);
+  border: 1px solid #888;
+  border-radius: 4px;
+  color: #ccc;
+  font-family: sans-serif;
+  font-size: 12px;
+  padding: 2px 6px;
+  cursor: pointer;
+  z-index: 50;
+  white-space: nowrap;
+}
+
 #error-message {
   display: none;
   position: absolute;

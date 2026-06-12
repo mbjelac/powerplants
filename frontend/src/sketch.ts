@@ -4,7 +4,8 @@ import {parseCommands} from "../../shared/parseCommands";
 import {applyCommands} from "../../shared/applyCommands";
 import {BLOCK_SIZE} from "../../shared/constants";
 import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} from "./toolbar";
-import { BuildingLocation, Sektor } from "./sektor/Sektor";
+import { BuildingLocation, PossibleConnection, Sektor } from "./sektor/Sektor";
+import { getResourceIcon } from "./resources";
 import { buildingDefinitions } from "./sektor/buildings/buildings";
 import {showBuildingPanel, hideBuildingPanel} from "./sektor/buildings/buildingPanel";
 import {updateImportExportPanel} from "./importExportPanel";
@@ -29,9 +30,10 @@ const placedBuildings: { type: string; location: BuildingLocation; code: string 
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
 
 let selectMode: {
-  possibleConnections: BuildingLocation[];
+  possibleConnections: PossibleConnection[];
   targetLocation: BuildingLocation;
   resourceType: string;
+  connectButtons: HTMLElement[];
 } | null = null;
 
 function enterSelectMode(targetLocation: BuildingLocation, resourceType: string) {
@@ -40,7 +42,23 @@ function enterSelectMode(targetLocation: BuildingLocation, resourceType: string)
     showError("noPossibleConnections");
     return;
   }
-  selectMode = { possibleConnections, targetLocation, resourceType };
+
+  const container = document.getElementById("canvas-container")!;
+  const connectButtons: HTMLElement[] = [];
+
+  for (const connection of possibleConnections) {
+    const button = document.createElement("button");
+    button.className = "connect-button";
+    const icon = getResourceIcon(resourceType) ?? "";
+    button.textContent = `${icon} ${connection.remainingOutput}/${connection.totalOutput}`;
+    button.addEventListener("click", () => {
+      handleConnectButtonClick(connection.location);
+    });
+    container.appendChild(button);
+    connectButtons.push(button);
+  }
+
+  selectMode = { possibleConnections, targetLocation, resourceType, connectButtons };
 
   const banner = document.createElement("div");
   banner.id = "select-banner";
@@ -52,22 +70,66 @@ function enterSelectMode(targetLocation: BuildingLocation, resourceType: string)
   closeButton.addEventListener("click", exitSelectMode);
   banner.appendChild(closeButton);
 
-  document.getElementById("canvas-container")!.appendChild(banner);
+  container.appendChild(banner);
   document.getElementById("toolbar")!.style.pointerEvents = "none";
 }
 
+function handleConnectButtonClick(sourceLocation: BuildingLocation) {
+  if (!selectMode) return;
+  const targetLocation = selectMode.targetLocation;
+  const resourceType = selectMode.resourceType;
+  exitSelectMode();
+
+  const connectionResult = sektor.addConnection(targetLocation, sourceLocation, resourceType);
+
+  if (!connectionResult.success) {
+    showError(connectionResult.error ?? "Connection failed");
+    return;
+  }
+
+  const targetPlaced = placedBuildings.find(b => b.location.x === targetLocation.x && b.location.y === targetLocation.y);
+  if (targetPlaced) openBuildingPanel(targetPlaced);
+  updateImportExportPanel(sektor.getImportsExports());
+}
+
 function exitSelectMode() {
+  if (selectMode) {
+    for (const button of selectMode.connectButtons) {
+      button.remove();
+    }
+  }
   selectMode = null;
   const banner = document.getElementById("select-banner");
   if (banner) banner.remove();
   document.getElementById("toolbar")!.style.pointerEvents = "";
 }
 
-function isInPossibleConnections(location: BuildingLocation): boolean {
-  if (!selectMode) return false;
-  return selectMode.possibleConnections.some(
-    possible => possible.x === location.x && possible.y === location.y
-  );
+function worldToScreen(p: p5, worldX: number, worldY: number, worldZ: number, currentZoom: number): { screenX: number; screenY: number } {
+  const { rightX, rightY, rightZ, upX, upY, upZ } = getCameraBasis(p);
+
+  // Project world position onto camera right/up axes
+  const dotRight = rightX * worldX + rightY * worldY + rightZ * worldZ;
+  const dotUp = upX * worldX + upY * worldY + upZ * worldZ;
+
+  const hw = p.width * currentZoom / 2;
+  const hh = p.height * currentZoom / 2;
+
+  return {
+    screenX: p.width / 2 + (dotRight / hw) * (p.width / 2),
+    screenY: p.height / 2 + (dotUp / hh) * (p.height / 2),
+  };
+}
+
+function updateConnectButtonPositions(p: p5, currentZoom: number) {
+  if (!selectMode) return;
+  for (let i = 0; i < selectMode.possibleConnections.length; i++) {
+    const connection = selectMode.possibleConnections[i];
+    const button = selectMode.connectButtons[i];
+    const { wx, wz } = gridToWorld(connection.location.x, connection.location.y);
+    const { screenX, screenY } = worldToScreen(p, wx, -BLOCK_SIZE * 0.3, wz, currentZoom);
+    button.style.left = `${screenX}px`;
+    button.style.top = `${screenY}px`;
+  }
 }
 
 function openBuildingPanel(placed: { type: string; location: BuildingLocation; code: string }) {
@@ -308,29 +370,9 @@ const sketch = (p: p5) => {
     mouseDownOnCanvas = false;
     if (didDrag) return;
 
+    if (selectMode) return;
+
     const grid = findClickedTile(p, zoom);
-
-    if (selectMode) {
-      if (!grid) return;
-      const clickedLocation = { x: grid.x, y: grid.y };
-      if (!isInPossibleConnections(clickedLocation)) return;
-
-      const targetLocation = selectMode.targetLocation;
-      const resourceType = selectMode.resourceType;
-      exitSelectMode();
-
-      const connectionResult = sektor.addConnection(targetLocation, clickedLocation, resourceType);
-
-      if (!connectionResult.success) {
-        showError(connectionResult.error ?? "Connection failed");
-        return;
-      }
-
-      const targetPlaced = placedBuildings.find(b => b.location.x === targetLocation.x && b.location.y === targetLocation.y);
-      if (targetPlaced) openBuildingPanel(targetPlaced);
-      updateImportExportPanel(sektor.getImportsExports());
-      return;
-    }
 
     if (!grid) {
       hideBuildingPanel();
@@ -398,15 +440,11 @@ const sketch = (p: p5) => {
       p.translate(wx, 0, wz);
       const commands = parseCommands(building.code);
       applyCommands(p, commands);
-
-      if (selectMode && !isInPossibleConnections(building.location)) {
-        p.fill(0, 0, 0, 160);
-        p.noStroke();
-        p.translate(0, -BLOCK_SIZE * 0.25, 0);
-        p.box(BLOCK_SIZE, BLOCK_SIZE * 0.5, BLOCK_SIZE);
-      }
-
       p.pop();
+    }
+
+    if (selectMode) {
+      updateConnectButtonPositions(p, zoom);
     }
 
     document.getElementById("canvas-container")!.dataset.rendered = "true";
