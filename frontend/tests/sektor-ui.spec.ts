@@ -93,6 +93,74 @@ test("displays function panel when building tool is selected", async ({ page }) 
   });
 });
 
+test("displays selection mode with connect buttons", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+  const canvas = page.locator("#canvas-container canvas");
+  const box = await canvas.boundingBox();
+  const centerX = box!.width / 2;
+  const centerY = box!.height / 2;
+
+  // Place TestFactory (outputs Food) — will be a possible connection
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX - 60, y: centerY - 20 } });
+  await page.waitForTimeout(200);
+
+  // Place TestMine (outputs Ore) — will NOT be a possible connection for Food
+  await page.locator('.building-item[data-building-name="TestMine"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX + 60, y: centerY - 20 } });
+  await page.waitForTimeout(200);
+
+  // Place TestHouse (inputs Food) — target building
+  await page.locator('.building-item[data-building-name="TestHouse"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+
+  // Click TestHouse to open panel
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+
+  // Click "+" on the Food input row
+  await page.locator(".bf-add-connection").first().click();
+  await page.waitForTimeout(300);
+
+  await expectScreenshot(page, "selection-mode", "body");
+});
+
+test("cancels selection mode when X is clicked", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+  const canvas = page.locator("#canvas-container canvas");
+  const box = await canvas.boundingBox();
+  const centerX = box!.width / 2;
+  const centerY = box!.height / 2;
+
+  // Place TestFactory and TestHouse
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX - 60, y: centerY - 20 } });
+  await page.waitForTimeout(200);
+
+  await page.locator('.building-item[data-building-name="TestHouse"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+
+  // Open panel and enter select mode
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+  await page.locator(".bf-add-connection").first().click();
+  await page.waitForTimeout(300);
+
+  // Click X to cancel
+  await page.locator(".select-banner-close").click();
+  await page.waitForTimeout(200);
+
+  // Banner and connect buttons should be gone, panel should still be visible
+  await expectScreenshot(page, "selection-cancelled", "body");
+});
+
 test("shows error when placing building on occupied location", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   await page.locator('.building-item[data-building-name="TestFactory"]').click();
