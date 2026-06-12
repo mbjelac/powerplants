@@ -95,7 +95,7 @@
             - if adding a connection fails (success=false), display error message on the top of the screen same as for locationOccupied (message dissapears automatically)
             - if adding a connection succeeds, display label "1" in the input row on the left-hand side to the left of the "+" button
                 - this shows a connection has been made for this resource type with the amount of 1
-- additional restrictions with full connections structure
+- [done] additional restrictions with full connections structure
     - getPossibleConnectionsForInput should return all buildings which:
         - are not on target location (building can't be connected to itself)
         - have at least 1 amount of output to spare
