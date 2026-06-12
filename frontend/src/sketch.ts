@@ -28,6 +28,7 @@ const sektor = new Sektor(createFertilityMatrix(GRID_SIZE), buildingDefinitions)
 const soilFertility = sektor.getSoilFertility();
 const placedBuildings: { type: string; location: BuildingLocation; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
+let selectedBuildingLocation: BuildingLocation | null = null;
 let displayedConnections: { connections: BuildingConnection[]; buildingLocation: BuildingLocation; labels: HTMLElement[] } | null = null;
 
 let selectMode: {
@@ -193,6 +194,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
     container.appendChild(label);
     labels.push(label);
   }
+  selectedBuildingLocation = placed.location;
   displayedConnections = { connections: buildingState.inputConnections, buildingLocation: placed.location, labels };
   showBuildingPanel({
     name: placed.type,
@@ -434,6 +436,7 @@ const sketch = (p: p5) => {
       if (displayedConnections) {
         for (const label of displayedConnections.labels) label.remove();
       }
+      selectedBuildingLocation = null;
       displayedConnections = null;
       return;
     }
@@ -450,6 +453,7 @@ const sketch = (p: p5) => {
       if (displayedConnections) {
         for (const label of displayedConnections.labels) label.remove();
       }
+      selectedBuildingLocation = null;
       displayedConnections = null;
       }
       return;
@@ -496,6 +500,25 @@ const sketch = (p: p5) => {
         p.pop();
       }
     }
+    if (selectedBuildingLocation) {
+      const { wx, wz } = gridToWorld(selectedBuildingLocation.x, selectedBuildingLocation.y);
+      const borderWidth = BLOCK_SIZE * 0.04;
+      const sides = [
+        { x: wx, z: wz - HALF + borderWidth / 2, w: BLOCK_SIZE, d: borderWidth },
+        { x: wx, z: wz + HALF - borderWidth / 2, w: BLOCK_SIZE, d: borderWidth },
+        { x: wx - HALF + borderWidth / 2, z: wz, w: borderWidth, d: BLOCK_SIZE },
+        { x: wx + HALF - borderWidth / 2, z: wz, w: borderWidth, d: BLOCK_SIZE },
+      ];
+      for (const side of sides) {
+        p.push();
+        p.noStroke();
+        p.emissiveMaterial(255, 255, 0);
+        p.translate(side.x, -FLOOR_HEIGHT / 2 - 0.1, side.z);
+        p.box(side.w, 0.1, side.d);
+        p.pop();
+      }
+    }
+
     p.noStroke();
     for (const building of placedBuildings) {
       p.push();
