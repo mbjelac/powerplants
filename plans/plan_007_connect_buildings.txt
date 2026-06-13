@@ -123,7 +123,7 @@
 - [done] create visual tests for connection display
 
 #4 Increase & decrease connection amount
-- Sektor has method "changeConnectionAmount(target: BuildingLocation, source: BuildingLocation, resourceType: string, delta: number): ConnectionAmountChangeResult"
+- [done] Sektor has method "changeConnectionAmount(target: BuildingLocation, source: BuildingLocation, resourceType: string, delta: number): ConnectionAmountChangeResult"
     - target, source & resource type are used to identify the connection
     - delta is the amount to increase or decrease the connection amount by
     - ConnectionAmountChangeResult is { success: boolean, error?: string, newAmount: number }
