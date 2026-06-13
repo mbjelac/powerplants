@@ -75,7 +75,7 @@ export class Sektor {
   }
 
   getBuildingState(location: BuildingLocation): BuildingState | null {
-    const building = this.buildings.find(b => b.location.x === location.x && b.location.y === location.y);
+    const building = this.findBuildingAt(location);
     if (!building) return null;
     const def = this.buildingDefinitions.find(b => b.name === building.type);
     if (!def) return null;
@@ -118,7 +118,7 @@ export class Sektor {
   }
 
   private getRemainingImport(location: BuildingLocation, resourceType: string): number {
-    const building = this.buildings.find(b => b.location.x === location.x && b.location.y === location.y);
+    const building = this.findBuildingAt(location);
     if (!building) return 0;
     const input = this.getInputs(building.type).find(i => i.name === resourceType);
     if (!input) return 0;
@@ -129,7 +129,7 @@ export class Sektor {
   }
 
   private getRemainingExport(location: BuildingLocation, resourceType: string): number {
-    const building = this.buildings.find(b => b.location.x === location.x && b.location.y === location.y);
+    const building = this.findBuildingAt(location);
     if (!building) return 0;
     const output = this.getOutputs(building.type).find(o => o.name === resourceType);
     if (!output) return 0;
@@ -156,10 +156,10 @@ export class Sektor {
   }
 
   addConnection(target: BuildingLocation, source: BuildingLocation, resourceType: string): AddConnectionResult {
-    const targetBuilding = this.buildings.find(b => b.location.x === target.x && b.location.y === target.y);
+    const targetBuilding = this.findBuildingAt(target);
     if (!targetBuilding) return { success: false, error: "targetBuildingNotFound" };
 
-    const sourceBuilding = this.buildings.find(b => b.location.x === source.x && b.location.y === source.y);
+    const sourceBuilding = this.findBuildingAt(source);
     if (!sourceBuilding) return { success: false, error: "sourceBuildingNotFound" };
 
     const targetInput = this.getInputs(targetBuilding.type).find(input => input.name === resourceType);
@@ -192,7 +192,7 @@ export class Sektor {
 
     if (newAmount < 0) return { success: false, error: "cannotDecreaseBelowZero", newAmount: connection.amount };
 
-    const targetBuilding = this.buildings.find(b => b.location.x === target.x && b.location.y === target.y);
+    const targetBuilding = this.findBuildingAt(target);
     if (!targetBuilding) return { success: false, error: "targetBuildingNotFound", newAmount: connection.amount };
     const targetInput = this.getInputs(targetBuilding.type).find(input => input.name === resourceType);
     if (!targetInput) return { success: false, error: "targetHasNoMatchingInput", newAmount: connection.amount };
@@ -201,7 +201,7 @@ export class Sektor {
       .reduce((sum, c) => sum + c.amount, 0) + delta;
     if (totalInputConnected > targetInput.value) return { success: false, error: "inputOverflow", newAmount: connection.amount };
 
-    const sourceBuilding = this.buildings.find(b => b.location.x === source.x && b.location.y === source.y);
+    const sourceBuilding = this.findBuildingAt(source);
     if (!sourceBuilding) return { success: false, error: "sourceBuildingNotFound", newAmount: connection.amount };
     const sourceOutput = this.getOutputs(sourceBuilding.type).find(output => output.name === resourceType);
     if (!sourceOutput) return { success: false, error: "sourceHasNoMatchingOutput", newAmount: connection.amount };
@@ -230,11 +230,15 @@ export class Sektor {
   }
 
   createBuilding(building: BuildingCreation): CreateBuildingResult {
-    if (this.buildings.some((existing) => existing.location.x === building.location.x && existing.location.y === building.location.y)) {
+    if (this.findBuildingAt(building.location)) {
       return { error: "locationOccupied", addedBuildings: [] };
     }
 
     this.buildings.push(building);
     return { error: undefined, addedBuildings: [building] };
+  }
+
+  private findBuildingAt(location: BuildingLocation): BuildingCreation | undefined {
+    return this.buildings.find(building => building.location.x === location.x && building.location.y === location.y);
   }
 }
