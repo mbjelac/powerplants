@@ -5,7 +5,7 @@ import { drawFloor } from "../../../../shared/drawFloor";
 import { BLOCK_SIZE } from "../../../../shared/constants";
 import { createFunctionDisplay } from "../../functionDisplay";
 import { BuildingFunction, ResourceThroughput } from "./parseBuildingDefinitions";
-import { BuildingConnection, BuildingLocation } from "../Sektor";
+import { BuildingLocation } from "../Sektor";
 
 let panelEl: HTMLElement | null = null;
 let previewP5: p5 | null = null;
@@ -52,12 +52,11 @@ function ensurePreviewP5(parent: HTMLElement) {
   });
 }
 
-export function showBuildingPanel({ name, code, buildingFunction, imports, inputConnections, floorColor, location, onAddInputConnection }: {
+export function showBuildingPanel({ name, code, buildingFunction, imports, floorColor, location, onAddInputConnection }: {
   name: string,
   code: string,
   buildingFunction: BuildingFunction,
   imports: ResourceThroughput[],
-  inputConnections: BuildingConnection[],
   floorColor: [number, number, number],
   location: BuildingLocation,
   onAddInputConnection?: (resourceType: string) => void
@@ -87,7 +86,7 @@ export function showBuildingPanel({ name, code, buildingFunction, imports, input
 
   panelEl.appendChild(header);
 
-  panelEl.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, imports: imports, inputConnections: inputConnections, onAddInputConnection: onAddInputConnection }));
+  panelEl.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, imports: imports, onAddInputConnection: onAddInputConnection }));
 
   document.getElementById("canvas-container")!.appendChild(panelEl);
 

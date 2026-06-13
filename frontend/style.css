@@ -133,23 +133,12 @@ body > main {
   flex: 1;
 }
 
-.bf-import {
-  display: flex;
-  align-self: stretch;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 4px;
+.bf-input-clickable {
+  cursor: pointer;
 }
 
-.bf-add-connection {
-  background: #2a2a2a;
-  border: 1px solid #888;
-  color: #ccc;
-  font-family: sans-serif;
-  font-size: 12px;
-  cursor: pointer;
-  padding: 0 4px;
-  line-height: 1.4;
+.bf-input-clickable:hover {
+  background: #444;
 }
 
 .bf-equals {

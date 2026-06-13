@@ -123,7 +123,7 @@ test("displays selection mode with connect buttons", async ({ page }) => {
   await page.waitForTimeout(200);
 
   // Click "+" on the Food input row
-  await page.locator(".bf-add-connection").first().click();
+  await page.locator(".bf-input-clickable").first().click();
   await page.waitForTimeout(300);
 
   await expectScreenshot(page, "selection-mode", "body");
@@ -150,7 +150,7 @@ test("cancels selection mode when X is clicked", async ({ page }) => {
   // Open panel and enter select mode
   await canvas.click({ position: { x: centerX, y: centerY + 30 } });
   await page.waitForTimeout(200);
-  await page.locator(".bf-add-connection").first().click();
+  await page.locator(".bf-input-clickable").first().click();
   await page.waitForTimeout(300);
 
   // Click X to cancel
@@ -191,13 +191,13 @@ test("displays connection arc on map after connecting buildings", async ({ page 
   await page.waitForTimeout(200);
 
   // Connect Food from first TestFactory
-  await page.locator(".bf-add-connection").first().click();
+  await page.locator(".bf-input-clickable").first().click();
   await page.waitForTimeout(300);
   await page.locator(".connect-button").first().click();
   await page.waitForTimeout(300);
 
   // Connect Food from second TestFactory (further away)
-  await page.locator(".bf-add-connection").first().click();
+  await page.locator(".bf-input-clickable").first().click();
   await page.waitForTimeout(300);
   await page.locator(".connect-button").last().click();
   await page.waitForTimeout(300);
@@ -226,7 +226,7 @@ test("increases connection amount when up button is clicked", async ({ page }) =
   // Open panel, create connection
   await canvas.click({ position: { x: centerX, y: centerY + 30 } });
   await page.waitForTimeout(200);
-  await page.locator(".bf-add-connection").first().click();
+  await page.locator(".bf-input-clickable").first().click();
   await page.waitForTimeout(300);
   await page.locator(".connect-button").click();
   await page.waitForTimeout(300);
@@ -259,7 +259,7 @@ test("decreases connection amount when down button is clicked", async ({ page })
   // Open panel, create connection, increase to 2
   await canvas.click({ position: { x: centerX, y: centerY + 30 } });
   await page.waitForTimeout(200);
-  await page.locator(".bf-add-connection").first().click();
+  await page.locator(".bf-input-clickable").first().click();
   await page.waitForTimeout(300);
   await page.locator(".connect-button").click();
   await page.waitForTimeout(300);

@@ -238,7 +238,6 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
     code: code,
     buildingFunction: buildingState.buildingFunction,
     imports: buildingState.imports,
-    inputConnections: buildingState.inputConnections,
     floorColor: floorColor,
     location: placed.location,
     onAddInputConnection: (resourceType: string) => {
