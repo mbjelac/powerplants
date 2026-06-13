@@ -30,7 +30,7 @@ function createColumn(title: string, items: ResourceThroughput[]): HTMLElement {
   header.textContent = title;
   col.appendChild(header);
 
-  for (const item of items) {
+  for (const item of items.filter(item => item.value !== 0)) {
     const row = document.createElement("div");
     row.className = "ie-row";
     const icon = getResourceIcon(item.name);
