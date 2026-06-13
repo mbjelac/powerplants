@@ -122,8 +122,33 @@
     - display all connections as previously described
 - [done] create visual tests for connection display
 
-#4 Increase connection amount
+#4 Increase & decrease connection amount
+- Sektor has method "changeConnectionAmount(target: BuildingLocation, source: BuildingLocation, resourceType: string, delta: number): ConnectionAmountChangeResult"
+    - target, source & resource type are used to identify the connection
+    - delta is the amount to increase or decrease the connection amount by
+    - ConnectionAmountChangeResult is { success: boolean, error?: string, newAmount: number }
+    - to change the connection amount, the delta has to be valid
+        - the new amount has to be equal to or greater than 0
+        - the sum of all connection amounts connected to that input of the target building has to be less or equal to that input amount from the building's function
+            - example:
+                - target building has input X 6
+                - input X has 2 connections, one with amount 3, another with amount 1
+                - changing any of the two connections with delta 3 or more is not allowed, since this would bring the sum of all connection amounts to 7, which would exceed the input X 6
+        - the sum of all connection amounts connected to that output of the source building has to be less or equal to that output amount from the building's function
+            - example:
+                - source building has output X 6
+                - output X has 2 connections, one with amount 3, another with amount 1
+                - changing any of the two connections with delta 3 or more is not allowed, since this would bring the sum of all connection amounts to 7, which would exceed the output X 6
+    - if changing the amount is successful, imports and exports are updated accordingly
+        - imports for the resource type are decreased by the delta
+        - exports for the resource type are decreased by the delta
+        - create Sektor test which verifies imports & exports
+    - create Sektor test which verifies new connection amount by getting BuildingState of the target building and checking the connection amount in the inputConnections array
+    - if changing the amount is not successful, return result with success=false and error message
+        - in case of failure, newAmount is current (unchanged) amount
+        - if delta would decrease amount below 0, error message is "cannotDecreaseBelowZero"
+        - if delta would increase amount above the input amount, error message is "inputOverflow"
+        - if delta would increase amount above the output amount, error message is "outputOverflow"
+        - create Sektor tests for all error cases and assert newAmount, success=false and error message value
 
-#5 Decrease connection amount
-
-#6 Remove connection
+#5 Remove connection
