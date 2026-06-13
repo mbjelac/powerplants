@@ -165,5 +165,11 @@
     - if changing amount is successful, display new amount in the label on top of the arc
 - UI reflects imports-exports changes
     - if changing amount is successful, get latest ImportsExports and refresh imports exports panel
+- redesign input rows in building panel
+    - do not add amount label to building panel row when connection added
+    - display resource import amount next to function row, after resource function amount, in parentheses, like "SomeResource <icon> 4 (3)"
+    - remove the "+" button from the row and delete the row
+    - the entire function row (with resource name, icon, amount & import) functions as the add connection button
+- imports exports panel does not display items with value 0
 
 #5 Remove connection
