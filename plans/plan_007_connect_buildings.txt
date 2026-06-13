@@ -108,7 +108,7 @@
         - is not already connected to the target building with the same resource type
     - addConnection should run the same validations for the source building as those for deciding whether to put a building in possible connections list
 
-#3 Display connection on map
+#3 [done] Display connection on map
 - [done] when a connection is added, it is displayed on the map
     - the connection is displayed as an arc from the center of the source building to the center of the target building
     - the height of the arc should range from one floor width to three floor widths, depending on the distance between buildings
