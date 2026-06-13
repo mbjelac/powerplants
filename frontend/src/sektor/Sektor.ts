@@ -39,6 +39,12 @@ export interface AddConnectionResult {
   error?: string;
 }
 
+export interface ConnectionAmountChangeResult {
+  success: boolean;
+  error?: string;
+  newAmount: number;
+}
+
 interface Connection {
   target: BuildingLocation;
   source: BuildingLocation;
@@ -172,6 +178,40 @@ export class Sektor {
 
     this.connections.push({ target, source, resourceType, amount: 1 });
     return { success: true };
+  }
+
+  changeConnectionAmount(target: BuildingLocation, source: BuildingLocation, resourceType: string, delta: number): ConnectionAmountChangeResult {
+    const connection = this.connections.find(
+      c => c.target.x === target.x && c.target.y === target.y
+        && c.source.x === source.x && c.source.y === source.y
+        && c.resourceType === resourceType
+    );
+    if (!connection) return { success: false, error: "connectionNotFound", newAmount: 0 };
+
+    const newAmount = connection.amount + delta;
+
+    if (newAmount < 0) return { success: false, error: "cannotDecreaseBelowZero", newAmount: connection.amount };
+
+    const targetBuilding = this.buildings.find(b => b.location.x === target.x && b.location.y === target.y);
+    if (!targetBuilding) return { success: false, error: "targetBuildingNotFound", newAmount: connection.amount };
+    const targetInput = this.getInputs(targetBuilding.type).find(input => input.name === resourceType);
+    if (!targetInput) return { success: false, error: "targetHasNoMatchingInput", newAmount: connection.amount };
+    const totalInputConnected = this.connections
+      .filter(c => c.target.x === target.x && c.target.y === target.y && c.resourceType === resourceType)
+      .reduce((sum, c) => sum + c.amount, 0) + delta;
+    if (totalInputConnected > targetInput.value) return { success: false, error: "inputOverflow", newAmount: connection.amount };
+
+    const sourceBuilding = this.buildings.find(b => b.location.x === source.x && b.location.y === source.y);
+    if (!sourceBuilding) return { success: false, error: "sourceBuildingNotFound", newAmount: connection.amount };
+    const sourceOutput = this.getOutputs(sourceBuilding.type).find(output => output.name === resourceType);
+    if (!sourceOutput) return { success: false, error: "sourceHasNoMatchingOutput", newAmount: connection.amount };
+    const totalOutputConnected = this.connections
+      .filter(c => c.source.x === source.x && c.source.y === source.y && c.resourceType === resourceType)
+      .reduce((sum, c) => sum + c.amount, 0) + delta;
+    if (totalOutputConnected > sourceOutput.value) return { success: false, error: "outputOverflow", newAmount: connection.amount };
+
+    connection.amount = newAmount;
+    return { success: true, newAmount };
   }
 
   getPossibleConnectionsForInput(target: BuildingLocation, resourceType: string): PossibleConnection[] {
