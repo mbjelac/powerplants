@@ -163,5 +163,7 @@
 - UI reflects amount change
     - if changing amount is not successful, display error message on the top of the screen same as for locationOccupied (message dissapears automatically)
     - if changing amount is successful, display new amount in the label on top of the arc
+- UI reflects imports-exports changes
+    - if changing amount is successful, get latest ImportsExports and refresh imports exports panel
 
 #5 Remove connection
