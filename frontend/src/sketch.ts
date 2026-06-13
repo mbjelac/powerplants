@@ -145,7 +145,7 @@ const MAX_GRID_DISTANCE = Math.sqrt((GRID_SIZE - 1) ** 2 + (GRID_SIZE - 1) ** 2)
 const MIN_ARC_HEIGHT = BLOCK_SIZE * 0.15 * 3;
 const MAX_ARC_HEIGHT = BLOCK_SIZE * 0.15 * 9;
 
-function drawConnectionArc(p: p5, source: BuildingLocation, target: BuildingLocation, resourceType: string, amount: number) {
+function drawConnectionArc(p: p5, source: BuildingLocation, target: BuildingLocation, resourceType: string) {
   const { wx: sourceX, wz: sourceZ } = gridToWorld(source.x, source.y);
   const { wx: targetX, wz: targetZ } = gridToWorld(target.x, target.y);
 
@@ -159,7 +159,7 @@ function drawConnectionArc(p: p5, source: BuildingLocation, target: BuildingLoca
   p.push();
   p.noFill();
   p.stroke(r, g, b);
-  p.strokeWeight(2);
+  p.strokeWeight(3);
 
   const segments = 20;
   p.beginShape();
@@ -188,9 +188,46 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
   for (const connection of buildingState.inputConnections) {
     const label = document.createElement("div");
     label.className = "connection-label";
-    const colorHex = getResourceColor(connection.resourceType);
-    label.style.color = colorHex;
-    label.textContent = `${connection.amount}`;
+
+    const icon = getResourceIcon(connection.resourceType) ?? "";
+    const amountText = document.createElement("span");
+    amountText.className = "connection-amount-text";
+    amountText.textContent = `${icon} ${connection.amount}`;
+    label.appendChild(amountText);
+
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.className = "connection-amount-buttons";
+
+    const upButton = document.createElement("button");
+    upButton.className = "connection-amount-button";
+    upButton.textContent = "▲";
+    upButton.addEventListener("click", () => {
+      const result = sektor.changeConnectionAmount(placed.location, connection.to, connection.resourceType, 1);
+      if (result.success) {
+        openBuildingPanel(placed);
+        updateImportExportPanel(sektor.getImportsExports());
+      } else {
+        showError(result.error ?? "Cannot increase");
+      }
+    });
+    buttonsContainer.appendChild(upButton);
+
+    const downButton = document.createElement("button");
+    downButton.className = "connection-amount-button";
+    downButton.textContent = "▼";
+    downButton.addEventListener("click", () => {
+      const result = sektor.changeConnectionAmount(placed.location, connection.to, connection.resourceType, -1);
+      if (result.success) {
+        openBuildingPanel(placed);
+        updateImportExportPanel(sektor.getImportsExports());
+      } else {
+        showError(result.error ?? "Cannot decrease");
+      }
+    });
+    buttonsContainer.appendChild(downButton);
+
+    label.appendChild(buttonsContainer);
+
     container.appendChild(label);
     labels.push(label);
   }
@@ -534,7 +571,7 @@ const sketch = (p: p5) => {
         const connection = displayedConnections.connections[i];
         const source = connection.to;
         const target = displayedConnections.buildingLocation;
-        drawConnectionArc(p, source, target, connection.resourceType, connection.amount);
+        drawConnectionArc(p, source, target, connection.resourceType);
 
         const { wx: sourceX, wz: sourceZ } = gridToWorld(source.x, source.y);
         const { wx: targetX, wz: targetZ } = gridToWorld(target.x, target.y);

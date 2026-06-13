@@ -205,6 +205,74 @@ test("displays connection arc on map after connecting buildings", async ({ page 
   await expectScreenshot(page, "connection-arc", "body");
 });
 
+test("increases connection amount when up button is clicked", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+  const canvas = page.locator("#canvas-container canvas");
+  const box = await canvas.boundingBox();
+  const centerX = box!.width / 2;
+  const centerY = box!.height / 2;
+
+  // Place TestFactory (outputs Food) and TestHouse (inputs Food 2)
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX - 60, y: centerY - 20 } });
+  await page.waitForTimeout(200);
+
+  await page.locator('.building-item[data-building-name="TestHouse"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+
+  // Open panel, create connection
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+  await page.locator(".bf-add-connection").first().click();
+  await page.waitForTimeout(300);
+  await page.locator(".connect-button").click();
+  await page.waitForTimeout(300);
+
+  // Click up button to increase amount
+  await page.locator(".connection-amount-button").first().click();
+  await page.waitForTimeout(300);
+
+  await expectScreenshot(page, "connection-amount-increased", "body");
+});
+
+test("decreases connection amount when down button is clicked", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+  const canvas = page.locator("#canvas-container canvas");
+  const box = await canvas.boundingBox();
+  const centerX = box!.width / 2;
+  const centerY = box!.height / 2;
+
+  // Place TestFactory (outputs Food) and TestHouse (inputs Food 2)
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX - 60, y: centerY - 20 } });
+  await page.waitForTimeout(200);
+
+  await page.locator('.building-item[data-building-name="TestHouse"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+
+  // Open panel, create connection, increase to 2
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+  await page.locator(".bf-add-connection").first().click();
+  await page.waitForTimeout(300);
+  await page.locator(".connect-button").click();
+  await page.waitForTimeout(300);
+  await page.locator(".connection-amount-button").first().click();
+  await page.waitForTimeout(300);
+
+  // Click down button to decrease amount back to 1
+  await page.locator(".connection-amount-button").last().click();
+  await page.waitForTimeout(300);
+
+  await expectScreenshot(page, "connection-amount-decreased", "body");
+});
+
 test("shows error when placing building on occupied location", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   await page.locator('.building-item[data-building-name="TestFactory"]').click();
