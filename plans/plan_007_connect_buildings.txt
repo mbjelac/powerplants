@@ -122,7 +122,7 @@
     - display all connections as previously described
 - [done] create visual tests for connection display
 
-#4 Increase & decrease connection amount
+#4 [done] Increase & decrease connection amount
 - [done] Sektor has method "changeConnectionAmount(target: BuildingLocation, source: BuildingLocation, resourceType: string, delta: number): ConnectionAmountChangeResult"
     - target, source & resource type are used to identify the connection
     - delta is the amount to increase or decrease the connection amount by
@@ -150,26 +150,26 @@
         - if delta would increase amount above the input amount, error message is "inputOverflow"
         - if delta would increase amount above the output amount, error message is "outputOverflow"
         - create Sektor tests for all error cases and assert newAmount, success=false and error message value
-- UI has button to increase amount
+- [done] UI has button to increase amount
     - there is a small button above the label on top of the arc
     - button has small up-triangle icon
     - clicking the button increases the connection amount by 1
     - create visual test which clicks increase button
-- UI has button to decrease amount
+- [done] UI has button to decrease amount
     - there is a small button below the label on top of the arc
     - button has small down-triangle icon
     - clicking the button decreases the connection amount by 1
     - create visual test which clicks decrease button
-- UI reflects amount change
+- [done] UI reflects amount change
     - if changing amount is not successful, display error message on the top of the screen same as for locationOccupied (message dissapears automatically)
     - if changing amount is successful, display new amount in the label on top of the arc
-- UI reflects imports-exports changes
+- [done] UI reflects imports-exports changes
     - if changing amount is successful, get latest ImportsExports and refresh imports exports panel
-- redesign input rows in building panel
+- [done] redesign input rows in building panel
     - do not add amount label to building panel row when connection added
     - display resource import amount next to function row, after resource function amount, in parentheses, like "SomeResource <icon> 4 (3)"
     - remove the "+" button from the row and delete the row
     - the entire function row (with resource name, icon, amount & import) functions as the add connection button
-- imports exports panel does not display items with value 0
+- [done] imports exports panel does not display items with value 0
 
 #5 Remove connection
