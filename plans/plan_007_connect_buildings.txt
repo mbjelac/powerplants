@@ -154,12 +154,12 @@
     - there is a small button above the label on top of the arc
     - button has small up-triangle icon
     - clicking the button increases the connection amount by 1
-    - create visual test for increase button clicking
+    - create visual test which clicks increase button
 - UI has button to decrease amount
     - there is a small button below the label on top of the arc
     - button has small down-triangle icon
     - clicking the button decreases the connection amount by 1
-    - create visual test for decrease button
+    - create visual test which clicks decrease button
 - UI reflects amount change
     - if changing amount is not successful, display error message on the top of the screen same as for locationOccupied (message dissapears automatically)
     - if changing amount is successful, display new amount in the label on top of the arc
