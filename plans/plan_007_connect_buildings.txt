@@ -160,5 +160,8 @@
     - button has small down-triangle icon
     - clicking the button decreases the connection amount by 1
     - create visual test for decrease button
+- UI reflects amount change
+    - if changing amount is not successful, display error message on the top of the screen same as for locationOccupied (message dissapears automatically)
+    - if changing amount is successful, display new amount in the label on top of the arc
 
 #5 Remove connection
