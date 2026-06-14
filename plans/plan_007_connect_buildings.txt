@@ -173,7 +173,7 @@
 - [done] imports exports panel does not display items with value 0
 
 #5 Temporary autosave
-- for purposes of easier manual testing, each change to the map should be saved automatically
+- [done] for purposes of easier manual testing, each change to the map should be saved automatically
     - on change (place building, add connection, etc.), serialize map state to json and save to local storage
     - on load, read from local storage if exists, deserialize and load map state
 
@@ -189,6 +189,7 @@
 - player can destroy a building from the building panel
     - building panel contains a trash-can icon in it's top right corner
     - clicking the icon calls Sektor.destroyBuilding
+    - save state
     - close building panel
     - update map
     - update imports-exports panel
