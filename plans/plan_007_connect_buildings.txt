@@ -177,7 +177,7 @@
     - on change (place building, add connection, etc.), serialize map state to json and save to local storage
     - on load, read from local storage if exists, deserialize and load map state
 
-#6 Destroy building
+#6 [done] Destroy building
 - [done] Sektor has method "destroyBuilding(location: BuildingLocation): DestroyBuildingResult"
     - DestroyBuildingResult is { success: boolean, error?: string }
     - if building is not found, returns success=false and error="buildingNotFound"
@@ -186,7 +186,7 @@
         - building is deleted
         - imports & exports are updated
     - create Sektor test which verifies all that
-- player can destroy a building from the building panel
+- [done] player can destroy a building from the building panel
     - building panel contains a trash-can icon in it's top right corner
     - clicking the icon calls Sektor.destroyBuilding
     - save state
