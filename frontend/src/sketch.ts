@@ -24,10 +24,32 @@ function createFertilityMatrix(gridSize: number): number[][] {
   );
 }
 
+const SAVE_KEY = "sektor-map-state";
+
 const sektor = new Sektor(createFertilityMatrix(GRID_SIZE), buildingDefinitions);
 const soilFertility = sektor.getSoilFertility();
 const placedBuildings: { type: string; location: BuildingLocation; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
+
+function saveState() {
+  const state = sektor.getState();
+  localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+}
+
+function loadSavedState() {
+  const saved = localStorage.getItem(SAVE_KEY);
+  if (!saved) return;
+  const state = JSON.parse(saved);
+  sektor.loadState(state);
+  for (const building of state.buildings) {
+    const code = getBuildingCode(building.type);
+    if (code) {
+      placedBuildings.push({ type: building.type, location: building.location, code });
+    }
+  }
+  updateImportExportPanel(sektor.getImportsExports());
+}
+
 let selectedBuildingLocation: BuildingLocation | null = null;
 let displayedConnections: { connections: BuildingConnection[]; buildingLocation: BuildingLocation; labels: HTMLElement[] } | null = null;
 
@@ -92,6 +114,7 @@ function handleConnectButtonClick(sourceLocation: BuildingLocation) {
   const targetPlaced = placedBuildings.find(b => b.location.x === targetLocation.x && b.location.y === targetLocation.y);
   if (targetPlaced) openBuildingPanel(targetPlaced);
   updateImportExportPanel(sektor.getImportsExports());
+  saveState();
 }
 
 function exitSelectMode() {
@@ -206,6 +229,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
       if (result.success) {
         openBuildingPanel(placed);
         updateImportExportPanel(sektor.getImportsExports());
+        saveState();
       } else {
         showError(result.error ?? "Cannot increase");
       }
@@ -220,6 +244,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
       if (result.success) {
         openBuildingPanel(placed);
         updateImportExportPanel(sektor.getImportsExports());
+        saveState();
       } else {
         showError(result.error ?? "Cannot decrease");
       }
@@ -507,6 +532,7 @@ const sketch = (p: p5) => {
     if (result.error === undefined) {
       deselectBuilding();
       updateImportExportPanel(sektor.getImportsExports());
+      saveState();
     }
 
     if (result.error !== undefined) {
@@ -597,3 +623,6 @@ const sketch = (p: p5) => {
 
 new p5(sketch);
 initToolbar();
+if (!isTestMode) {
+  loadSavedState();
+}

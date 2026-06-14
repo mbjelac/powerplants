@@ -45,7 +45,7 @@ export interface ConnectionAmountChangeResult {
   newAmount: number;
 }
 
-interface Connection {
+export interface Connection {
   target: BuildingLocation;
   source: BuildingLocation;
   resourceType: string;
@@ -72,6 +72,18 @@ export class Sektor {
 
   getSoilFertility(): SoilFertilityMatrix {
     return this.soilFertility;
+  }
+
+  getState(): { buildings: BuildingCreation[]; connections: Connection[] } {
+    return {
+      buildings: this.buildings.map(building => ({ ...building })),
+      connections: this.connections.map(connection => ({ ...connection })),
+    };
+  }
+
+  loadState(state: { buildings: BuildingCreation[]; connections: Connection[] }) {
+    this.buildings = state.buildings;
+    this.connections = state.connections;
   }
 
   getBuildingState(location: BuildingLocation): BuildingState | null {
