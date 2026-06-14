@@ -267,6 +267,23 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
     location: placed.location,
     onAddInputConnection: (resourceType: string) => {
       enterSelectMode(placed.location, resourceType)
+    },
+    onDestroy: () => {
+      const result = sektor.destroyBuilding(placed.location);
+      if (!result.success) {
+        showError(result.error ?? "Cannot destroy");
+        return;
+      }
+      const index = placedBuildings.findIndex(b => b.location.x === placed.location.x && b.location.y === placed.location.y);
+      if (index !== -1) placedBuildings.splice(index, 1);
+      hideBuildingPanel();
+      selectedBuildingLocation = null;
+      if (displayedConnections) {
+        for (const label of displayedConnections.labels) label.remove();
+      }
+      displayedConnections = null;
+      updateImportExportPanel(sektor.getImportsExports());
+      saveState();
     }
   });
 }

@@ -273,6 +273,31 @@ test("decreases connection amount when down button is clicked", async ({ page })
   await expectScreenshot(page, "connection-amount-decreased", "body");
 });
 
+test("destroys building when trash icon is clicked", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+  const canvas = page.locator("#canvas-container canvas");
+  const box = await canvas.boundingBox();
+  const centerX = box!.width / 2;
+  const centerY = box!.height / 2;
+
+  // Place a building
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX, y: centerY } });
+  await page.waitForTimeout(200);
+
+  // Open panel
+  await canvas.click({ position: { x: centerX, y: centerY } });
+  await page.waitForTimeout(200);
+
+  // Click destroy button
+  await page.locator(".bf-destroy").click();
+  await page.waitForTimeout(200);
+
+  // Panel should be closed, building removed from map
+  await expectScreenshot(page, "building-destroyed", "body");
+});
+
 test("shows error when placing building on occupied location", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   await page.locator('.building-item[data-building-name="TestFactory"]').click();
