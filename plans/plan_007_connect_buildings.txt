@@ -195,20 +195,20 @@
     - update imports-exports panel
     - create visual test for destroying a building
 
-#7 Improve building panel design
-- resource columns in building panel should be vertically aligned to top
-- input column should be broken into columns which are vertically aligned like a table (do not use html table):
+#7 [done] Improve building panel design
+- [done] resource columns in building panel should be vertically aligned to top
+- [done] input column should be broken into columns which are vertically aligned like a table (do not use html table):
     - resource type (name + icon)
     - amount
     - import amount
-- above these there should be a header with icons:
+- [done] above these there should be a header with icons:
     - "Resource" above the resource type & icon
     - nothing above the function input amount
     - "import" icon above the import amount
         - herocicons arrow-down-tray
     - the "import" icon has tooltip "Imported"
-- on mouse hover over input, display a connect icon
+- [done] on mouse hover over input, display a connect icon
     - put a left-most column which does not display anything
     - display a connect icon on row hover
     - heroicon "link"
-- the "=" sign between input & output amounts should be a herocion "arrow-right"
+- [done] the "=" sign between input & output amounts should be a heroicon "arrow-right"
