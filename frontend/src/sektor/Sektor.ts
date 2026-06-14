@@ -52,6 +52,11 @@ export interface Connection {
   amount: number;
 }
 
+export interface DestroyBuildingResult {
+  success: boolean;
+  error?: string;
+}
+
 export interface CreateBuildingResult {
   error: undefined | string;
   addedBuildings: BuildingCreation[];
@@ -248,6 +253,21 @@ export class Sektor {
 
     this.buildings.push(building);
     return { error: undefined, addedBuildings: [building] };
+  }
+
+  destroyBuilding(location: BuildingLocation): DestroyBuildingResult {
+    const building = this.findBuildingAt(location);
+    if (!building) return { success: false, error: "buildingNotFound" };
+
+    this.connections = this.connections.filter(
+      connection => !(connection.target.x === location.x && connection.target.y === location.y)
+        && !(connection.source.x === location.x && connection.source.y === location.y)
+    );
+    this.buildings = this.buildings.filter(
+      existing => !(existing.location.x === location.x && existing.location.y === location.y)
+    );
+
+    return { success: true };
   }
 
   private findBuildingAt(location: BuildingLocation): BuildingCreation | undefined {
