@@ -212,5 +212,3 @@
     - display a connect icon on row hover
     - heroicon "link"
 - the "=" sign between input & output amounts should be a herocion "arrow-right"
-
-#8 Remove connection
