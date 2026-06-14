@@ -129,7 +129,7 @@ body > main {
 
 .bf-function {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   align-self: stretch;
   gap: 12px;
 }
@@ -137,16 +137,70 @@ body > main {
 .bf-col {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   color: #ccc;
   font-family: sans-serif;
   font-size: 12px;
   gap: 2px;
 }
 
-.bf-col:first-child {
-  text-align: right;
+.bf-inputs-table {
+  display: grid;
+  grid-template-columns: 14px auto auto auto;
+  gap: 2px 6px;
   flex: 1;
+  color: #ccc;
+  font-family: sans-serif;
+  font-size: 12px;
+  align-items: center;
+}
+
+.bf-inputs-table-simple {
+  grid-template-columns: auto auto;
+}
+
+.bf-inputs-row {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  align-items: center;
+}
+
+.bf-inputs-header {
+  color: #888;
+  font-size: 11px;
+}
+
+.bf-inputs-cell {
+  white-space: nowrap;
+}
+
+.bf-inputs-connect {
+  width: 14px;
+  visibility: hidden;
+  color: #888;
+  display: flex;
+  align-items: center;
+}
+
+.bf-inputs-row:not(.bf-inputs-header):hover .bf-inputs-connect {
+  visibility: visible;
+}
+
+.bf-inputs-amount {
+  text-align: center;
+}
+
+.bf-inputs-import {
+  text-align: center;
+  color: #999;
+}
+
+.bf-inputs-import-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
 }
 
 .bf-input-clickable {
@@ -157,10 +211,10 @@ body > main {
   background: #444;
 }
 
-.bf-equals {
+.bf-arrow {
   color: #ccc;
-  font-family: sans-serif;
-  font-size: 16px;
+  display: flex;
+  align-items: center;
 }
 
 #select-banner {
