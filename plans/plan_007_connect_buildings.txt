@@ -178,7 +178,7 @@
     - on load, read from local storage if exists, deserialize and load map state
 
 #6 Destroy building
-- Sektor has method "destroyBuilding(location: BuildingLocation): DestroyBuildingResult"
+- [done] Sektor has method "destroyBuilding(location: BuildingLocation): DestroyBuildingResult"
     - DestroyBuildingResult is { success: boolean, error?: string }
     - if building is not found, returns success=false and error="buildingNotFound"
     - if building is found:
@@ -196,6 +196,16 @@
     - create visual test for destroying a building
 
 #7 Improve building panel design
--
+- resource columns in building panel should be vertically aligned to top
+- above the input columns there should be a header with icons:
+    - "Resource" above the resource type & icon
+    - nothing above the function input amount
+    - "import" icon above the import amount
+        - herocicons arrow-down-tray
+    - the "import" icon has tooltip "Imported"
+- on mouse hover over input, display a connect icon
+    - put a left-most column which does not display anything
+    - display a connect icon on row hover
+    - heroicon "link"
 
 #8 Remove connection
