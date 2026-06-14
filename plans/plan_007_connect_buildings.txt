@@ -197,7 +197,11 @@
 
 #7 Improve building panel design
 - resource columns in building panel should be vertically aligned to top
-- above the input columns there should be a header with icons:
+- input column should be broken into columns which are vertically aligned like a table (do not use html table):
+    - resource type (name + icon)
+    - amount
+    - import amount
+- above these there should be a header with icons:
     - "Resource" above the resource type & icon
     - nothing above the function input amount
     - "import" icon above the import amount
