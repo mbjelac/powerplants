@@ -177,4 +177,7 @@
     - on change (place building, add connection, etc.), serialize map state to json and save to local storage
     - on load, read from local storage if exists, deserialize and load map state
 
-#6 Remove connection
+#6 Improve building panel design
+-
+
+#7 Remove connection
