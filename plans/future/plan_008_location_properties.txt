@@ -1,0 +1,12 @@
+All locations on the map have properties.
+
+Examples of properties are:
+- soil fertility
+- groundwater availability
+- ore density
+- cloud cover
+- wind speed
+
+These properties may influence a building's output.
+
+Each location has a set value for all properties and that value is a floating point number.
