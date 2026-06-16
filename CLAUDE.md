@@ -3,17 +3,18 @@
 ## Workflow
 
 1. Read the last plan file in `plans/` before starting any work.
-2. Each plan file has numbered section starting with #N where N is the section number and continuing with the section's name
-3. Underneath each section heading are bullets with dashes
-4. Each bullet is a step
-5. Execute only one step at a time, then report what was done.
-6. Wait for user approval before proceeding to the next step.
-7. Do not skip ahead or combine steps.
-8. When user instructs that a step is done, mark it done by adding [done] after the dash, like this: "- [done] <step instruction>"
-9. When all steps in a section are done, ask the user to confirm the section is done. Only after user confirms, mark the section as done by adding [done] after the #N numbering, like this: "#13 [done] <section name>".
-10. steps can have sub-steps described in indented bullets, which can also have sub-bullets, etc. do those without waiting for approval.
-11. User may nudge you forward  (approving your work) by instructions like "go", "proceed", "continue", etc. if unsure, ask the user does the instruction mean to continue with plan.
-12. When user approves a step, FIRST mark it [done] in the plan file, THEN start the next step. Never begin new work without marking the previous step done.
+2. Plan files may have introductory text before the numbered sections. This text describes the general idea and concepts behind the plan. Read and understand it before executing any steps.
+3. Each plan file has numbered sections starting with #N where N is the section number and continuing with the section's name
+4. Underneath each section heading are bullets with dashes
+5. Each bullet is a step
+6. Execute only one step at a time, then report what was done.
+7. Wait for user approval before proceeding to the next step.
+8. Do not skip ahead or combine steps.
+9. When user instructs that a step is done, mark it done by adding [done] after the dash, like this: "- [done] <step instruction>"
+10. When all steps in a section are done, ask the user to confirm the section is done. Only after user confirms, mark the section as done by adding [done] after the #N numbering, like this: "#13 [done] <section name>".
+11. steps can have sub-steps described in indented bullets, which can also have sub-bullets, etc. do those without waiting for approval.
+12. User may nudge you forward  (approving your work) by instructions like "go", "proceed", "continue", etc. if unsure, ask the user does the instruction mean to continue with plan.
+13. When user approves a step, FIRST mark it [done] in the plan file, THEN start the next step. Never begin new work without marking the previous step done.
 
 ## Code style
 
