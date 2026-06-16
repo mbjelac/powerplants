@@ -1,0 +1,74 @@
+When a Sektor is created, it is created with import restrictions & export requirements.
+
+Restrictions and requirements are set for specific resource types.
+
+Import restriction:
+Maximum value of import allowed.
+If not specified, restriction is 0 (no import allowed for that resource).
+
+Export requirements:
+Minimum value of export required.
+If not specified, requirement is 0 (no export required for that resource).
+
+Connected to this, each Sektor has a status.
+Initially, a Sektor's status is "Unfinished".
+If all requirements are met, and no restrictions are exceeded, a Sektor's status is "Finished".
+
+#1 Sektor status & requirements & restrictions can be read
+- refactor: ImportsExports should be named SektorState
+    - rename methods & tests accordingly
+- Sektor has restrictions & requirements
+    - Sektor instance is created with predefined import restrictions & export requirements:
+        - param restrictionsRequirements: { importRestrictions: ResourceThroughput[], exportRequirements: ResourceThroughput[] }
+    - method getSektorState returns SektorState with:
+        - imports (existing)
+        - exports (existing)
+        - status: "UNFINISHED" | "FINISHED"
+        - importRestrictions: ResourceThroughput[]\
+        - exportRequirements: ResourceThroughput[]
+
+#2 Restrictions and requirements are displayed
+- display import restrictions
+    - import restrictions should be displayed next to import values of those resource types
+    - if a resource import value is 0 and the resource has a restriction, that resource import row should be displayed
+    - import column should have sub-columns:
+        - resource name and icon
+        - import value
+        - restriction value (if any)
+    - column headers are:
+        - resource: "Resource"
+        - import: heroicons arrow-down-tray, tooltip: "Amount imported"
+        - restriction: heroicons exclamation-triangle, orange, tooltip: "Maximum"
+    - if an import value is over a restriction, that value has an orange background
+- display export requirements
+    - export requirements should be displayed next to export values of those resource types
+    - if a resource export value is 0 and the resource has a requirement, that resource export row should be displayed
+    - export column should have sub-columns:
+        - resource name and icon
+        - export value
+        - requirement value (if any)
+    - column headers are:
+        - resource: "Resource"
+        - export: heroicons arrow-up-tray, tooltip: "Amount exported"
+        - requirement: heroicon check-circle, green, tooltip: "Minimum"
+    - if an export value is on or over a requirement, that value has a green background
+- expand existing tests of the status panel to include a mixture of:
+    - non-zero import without restriction
+    - zero import with restriction
+    - non-zero import with restriction but below
+    - non-zero import with restriction, equal to restriction
+    - non-zero import with restriction, greater than restriction
+    - non-zero export without requirement
+    - zero export with requirement
+    - non-zero export with requirement but below
+    - non-zero export with requirement, equal to requirement
+    - non-zero export with requirement, greater than requirement
+
+#3 Status is displayed
+- status is displayed in the SektorState panel above the Imports & Exports table
+- label: "Status: "
+- value:
+    - UNFINISHED: "Unfinished", white
+    - FINISHED: "Finished", green, bold
+- create visual tests of panel in finished status
+    - other tests should already cover unfinished status
