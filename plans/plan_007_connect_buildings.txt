@@ -205,7 +205,7 @@
     - "Resource" above the resource type & icon
     - nothing above the function input amount
     - "import" icon above the import amount
-        - herocicons arrow-down-tray
+        - heroicons arrow-down-tray
     - the "import" icon has tooltip "Imported"
 - [done] on mouse hover over input, display a connect icon
     - put a left-most column which does not display anything
