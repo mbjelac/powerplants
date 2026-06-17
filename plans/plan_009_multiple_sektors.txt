@@ -24,4 +24,4 @@
 - if sektor not found for specified name, display empty page with error message "Sektor not found"
 
 #3 Sektor list is the intial page
-- when app starts, it displays sektor list
+- when app starts, it displays sektor list as initial page
