@@ -24,7 +24,7 @@ If all requirements are met, and no restrictions are exceeded, a Sektor's status
         - imports (existing)
         - exports (existing)
         - status: "UNFINISHED" | "FINISHED"
-        - importRestrictions: ResourceThroughput[]\
+        - importRestrictions: ResourceThroughput[]
         - exportRequirements: ResourceThroughput[]
 
 #2 Restrictions and requirements are displayed
