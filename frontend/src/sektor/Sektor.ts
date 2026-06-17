@@ -6,10 +6,12 @@ export interface RestrictionsRequirements {
   exportRequirements: ResourceThroughput[];
 }
 
+export type SektorStatus = "InProgress" | "Done" | "RestrictionsExceeded";
+
 export interface SektorState {
   imports: ResourceThroughput[];
   exports: ResourceThroughput[];
-  status: "InProgress" | "Done" | "RestrictionsExceeded";
+  status: SektorStatus;
   importRestrictions: ResourceThroughput[];
   exportRequirements: ResourceThroughput[];
 }
