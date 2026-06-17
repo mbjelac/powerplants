@@ -10,7 +10,7 @@
     - status
     - heroicon arrow-right as a button
 
-#2 Sektor page
+#2 [done] Sektor page
 - [done] when arrow button in list clicked, navigate to sektor page with sektor name in url
     - sektor.ui.ts is the sektor page
     - change the way sektor page creates a Sektor instance
@@ -22,12 +22,13 @@
     - sektor page has close button in bottom-left corner
         - icon: heroicons x-mark
     - when clicked, navigate to sektor list
-- display error instead of page if sektor missing
+- [done] display error instead of page if sektor missing
     - if sektor page loads without sektor name in URL
     - if sektor not found for specified name
     - display empty page with error message "Sektor not found"
         - text displayed in center of screen
         - red text, Courier New
         - text within thin red border with wide inner margins
+
 #3 Sektor list is the intial page
 - when app starts, it displays sektor list as initial page
