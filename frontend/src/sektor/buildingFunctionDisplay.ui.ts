@@ -1,10 +1,7 @@
 
 import { getResourceIcon } from "../resources";
 import { BuildingFunction, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
-
-const ARROW_DOWN_TRAY_SVG = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>';
-const LINK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>';
-const ARROW_RIGHT_SVG = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>';
+import { arrowDownTrayIcon, linkIcon, arrowRightIcon } from "../icons";
 
 export function createFunctionDisplay({ buildingFunction, imports, onAddInputConnection }: {
   buildingFunction: BuildingFunction,
@@ -18,7 +15,7 @@ export function createFunctionDisplay({ buildingFunction, imports, onAddInputCon
 
   const arrowEl = document.createElement("div");
   arrowEl.className = "bf-arrow";
-  arrowEl.innerHTML = ARROW_RIGHT_SVG;
+  arrowEl.innerHTML = arrowRightIcon;
   functionDisplay.appendChild(arrowEl);
 
   functionDisplay.appendChild(createColumn(buildingFunction.outputs));
@@ -53,7 +50,7 @@ function createInputsTable({ inputs, imports, onAddConnection }: {
 
     const importHeader = document.createElement("div");
     importHeader.className = "bf-inputs-cell bf-inputs-import-header";
-    importHeader.innerHTML = ARROW_DOWN_TRAY_SVG;
+    importHeader.innerHTML = arrowDownTrayIcon;
     importHeader.title = "Imported";
     headerRow.appendChild(importHeader);
 
@@ -67,7 +64,7 @@ function createInputsTable({ inputs, imports, onAddConnection }: {
     if (onAddConnection) {
       const connectCell = document.createElement("div");
       connectCell.className = "bf-inputs-cell bf-inputs-connect";
-      connectCell.innerHTML = LINK_SVG;
+      connectCell.innerHTML = linkIcon;
       row.appendChild(connectCell);
     }
 
