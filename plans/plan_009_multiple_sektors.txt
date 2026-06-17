@@ -17,6 +17,7 @@
         - loads data for Sektor from an api function (in it's own file) which for now returns the sektor data from the local storage by sektor name
             - local storage variable: sektor_<name>
             - value structure: { importRestrictions: ResourceThroughput[], exportRequirements: ResourceThroughput[], buildings: BuildingCreation[], connections: Connection[] }
+    - saving data is also done through an api function (in the same file as function for getting data)
 - player can return to sektor list
     - sektor page has gray X button in top right corner
     - when clicked, navigate to sektor list
