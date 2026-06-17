@@ -28,7 +28,21 @@ function createToggleButton(property: PropertyDefinition): HTMLElement {
   const button = document.createElement("button");
   button.className = "property-toggle";
   button.dataset.property = property.name;
-  button.textContent = property.name;
+  const nameSpan = document.createElement("span");
+  nameSpan.textContent = property.name;
+  button.appendChild(nameSpan);
+
+  const swatches = document.createElement("span");
+  swatches.className = "property-swatches";
+  const minSwatch = document.createElement("span");
+  minSwatch.className = "property-swatch";
+  minSwatch.style.backgroundColor = property.minColor;
+  const maxSwatch = document.createElement("span");
+  maxSwatch.className = "property-swatch";
+  maxSwatch.style.backgroundColor = property.maxColor;
+  swatches.appendChild(minSwatch);
+  swatches.appendChild(maxSwatch);
+  button.appendChild(swatches);
   button.addEventListener("click", () => {
     selectedProperty = property.name;
     updateSelection();

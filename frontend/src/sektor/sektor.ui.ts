@@ -11,7 +11,8 @@ import {showBuildingPanel, hideBuildingPanel} from "./buildings/buildingPanel.ui
 import {updateSektorStatePanel} from "./sektorStatePanel.ui";
 import { getSektorData, saveSektorData } from "./sektor.api";
 import { xMarkIcon } from "../icons";
-import { initPropertyToggler } from "./propertyToggler.ui";
+import { initPropertyToggler, getSelectedProperty } from "./propertyToggler.ui";
+import { propertyDefinitions } from "../properties";
 
 const GRID_SIZE = 10;
 const isTestMode = new URLSearchParams(window.location.search).get("test") === "true";
@@ -286,7 +287,8 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
   if (!buildingState) return;
   const code = getBuildingCode(placed.type);
   if (!code) return;
-  const floorColor = fertilityColor(locations[placed.location.x][placed.location.y].properties.soil);
+  const selectedProperty = getSelectedProperty();
+  const floorColor = propertyColor(selectedProperty, locations[placed.location.x][placed.location.y].properties[selectedProperty] ?? 0);
   if (displayedConnections) {
     for (const label of displayedConnections.labels) label.remove();
   }
@@ -382,15 +384,16 @@ function showError(message: string) {
   }, 5000);
 }
 
-const COLOR_0: [number, number, number] = [0xE3, 0xCA, 0x86];
-const COLOR_100: [number, number, number] = [0x86, 0xE3, 0x89];
-
-function fertilityColor(value: number): [number, number, number] {
+function propertyColor(propertyName: string, value: number): [number, number, number] {
+  const property = propertyDefinitions.find(property => property.name === propertyName);
+  if (!property) return [128, 128, 128];
+  const minColor = parseHexColor(property.minColor);
+  const maxColor = parseHexColor(property.maxColor);
   const t = value / 2;
   return [
-    Math.round(COLOR_0[0] + (COLOR_100[0] - COLOR_0[0]) * t),
-    Math.round(COLOR_0[1] + (COLOR_100[1] - COLOR_0[1]) * t),
-    Math.round(COLOR_0[2] + (COLOR_100[2] - COLOR_0[2]) * t),
+    Math.round(minColor[0] + (maxColor[0] - minColor[0]) * t),
+    Math.round(minColor[1] + (maxColor[1] - minColor[1]) * t),
+    Math.round(minColor[2] + (maxColor[2] - minColor[2]) * t),
   ];
 }
 
@@ -658,7 +661,8 @@ const sektorUi = (p: p5) => {
         p.push();
         const { wx, wz } = gridToWorld(x, z);
         p.translate(wx, 0, wz);
-        drawFloor(p, BLOCK_SIZE, fertilityColor(locations[x][z].properties.soil));
+        const selectedProperty = getSelectedProperty();
+        drawFloor(p, BLOCK_SIZE, propertyColor(selectedProperty, locations[x][z].properties[selectedProperty] ?? 0));
         p.pop();
       }
     }

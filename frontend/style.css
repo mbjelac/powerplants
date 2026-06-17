@@ -473,7 +473,9 @@ body > main {
   padding: 4px 8px;
   cursor: pointer;
   border-radius: 3px;
-  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .property-toggle.selected {
@@ -482,8 +484,15 @@ body > main {
   border-color: #888;
 }
 
-.property-toggle:hover {
-  background: #3a3a3a;
+.property-swatches {
+  display: flex;
+  gap: 3px;
+}
+
+.property-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
 }
 
 #sektor-not-found {
