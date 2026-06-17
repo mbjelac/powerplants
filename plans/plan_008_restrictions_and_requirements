@@ -14,10 +14,10 @@ Connected to this, each Sektor has a status.
 Initially, a Sektor's status is "InProgress".
 If all requirements are met, and no restrictions are exceeded, a Sektor's status is "Done".
 
-#1 Sektor has status, requirements & restrictions
+#1 [done] Sektor has status, requirements & restrictions
 - [done] refactor: ImportsExports should be named SektorState
     - rename methods & tests accordingly
-- State has restrictions, requirements & status
+- [done] State has restrictions, requirements & status
     - Sektor instance is created with predefined import restrictions & export requirements:
         - param restrictionsRequirements: { importRestrictions: ResourceThroughput[], exportRequirements: ResourceThroughput[] }
     - method getSektorState returns SektorState with:
