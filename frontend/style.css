@@ -454,3 +454,36 @@ body > main {
 .sektor-list-go:hover {
   color: #fff;
 }
+
+#sektor-not-found {
+  color: red;
+  font-family: "Courier New", monospace;
+  font-size: 16px;
+  border: 1px solid red;
+  padding: 40px 60px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#sektor-close {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  z-index: 200;
+  background: none;
+  border: 1px solid #666;
+  color: #999;
+  font-family: sans-serif;
+  font-size: 14px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#sektor-close:hover {
+  color: #fff;
+  border-color: #999;
+}

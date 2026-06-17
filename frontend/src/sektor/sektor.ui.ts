@@ -9,9 +9,25 @@ import { getResourceColor, getResourceIcon } from "../resources";
 import { buildingDefinitions } from "./buildings/buildings";
 import {showBuildingPanel, hideBuildingPanel} from "./buildings/buildingPanel.ui";
 import {updateSektorStatePanel} from "./sektorStatePanel.ui";
+import { getSektorData, saveSektorData } from "./sektor.api";
+import { xMarkIcon } from "../icons";
 
 const GRID_SIZE = 10;
 const isTestMode = new URLSearchParams(window.location.search).get("test") === "true";
+const sektorName = new URLSearchParams(window.location.search).get("name");
+
+if (!isTestMode && (!sektorName || !getSektorData(sektorName))) {
+  showSektorNotFound();
+}
+
+function showSektorNotFound() {
+  document.body.innerHTML = "";
+  const message = document.createElement("div");
+  message.id = "sektor-not-found";
+  message.textContent = "Sektor not found";
+  document.body.appendChild(message);
+  throw new Error("Sektor not found");
+}
 
 function createFertilityMatrix(gridSize: number): number[][] {
   if (isTestMode) {
@@ -24,43 +40,56 @@ function createFertilityMatrix(gridSize: number): number[][] {
   );
 }
 
-const SAVE_KEY = "sektor-map-state";
+function getRestrictionsRequirements() {
+  if (isTestMode) {
+    return {
+      importRestrictions: [
+        { name: "Water", value: 4 },
+        { name: "Energy", value: 3 },
+        { name: "Ore", value: 5 },
+      ],
+      exportRequirements: [
+        { name: "Food", value: 4 },
+        { name: "Work", value: 5 },
+        { name: "Metal", value: 8 },
+      ],
+    };
+  }
+  if (sektorName) {
+    const sektorData = getSektorData(sektorName);
+    if (sektorData) {
+      return {
+        importRestrictions: sektorData.importRestrictions,
+        exportRequirements: sektorData.exportRequirements,
+      };
+    }
+  }
+  return { importRestrictions: [], exportRequirements: [] };
+}
 
-const sektor = new Sektor(createFertilityMatrix(GRID_SIZE), buildingDefinitions, isTestMode ? {
-  importRestrictions: [
-    { name: "Water", value: 4 },
-    { name: "Energy", value: 3 },
-    { name: "Ore", value: 5 },
-  ],
-  exportRequirements: [
-    { name: "Food", value: 4 },
-    { name: "Work", value: 5 },
-    { name: "Metal", value: 8 },
-  ],
-} : {
-  importRestrictions: [
-    { name: "EnergyElectric", value: 4 },
-    { name: "WaterPottable", value: 0 },
-  ],
-  exportRequirements: [
-    { name: "FoodRaw", value: 10 },
-  ],
-});
+const sektor = new Sektor(createFertilityMatrix(GRID_SIZE), buildingDefinitions, getRestrictionsRequirements());
 const soilFertility = sektor.getSoilFertility();
 const placedBuildings: { type: string; location: BuildingLocation; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
 
 function saveState() {
+  if (!sektorName) return;
   const state = sektor.getState();
-  localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+  const { importRestrictions, exportRequirements } = sektor.getSektorState();
+  saveSektorData(sektorName, {
+    importRestrictions,
+    exportRequirements,
+    buildings: state.buildings,
+    connections: state.connections,
+  });
 }
 
 function loadSavedState() {
-  const saved = localStorage.getItem(SAVE_KEY);
-  if (!saved) return;
-  const state = JSON.parse(saved);
-  sektor.loadState(state);
-  for (const building of state.buildings) {
+  if (!sektorName) return;
+  const sektorData = getSektorData(sektorName);
+  if (!sektorData) return;
+  sektor.loadState({ buildings: sektorData.buildings, connections: sektorData.connections });
+  for (const building of sektorData.buildings) {
     const code = getBuildingCode(building.type);
     if (code) {
       placedBuildings.push({ type: building.type, location: building.location, code });
@@ -660,8 +689,21 @@ const sektorUi = (p: p5) => {
 new p5(sektorUi);
 initToolbar();
 if (!isTestMode) {
+  addCloseButton();
+}
+if (!isTestMode) {
   loadSavedState();
 }
 if (isTestMode) {
   (window as any).updateSektorStatePanel = updateSektorStatePanel;
+}
+
+function addCloseButton() {
+  const button = document.createElement("button");
+  button.id = "sektor-close";
+  button.innerHTML = xMarkIcon;
+  button.addEventListener("click", () => {
+    window.location.href = "/list.html";
+  });
+  document.body.appendChild(button);
 }
