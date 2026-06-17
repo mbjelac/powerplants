@@ -1,10 +1,8 @@
 
 import { BuildingDefinition, BuildingFunction, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
+import { BuildingLocation, BuildingCreation, Connection, RestrictionsRequirements } from "../../../shared/sektorData";
 
-export interface RestrictionsRequirements {
-  importRestrictions: ResourceThroughput[];
-  exportRequirements: ResourceThroughput[];
-}
+export type { BuildingLocation, BuildingCreation, Connection, RestrictionsRequirements };
 
 export type SektorStatus = "InProgress" | "Done" | "RestrictionsExceeded";
 
@@ -28,16 +26,6 @@ export interface BuildingState {
   inputConnections: BuildingConnection[];
 }
 
-export interface BuildingLocation {
-  x: number;
-  y: number;
-}
-
-export interface BuildingCreation {
-  type: string;
-  location: BuildingLocation;
-}
-
 export interface PossibleConnection {
   location: BuildingLocation;
   totalOutput: number;
@@ -53,13 +41,6 @@ export interface ConnectionAmountChangeResult {
   success: boolean;
   error?: string;
   newAmount: number;
-}
-
-export interface Connection {
-  target: BuildingLocation;
-  source: BuildingLocation;
-  resourceType: string;
-  amount: number;
 }
 
 export interface DestroyBuildingResult {

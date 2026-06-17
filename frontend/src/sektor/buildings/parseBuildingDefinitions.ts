@@ -1,4 +1,4 @@
-export type ResourceThroughput = { name: string; value: number };
+export type { ResourceThroughput } from "../../../../shared/sektorData";
 
 export interface BuildingFunction {
   inputs: ResourceThroughput[];

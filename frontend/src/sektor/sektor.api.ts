@@ -1,12 +1,6 @@
-import { ResourceThroughput } from "./buildings/parseBuildingDefinitions";
-import { BuildingCreation, Connection } from "./Sektor";
+import { SektorData } from "../../../shared/sektorData";
 
-export interface SektorData {
-  importRestrictions: ResourceThroughput[];
-  exportRequirements: ResourceThroughput[];
-  buildings: BuildingCreation[];
-  connections: Connection[];
-}
+export type { SektorData };
 
 export function getSektorData(name: string): SektorData | null {
   const stored = localStorage.getItem(`sektor_${name}`);
