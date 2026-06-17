@@ -4,7 +4,7 @@ import {parseCommands} from "../../../shared/parseCommands";
 import {applyCommands} from "../../../shared/applyCommands";
 import {BLOCK_SIZE} from "../../../shared/constants";
 import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} from "./buildingToolbar.ui";
-import { BuildingConnection, BuildingLocation, PossibleConnection, Sektor } from "./Sektor";
+import { BuildingConnection, BuildingLocation, Location, PossibleConnection, Sektor } from "./Sektor";
 import { getResourceColor, getResourceIcon } from "../resources";
 import { buildingDefinitions } from "./buildings/buildings";
 import {showBuildingPanel, hideBuildingPanel} from "./buildings/buildingPanel.ui";
@@ -29,15 +29,25 @@ function showSektorNotFound() {
   throw new Error("Sektor not found");
 }
 
-function createFertilityMatrix(gridSize: number): number[][] {
-  if (isTestMode) {
-    return Array.from({ length: gridSize }, (_, x) =>
-      Array.from({ length: gridSize }, (_, z) => ((x * 17 + z * 31) % 101))
-    );
-  }
-  return Array.from({ length: gridSize }, () =>
-    Array.from({ length: gridSize }, () => Math.floor(Math.random() * 101))
+function createTestLocations(gridSize: number): Location[][] {
+  return Array.from({ length: gridSize }, (_, x) =>
+    Array.from({ length: gridSize }, (_, z) => ({
+      properties: { soil: ((x * 17 + z * 31) % 101) / 100 * 2 },
+    }))
   );
+}
+
+function getLocations(): Location[][] {
+  if (isTestMode) {
+    return createTestLocations(GRID_SIZE);
+  }
+  if (sektorName) {
+    const sektorData = getSektorData(sektorName);
+    if (sektorData) {
+      return sektorData.locations;
+    }
+  }
+  return [];
 }
 
 function getRestrictionsRequirements() {
@@ -67,8 +77,8 @@ function getRestrictionsRequirements() {
   return { importRestrictions: [], exportRequirements: [] };
 }
 
-const sektor = new Sektor(createFertilityMatrix(GRID_SIZE), buildingDefinitions, getRestrictionsRequirements());
-const soilFertility = sektor.getSoilFertility();
+const sektor = new Sektor(getLocations(), buildingDefinitions, getRestrictionsRequirements());
+const locations = sektor.getLocations();
 const placedBuildings: { type: string; location: BuildingLocation; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -250,7 +260,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
   if (!buildingState) return;
   const code = getBuildingCode(placed.type);
   if (!code) return;
-  const floorColor = fertilityColor(soilFertility[placed.location.x][placed.location.y]);
+  const floorColor = fertilityColor(locations[placed.location.x][placed.location.y].properties.soil);
   if (displayedConnections) {
     for (const label of displayedConnections.labels) label.remove();
   }
@@ -351,7 +361,7 @@ const COLOR_0: [number, number, number] = [0xE3, 0xCA, 0x86];
 const COLOR_100: [number, number, number] = [0x86, 0xE3, 0x89];
 
 function fertilityColor(value: number): [number, number, number] {
-  const t = value / 100;
+  const t = value / 2;
   return [
     Math.round(COLOR_0[0] + (COLOR_100[0] - COLOR_0[0]) * t),
     Math.round(COLOR_0[1] + (COLOR_100[1] - COLOR_0[1]) * t),
@@ -623,7 +633,7 @@ const sektorUi = (p: p5) => {
         p.push();
         const { wx, wz } = gridToWorld(x, z);
         p.translate(wx, 0, wz);
-        drawFloor(p, BLOCK_SIZE, fertilityColor(soilFertility[x][z]));
+        drawFloor(p, BLOCK_SIZE, fertilityColor(locations[x][z].properties.soil));
         p.pop();
       }
     }

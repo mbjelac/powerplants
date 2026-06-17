@@ -1,8 +1,8 @@
 
 import { BuildingDefinition, BuildingFunction, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
-import { BuildingLocation, BuildingCreation, Connection, RestrictionsRequirements } from "../../../shared/sektorData";
+import { BuildingLocation, BuildingCreation, Connection, RestrictionsRequirements, Location } from "../../../shared/sektorData";
 
-export type { BuildingLocation, BuildingCreation, Connection, RestrictionsRequirements };
+export type { BuildingLocation, BuildingCreation, Connection, RestrictionsRequirements, Location };
 
 export type SektorStatus = "InProgress" | "Done" | "RestrictionsExceeded";
 
@@ -53,23 +53,21 @@ export interface CreateBuildingResult {
   addedBuildings: BuildingCreation[];
 }
 
-export type SoilFertilityMatrix = ReadonlyArray<ReadonlyArray<number>>;
-
 export class Sektor {
   private buildings: BuildingCreation[] = [];
   private connections: Connection[] = [];
-  private readonly soilFertility: SoilFertilityMatrix;
+  private readonly locations: Location[][];
   private readonly buildingDefinitions: BuildingDefinition[];
   private readonly restrictionsRequirements: RestrictionsRequirements;
 
-  constructor(soilFertility: SoilFertilityMatrix, buildingDefinitions: BuildingDefinition[], restrictionsRequirements: RestrictionsRequirements) {
-    this.soilFertility = soilFertility;
+  constructor(locations: Location[][], buildingDefinitions: BuildingDefinition[], restrictionsRequirements: RestrictionsRequirements) {
+    this.locations = locations;
     this.buildingDefinitions = buildingDefinitions;
     this.restrictionsRequirements = restrictionsRequirements;
   }
 
-  getSoilFertility(): SoilFertilityMatrix {
-    return this.soilFertility;
+  getLocations(): Location[][] {
+    return this.locations;
   }
 
   getState(): { buildings: BuildingCreation[]; connections: Connection[] } {

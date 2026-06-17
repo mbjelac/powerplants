@@ -21,13 +21,13 @@ const testDefinitions: BuildingDefinition[] = [
 
 describe("getBuildingState", () => {
   it("returns null when no building at location", () => {
-    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
+    const sektor = new Sektor([[{ properties: { soil: 1.0 } }]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
 
     expect(sektor.getBuildingState({ x: 0, y: 0 })).toEqual(null);
   });
 
   it("returns building function and imports for a placed building", () => {
-    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
+    const sektor = new Sektor([[{ properties: { soil: 1.0 } }]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 3, y: 5 } });
 
     const state = sektor.getBuildingState({ x: 3, y: 5 });
@@ -63,7 +63,7 @@ describe("getBuildingState", () => {
         properties: {},
       },
     ];
-    const sektor = new Sektor([[50]], testDefinitionsWithFarm, { importRestrictions: [], exportRequirements: [] });
+    const sektor = new Sektor([[{ properties: { soil: 1.0 } }]], testDefinitionsWithFarm, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
     sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");

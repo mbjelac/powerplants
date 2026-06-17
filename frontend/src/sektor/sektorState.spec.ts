@@ -36,7 +36,7 @@ const testDefinitions: BuildingDefinition[] = [
 
 describe("getSektorState", () => {
   it("returns empty imports and exports when there are no buildings", () => {
-    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
+    const sektor = new Sektor([[{ properties: { soil: 1.0 } }]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
 
     const result = sektor.getSektorState();
 
@@ -50,7 +50,7 @@ describe("getSektorState", () => {
   });
 
   it("returns imports and exports for a single building", () => {
-    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
+    const sektor = new Sektor([[{ properties: { soil: 1.0 } }]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Well", location: { x: 0, y: 0 } });
 
     const result = sektor.getSektorState();
@@ -70,7 +70,7 @@ describe("getSektorState", () => {
   });
 
   it("aggregates imports and exports by resource name across buildings", () => {
-    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
+    const sektor = new Sektor([[{ properties: { soil: 1.0 } }]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Well", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
 
@@ -93,7 +93,7 @@ describe("getSektorState", () => {
   });
 
   it("decreases imports and exports when a connection is added", () => {
-    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
+    const sektor = new Sektor([[{ properties: { soil: 1.0 } }]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Well", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
 
@@ -136,13 +136,13 @@ const statusDefinitions: BuildingDefinition[] = [
 
 describe("status", () => {
   it("is Done when no buildings, no restrictions, no requirements", () => {
-    const sektor = new Sektor([[50]], statusDefinitions, { importRestrictions: [], exportRequirements: [] });
+    const sektor = new Sektor([[{ properties: { soil: 1.0 } }]], statusDefinitions, { importRestrictions: [], exportRequirements: [] });
 
     expect(sektor.getSektorState().status).toEqual("Done");
   });
 
   it("is Done when some imports, no restrictions, no requirements", () => {
-    const sektor = new Sektor([[50]], statusDefinitions, { importRestrictions: [], exportRequirements: [] });
+    const sektor = new Sektor([[{ properties: { soil: 1.0 } }]], statusDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Generator", location: { x: 0, y: 0 } });
 
     expect(sektor.getSektorState().status).toEqual("Done");
