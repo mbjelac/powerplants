@@ -20,6 +20,7 @@
 
 - Functions/methods should be ordered in the file in order of calling — callers before callees. A method declaration should be below the last call of that method.
 - Always use full, domain-specific variable names — no abbreviations (e.g. `building` not `b`, `buildingDefinition` not `def`, `buildingFunction` not `fn`).
+- File naming: display files (code for displaying stuff in a web browser, using p5.js) use `.ui.ts` extension. API files (getting and setting data to backend) use `.api.ts` extension.
 
 ## Testing
 
