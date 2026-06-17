@@ -703,7 +703,7 @@ function addCloseButton() {
   button.id = "sektor-close";
   button.innerHTML = xMarkIcon;
   button.addEventListener("click", () => {
-    window.location.href = "/list.html";
+    window.location.href = "/";
   });
   document.body.appendChild(button);
 }
