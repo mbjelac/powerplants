@@ -1,11 +1,11 @@
-#1 Sektor list
-- there is a separate page displaying a list of sektors
+#1 [done] Sektor list
+- [done] there is a separate page displaying a list of sektors
     - located in frontend/src/list
     - the list has the structure: { name: string, status: SektorStatus }
     - the sektor list is retrieved from an api function (in it's own file) which for now returns data from local storage
         - local storage variable: "sektors"
         - value structure: [{name: string, status: SektorStatus}]
-- list item displayed as:
+- [done] list item displayed as:
     - name
     - status
     - heroicon arrow-right as a button

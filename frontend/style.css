@@ -409,3 +409,48 @@ body > main {
   background-color: green;
   color: #fff;
 }
+
+#sektor-list {
+  max-width: 400px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sektor-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.sektor-list-name {
+  flex: 1;
+  color: #ccc;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+.sektor-list-status {
+  color: #999;
+  font-family: sans-serif;
+  font-size: 12px;
+}
+
+.sektor-list-go {
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.sektor-list-go:hover {
+  color: #fff;
+}
