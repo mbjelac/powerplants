@@ -28,7 +28,7 @@ pri4 c(#c7c2a9) s(23,23,10) t(-30,30,0)
 EnergyElectric 8
 WorkTechnical 3
 =
-WaterPottable 4
+WaterPottable 4 groundwater
 
 # Village
 
@@ -147,7 +147,7 @@ WaterPottable 3
 EnergyElectric 1
 WorkTechnical 5
 =
-FoodRaw 5
+FoodRaw 5 soil
 
 # OreExtractor
 
@@ -183,7 +183,7 @@ cyl s(1,1,45) c(#000000) t(0,8,-22)
 EnergyElectric 4
 WorkTechnical 1
 =
-Ore 5
+Ore 5 ore
 
 ## Properties
 
