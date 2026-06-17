@@ -43,11 +43,11 @@ Each location has a set value for all properties and that value is a floating po
         - both inclusive
         - with 1 digit precision
         - examples: 0.1, 0.0, 0.5, 1.0, 1.9, 2.0
+- [done] Sektor is initialized with location properties
+    - replace Sektor constructor parameter soilFertility with locations: Location[][]
+    - all usages of soilFertility should be replaced with locations[][].properties.soil
 - refactor locations structure for more efficient json:
     - SektorData contains locationProperties: { [string]: number[][]}
     - the [string] key is the name of the property
     - the number[][] is a 10x10 matrix of values for the property
     - the creator tool should be modified to populate the matrix
-- Sektor is initialized with location properties
-    - replace Sektor constructor parameter soilFertility with locations: Location[][]
-    - all usages of soilFertility should be replaced with locations[][].properties.soil
