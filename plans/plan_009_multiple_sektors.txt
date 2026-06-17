@@ -11,7 +11,7 @@
     - heroicon arrow-right as a button
 
 #2 Sektor page
-- when arrow button in list clicked, navigate to sektor page with sektor name in url
+- [done] when arrow button in list clicked, navigate to sektor page with sektor name in url
     - sektor.ui.ts is the sektor page
     - change the way sektor page creates a Sektor instance
         - loads data for Sektor from an api function (in it's own file) which for now returns the sektor data from the local storage by sektor name
@@ -19,7 +19,8 @@
             - value structure: { importRestrictions: ResourceThroughput[], exportRequirements: ResourceThroughput[], buildings: BuildingCreation[], connections: Connection[] }
     - saving data is also done through an api function (in the same file as function for getting data)
 - player can return to sektor list
-    - sektor page has gray X button in top right corner
+    - sektor page has close button in bottom-left corner
+        - icon: heroicons x-mark
     - when clicked, navigate to sektor list
 - if sektor page loads without sektor name in URL, display empty page with error message "Sektor not found"
 - if sektor not found for specified name, display empty page with error message "Sektor not found"
