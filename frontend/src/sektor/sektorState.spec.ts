@@ -34,11 +34,11 @@ const testDefinitions: BuildingDefinition[] = [
   },
 ];
 
-describe("getImportsExports", () => {
+describe("getSektorState", () => {
   it("returns empty imports and exports when there are no buildings", () => {
     const sektor = new Sektor([[50]], testDefinitions);
 
-    const result = sektor.getImportsExports();
+    const result = sektor.getSektorState();
 
     expect(result).toEqual({
       imports: [],
@@ -50,7 +50,7 @@ describe("getImportsExports", () => {
     const sektor = new Sektor([[50]], testDefinitions);
     sektor.createBuilding({ type: "Well", location: { x: 0, y: 0 } });
 
-    const result = sektor.getImportsExports();
+    const result = sektor.getSektorState();
 
     expect(result).toEqual({
       imports: [
@@ -68,7 +68,7 @@ describe("getImportsExports", () => {
     sektor.createBuilding({ type: "Well", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
 
-    const result = sektor.getImportsExports();
+    const result = sektor.getSektorState();
 
     expect(result).toEqual({
       imports: [
@@ -90,7 +90,7 @@ describe("getImportsExports", () => {
 
     sektor.addConnection({ x: 1, y: 0 }, { x: 0, y: 0 }, "Water");
 
-    const result = sektor.getImportsExports();
+    const result = sektor.getSektorState();
 
     expect(result).toEqual({
       imports: [

@@ -1,7 +1,7 @@
 
 import { BuildingDefinition, BuildingFunction, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
 
-export interface ImportsExports {
+export interface SektorState {
   imports: ResourceThroughput[];
   exports: ResourceThroughput[];
 }
@@ -110,7 +110,7 @@ export class Sektor {
     };
   }
 
-  getImportsExports(): ImportsExports {
+  getSektorState(): SektorState {
     const imports = this.aggregateThroughputs(this.buildings.map(building => this.getInputs(building.type)).flat());
     const exports = this.aggregateThroughputs(this.buildings.map(building => this.getOutputs(building.type)).flat());
 

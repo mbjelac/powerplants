@@ -8,7 +8,7 @@ import { BuildingConnection, BuildingLocation, PossibleConnection, Sektor } from
 import { getResourceColor, getResourceIcon } from "./resources";
 import { buildingDefinitions } from "./sektor/buildings/buildings";
 import {showBuildingPanel, hideBuildingPanel} from "./sektor/buildings/buildingPanel";
-import {updateImportExportPanel} from "./importExportPanel";
+import {updateSektorStatePanel} from "./sektorStatePanel";
 
 const GRID_SIZE = 10;
 const isTestMode = new URLSearchParams(window.location.search).get("test") === "true";
@@ -47,7 +47,7 @@ function loadSavedState() {
       placedBuildings.push({ type: building.type, location: building.location, code });
     }
   }
-  updateImportExportPanel(sektor.getImportsExports());
+  updateSektorStatePanel(sektor.getSektorState());
 }
 
 let selectedBuildingLocation: BuildingLocation | null = null;
@@ -113,7 +113,7 @@ function handleConnectButtonClick(sourceLocation: BuildingLocation) {
 
   const targetPlaced = placedBuildings.find(b => b.location.x === targetLocation.x && b.location.y === targetLocation.y);
   if (targetPlaced) openBuildingPanel(targetPlaced);
-  updateImportExportPanel(sektor.getImportsExports());
+  updateSektorStatePanel(sektor.getSektorState());
   saveState();
 }
 
@@ -228,7 +228,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
       const result = sektor.changeConnectionAmount(placed.location, connection.to, connection.resourceType, 1);
       if (result.success) {
         openBuildingPanel(placed);
-        updateImportExportPanel(sektor.getImportsExports());
+        updateSektorStatePanel(sektor.getSektorState());
         saveState();
       } else {
         showError(result.error ?? "Cannot increase");
@@ -243,7 +243,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
       const result = sektor.changeConnectionAmount(placed.location, connection.to, connection.resourceType, -1);
       if (result.success) {
         openBuildingPanel(placed);
-        updateImportExportPanel(sektor.getImportsExports());
+        updateSektorStatePanel(sektor.getSektorState());
         saveState();
       } else {
         showError(result.error ?? "Cannot decrease");
@@ -282,7 +282,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
         for (const label of displayedConnections.labels) label.remove();
       }
       displayedConnections = null;
-      updateImportExportPanel(sektor.getImportsExports());
+      updateSektorStatePanel(sektor.getSektorState());
       saveState();
     }
   });
@@ -548,7 +548,7 @@ const sketch = (p: p5) => {
 
     if (result.error === undefined) {
       deselectBuilding();
-      updateImportExportPanel(sektor.getImportsExports());
+      updateSektorStatePanel(sektor.getSektorState());
       saveState();
     }
 

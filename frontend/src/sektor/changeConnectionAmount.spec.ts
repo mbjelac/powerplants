@@ -68,7 +68,7 @@ describe("changeConnectionAmount", () => {
     sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");
     sektor.changeConnectionAmount({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat", 2);
 
-    const result = sektor.getImportsExports();
+    const result = sektor.getSektorState();
 
     expect(result).toEqual({
       imports: [

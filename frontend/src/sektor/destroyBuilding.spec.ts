@@ -42,7 +42,7 @@ describe("destroyBuilding", () => {
 
     expect(result).toEqual({ success: true });
     expect(sektor.getBuildingState({ x: 0, y: 0 })).toEqual(null);
-    expect(sektor.getImportsExports()).toEqual({
+    expect(sektor.getSektorState()).toEqual({
       imports: [
         { name: "Water", value: 2 },
       ],
