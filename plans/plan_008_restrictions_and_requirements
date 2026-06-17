@@ -78,10 +78,10 @@ If all requirements are met, and no restrictions are exceeded, a Sektor's status
 
 #4 Status is displayed
 - status is displayed in the SektorState panel above the Imports & Exports table
-- label: "Status: "
-- value:
-    - InProgress: "In progress", white
-    - Done: "Done", green, bold
-    - RestrictionsExceeded: "Restrictions exceeded", orange, bold
-- create visual tests of panel in Done & RestrictionsExceeded statuses
-    - other tests should already cover InProgress status
+    - label: "Status: "
+    - value:
+        - InProgress: "In progress", white
+        - Done: "Done", green, bold
+        - RestrictionsExceeded: "Restrictions exceeded", orange, bold
+    - create visual tests of panel in Done & RestrictionsExceeded statuses
+        - other tests should already cover InProgress status
