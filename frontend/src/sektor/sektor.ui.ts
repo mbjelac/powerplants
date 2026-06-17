@@ -381,7 +381,6 @@ function showError(message: string) {
   }, 5000);
 }
 
-// Interpolate between #E3CA86 (fertility 0) and #86E389 (fertility 100)
 const COLOR_0: [number, number, number] = [0xE3, 0xCA, 0x86];
 const COLOR_100: [number, number, number] = [0x86, 0xE3, 0x89];
 
