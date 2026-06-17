@@ -13,16 +13,36 @@ Each location has a set value for all properties and that value is a floating po
 
 #1 Sektors are created with a tool
 - tool for creating sektors
-    - tool located in frontend/src/creator folder
+    - tool located in <repo root>/creator
     - the main part is a createSektor function in createSektor.ts
-    - createSektor function returns SektorData
+    - usage of the tool is by using node to execute the function
+        - the tool outputs SektorData (same as in frontend/src/sektor/sektor.api.ts) in JSON format to the console
+        - do not create new SektorData definition - use the existing one by extracting it into it's own file and including it in the build of creator
+    - buildings are empty
+    - connections are empty
+    - restrictions and requirements depend on configuration
+        - configuration file for restrictions and requirements is located in creator/restrictions_requirements.ts
+            - this file exports default object of type RestrictionsRequirements (as already declared)
+                - do not create new RestrictionsRequirements definition - use the existing one by extracting it into it's own file and including it in the build of creator
 
 #2 Locations have properties
-- SektorData contains a location matrix: locations[][]: Location
+- SektorData contains a location matrix: locations: Location[][]
+    - this matrix is populated by the creator tool
+    - matrix has 10 rows & 10 columns
     - Location object has property "properties" which is an object with string keys & number values
-    - initially, creator generates these properties:
+    - initially, creator tool generates these properties:
         - soil
         - groundwater
         - ore
         - insolation
         - wind
+    - every location has a value for each property
+    - values for a specific property are generated according to a generation function
+    - initially, generate each property as a random floating point number
+        - between 0 & 2
+        - both inclusive
+        - with 1 digit precision
+        - examples: 0.1, 0.0, 0.5, 1.0, 1.9, 2.0
+- Sektor is initialized with location properties
+    - replace Sektor constructor parameter soilFertility with locations: Location[][]
+    - all usages of soilFertility should be replaced with locations[][].properties.soil
