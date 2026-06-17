@@ -53,7 +53,7 @@ Each location has a set value for all properties and that value is a floating po
     - the creator tool should be modified to populate the matrix
 
 #3 Player can see color-coded location properties on map
-- location property view toggler
+- [done] location property view toggler
     - below building toolbar there is a panel with toggle buttons for each property from file assets/properties.md
     - initially the first property from the properties.md is selected
     - clicking on any other button deselects the current one and selects the new one
@@ -63,3 +63,5 @@ Each location has a set value for all properties and that value is a floating po
     - calculate the color based on the value of the selected property for each location
         - first color is the minimum (0), last color is the maximum (2)
     - use the color on the location's floor
+- buttons display color gradient from left (minimum) to right (maximum)
+    - button background has the gradient color
