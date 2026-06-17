@@ -25,7 +25,7 @@ const testDefinitions: BuildingDefinition[] = [
 
 describe("changeConnectionAmount", () => {
   it("increases connection amount", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
     sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");
@@ -36,7 +36,7 @@ describe("changeConnectionAmount", () => {
   });
 
   it("decreases connection amount", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
     sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");
@@ -48,7 +48,7 @@ describe("changeConnectionAmount", () => {
   });
 
   it("reflects new amount in building state input connections", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
     sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");
@@ -62,7 +62,7 @@ describe("changeConnectionAmount", () => {
   });
 
   it("updates imports and exports when amount changes", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
     sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");
@@ -79,11 +79,14 @@ describe("changeConnectionAmount", () => {
         { name: "Flour", value: 3 },
         { name: "Wheat", value: 2 },
       ],
+      status: "Done",
+      importRestrictions: [],
+      exportRequirements: [],
     });
   });
 
   it("fails with cannotDecreaseBelowZero when delta would make amount negative", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
     sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");
@@ -94,7 +97,7 @@ describe("changeConnectionAmount", () => {
   });
 
   it("fails with inputOverflow when delta would exceed target input amount", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
     sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");
@@ -125,7 +128,7 @@ describe("changeConnectionAmount", () => {
         properties: {},
       },
     ];
-    const sektor = new Sektor([[50]], definitions);
+    const sektor = new Sektor([[50]], definitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "BigMill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "SmallFarm", location: { x: 1, y: 0 } });
     sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");

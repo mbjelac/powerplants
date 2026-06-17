@@ -26,7 +26,15 @@ function createFertilityMatrix(gridSize: number): number[][] {
 
 const SAVE_KEY = "sektor-map-state";
 
-const sektor = new Sektor(createFertilityMatrix(GRID_SIZE), buildingDefinitions);
+const sektor = new Sektor(createFertilityMatrix(GRID_SIZE), buildingDefinitions, {
+  importRestrictions: [
+    { name: "EnergyElectric", value: 4 },
+    { name: "WaterPottable", value: 0 },
+  ],
+  exportRequirements: [
+    { name: "FoodRaw", value: 10 },
+  ],
+});
 const soilFertility = sektor.getSoilFertility();
 const placedBuildings: { type: string; location: BuildingLocation; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;

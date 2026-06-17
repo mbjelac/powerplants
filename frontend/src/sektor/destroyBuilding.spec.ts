@@ -25,7 +25,7 @@ const testDefinitions: BuildingDefinition[] = [
 
 describe("destroyBuilding", () => {
   it("fails when no building at location", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
 
     const result = sektor.destroyBuilding({ x: 0, y: 0 });
 
@@ -33,7 +33,7 @@ describe("destroyBuilding", () => {
   });
 
   it("removes building and its connections and updates imports/exports", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
     sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");
@@ -49,11 +49,14 @@ describe("destroyBuilding", () => {
       exports: [
         { name: "Wheat", value: 5 },
       ],
+      status: "Done",
+      importRestrictions: [],
+      exportRequirements: [],
     });
   });
 
   it("removes connections where destroyed building is target", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Mill", location: { x: 2, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
@@ -68,7 +71,7 @@ describe("destroyBuilding", () => {
   });
 
   it("removes connections where destroyed building is source", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
     sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");

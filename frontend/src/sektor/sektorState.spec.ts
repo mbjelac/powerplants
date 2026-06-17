@@ -36,18 +36,21 @@ const testDefinitions: BuildingDefinition[] = [
 
 describe("getSektorState", () => {
   it("returns empty imports and exports when there are no buildings", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
 
     const result = sektor.getSektorState();
 
     expect(result).toEqual({
       imports: [],
       exports: [],
+      status: "Done",
+      importRestrictions: [],
+      exportRequirements: [],
     });
   });
 
   it("returns imports and exports for a single building", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Well", location: { x: 0, y: 0 } });
 
     const result = sektor.getSektorState();
@@ -60,11 +63,14 @@ describe("getSektorState", () => {
       exports: [
         { name: "Water", value: 4 },
       ],
+      status: "Done",
+      importRestrictions: [],
+      exportRequirements: [],
     });
   });
 
   it("aggregates imports and exports by resource name across buildings", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Well", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
 
@@ -80,11 +86,14 @@ describe("getSektorState", () => {
         { name: "Water", value: 4 },
         { name: "Food", value: 5 },
       ],
+      status: "Done",
+      importRestrictions: [],
+      exportRequirements: [],
     });
   });
 
   it("decreases imports and exports when a connection is added", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Well", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
 
@@ -102,6 +111,9 @@ describe("getSektorState", () => {
         { name: "Water", value: 3 },
         { name: "Food", value: 5 },
       ],
+      status: "Done",
+      importRestrictions: [],
+      exportRequirements: [],
     });
   });
 });

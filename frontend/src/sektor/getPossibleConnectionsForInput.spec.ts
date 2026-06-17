@@ -34,7 +34,7 @@ const testDefinitions: BuildingDefinition[] = [
 
 describe("getPossibleConnectionsForInput", () => {
   it("returns buildings that have an output matching the resource type", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
 
@@ -44,7 +44,7 @@ describe("getPossibleConnectionsForInput", () => {
   });
 
   it("excludes the target building itself", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Farm", location: { x: 2, y: 3 } });
 
     const result = sektor.getPossibleConnectionsForInput({ x: 2, y: 3 }, "Wheat");
@@ -53,7 +53,7 @@ describe("getPossibleConnectionsForInput", () => {
   });
 
   it("returns empty array when no buildings have matching output", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Well", location: { x: 1, y: 0 } });
 
@@ -63,7 +63,7 @@ describe("getPossibleConnectionsForInput", () => {
   });
 
   it("excludes buildings with depleted output", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Farm", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 2, y: 0 } });
@@ -83,7 +83,7 @@ describe("getPossibleConnectionsForInput", () => {
   });
 
   it("excludes buildings already connected to target with same resource type", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 2, y: 0 } });
@@ -98,7 +98,7 @@ describe("getPossibleConnectionsForInput", () => {
   });
 
   it("returns multiple buildings when several have matching output", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
     sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
     sektor.createBuilding({ type: "Farm", location: { x: 2, y: 0 } });

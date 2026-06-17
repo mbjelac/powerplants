@@ -1,9 +1,17 @@
 
 import { BuildingDefinition, BuildingFunction, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
 
+export interface RestrictionsRequirements {
+  importRestrictions: ResourceThroughput[];
+  exportRequirements: ResourceThroughput[];
+}
+
 export interface SektorState {
   imports: ResourceThroughput[];
   exports: ResourceThroughput[];
+  status: "InProgress" | "Done" | "RestrictionsExceeded";
+  importRestrictions: ResourceThroughput[];
+  exportRequirements: ResourceThroughput[];
 }
 
 export interface BuildingConnection {
@@ -69,10 +77,12 @@ export class Sektor {
   private connections: Connection[] = [];
   private readonly soilFertility: SoilFertilityMatrix;
   private readonly buildingDefinitions: BuildingDefinition[];
+  private readonly restrictionsRequirements: RestrictionsRequirements;
 
-  constructor(soilFertility: SoilFertilityMatrix, buildingDefinitions: BuildingDefinition[]) {
+  constructor(soilFertility: SoilFertilityMatrix, buildingDefinitions: BuildingDefinition[], restrictionsRequirements: RestrictionsRequirements) {
     this.soilFertility = soilFertility;
     this.buildingDefinitions = buildingDefinitions;
+    this.restrictionsRequirements = restrictionsRequirements;
   }
 
   getSoilFertility(): SoilFertilityMatrix {
@@ -121,7 +131,21 @@ export class Sektor {
       if (exportEntry) exportEntry.value -= connection.amount;
     }
 
-    return { imports, exports };
+    const { importRestrictions, exportRequirements } = this.restrictionsRequirements;
+
+    const restrictionsExceeded = importRestrictions.some(restriction => {
+      const importEntry = imports.find(entry => entry.name === restriction.name);
+      return importEntry !== undefined && importEntry.value > restriction.value;
+    });
+
+    const requirementsMet = exportRequirements.every(requirement => {
+      const exportEntry = exports.find(entry => entry.name === requirement.name);
+      return exportEntry !== undefined && exportEntry.value >= requirement.value;
+    });
+
+    const status = restrictionsExceeded ? "RestrictionsExceeded" : requirementsMet ? "Done" : "InProgress";
+
+    return { imports, exports, status, importRestrictions, exportRequirements };
   }
 
   private getInputs(type: string): ResourceThroughput[] {

@@ -16,7 +16,7 @@ const testDefinitions: BuildingDefinition[] = [
 
 describe("createBuilding", () => {
   it("creates building on free location", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
 
     const result = sektor.createBuilding({ type: "Mill", location: { x: 8, y: 6 } });
 
@@ -27,7 +27,7 @@ describe("createBuilding", () => {
   });
 
   it("does not create building on occupied location", () => {
-    const sektor = new Sektor([[50]], testDefinitions);
+    const sektor = new Sektor([[50]], testDefinitions, { importRestrictions: [], exportRequirements: [] });
 
     sektor.createBuilding({ type: "Mill", location: { x: 8, y: 6 } });
     const result = sektor.createBuilding({ type: "Mill", location: { x: 8, y: 6 } });
