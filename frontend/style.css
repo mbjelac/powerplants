@@ -321,7 +321,15 @@ body > main {
   padding: 12px;
   z-index: 100;
   display: flex;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+
+.ss-status {
+  width: 100%;
+  color: #ccc;
+  font-family: sans-serif;
+  font-size: 12px;
 }
 
 .ss-col {

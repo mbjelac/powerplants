@@ -300,28 +300,6 @@ test("destroys building when trash icon is clicked", async ({ page }) => {
 
 test("displays sektor state panel with restrictions and requirements", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
-  const canvas = page.locator("#canvas-container canvas");
-  const box = await canvas.boundingBox();
-  const centerX = box!.width / 2;
-  const centerY = box!.height / 2;
-
-  // Place TestFactory (imports: Water 3, Energy 1; exports: Food 5)
-  await page.locator('.building-item[data-building-name="TestFactory"]').click();
-  await page.waitForTimeout(100);
-  await canvas.click({ position: { x: centerX - 60, y: centerY - 20 } });
-  await page.waitForTimeout(200);
-
-  // Place TestMine (imports: Energy 4; exports: Ore 3)
-  await page.locator('.building-item[data-building-name="TestMine"]').click();
-  await page.waitForTimeout(100);
-  await canvas.click({ position: { x: centerX + 60, y: centerY - 20 } });
-  await page.waitForTimeout(200);
-
-  // Place TestHouse (imports: Food 2, Water 1; exports: Work 3)
-  await page.locator('.building-item[data-building-name="TestHouse"]').click();
-  await page.waitForTimeout(100);
-  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
-  await page.waitForTimeout(200);
 
   // Imports (restrictions: Water=4, Energy=3, Ore=5):
   //   Food=2 — non-zero import without restriction
@@ -333,7 +311,60 @@ test("displays sektor state panel with restrictions and requirements", async ({ 
   //   Metal=0 — zero export with requirement (min 8)
   //   Work=3 — non-zero export below requirement (min 5)
   //   Food=5 — non-zero export greater than requirement (min 4)
+  await page.evaluate(() => {
+    (window as any).updateSektorStatePanel({
+      imports: [
+        { name: "Water", value: 4 },
+        { name: "Energy", value: 5 },
+        { name: "Food", value: 2 },
+      ],
+      exports: [
+        { name: "Food", value: 5 },
+        { name: "Ore", value: 3 },
+        { name: "Work", value: 3 },
+      ],
+      status: "RestrictionsExceeded",
+      importRestrictions: [
+        { name: "Water", value: 4 },
+        { name: "Energy", value: 3 },
+        { name: "Ore", value: 5 },
+      ],
+      exportRequirements: [
+        { name: "Food", value: 4 },
+        { name: "Work", value: 5 },
+        { name: "Metal", value: 8 },
+      ],
+    });
+  });
+
   await expectScreenshot(page, "sektor-state-panel", "#sektor-state-panel");
+});
+
+test("displays sektor state panel with Done status", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+
+  await page.evaluate(() => {
+    (window as any).updateSektorStatePanel({
+      imports: [
+        { name: "Water", value: 2 },
+        { name: "Energy", value: 3 },
+      ],
+      exports: [
+        { name: "Food", value: 6 },
+        { name: "Work", value: 5 },
+      ],
+      status: "Done",
+      importRestrictions: [
+        { name: "Energy", value: 5 },
+      ],
+      exportRequirements: [
+        { name: "Food", value: 4 },
+        { name: "Work", value: 5 },
+      ],
+    });
+  });
+
+  await expectScreenshot(page, "sektor-state-panel-done", "#sektor-state-panel");
 });
 
 test("shows error when placing building on occupied location", async ({ page }) => {

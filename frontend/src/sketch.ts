@@ -662,3 +662,6 @@ initToolbar();
 if (!isTestMode) {
   loadSavedState();
 }
+if (isTestMode) {
+  (window as any).updateSektorStatePanel = updateSektorStatePanel;
+}
