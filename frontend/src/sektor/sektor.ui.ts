@@ -1,14 +1,14 @@
 import p5 from "p5";
-import {drawFloor} from "../../shared/drawFloor";
-import {parseCommands} from "../../shared/parseCommands";
-import {applyCommands} from "../../shared/applyCommands";
-import {BLOCK_SIZE} from "../../shared/constants";
-import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} from "./toolbar";
-import { BuildingConnection, BuildingLocation, PossibleConnection, Sektor } from "./sektor/Sektor";
-import { getResourceColor, getResourceIcon } from "./resources";
-import { buildingDefinitions } from "./sektor/buildings/buildings";
-import {showBuildingPanel, hideBuildingPanel} from "./sektor/buildings/buildingPanel";
-import {updateSektorStatePanel} from "./sektorStatePanel";
+import {drawFloor} from "../../../shared/drawFloor";
+import {parseCommands} from "../../../shared/parseCommands";
+import {applyCommands} from "../../../shared/applyCommands";
+import {BLOCK_SIZE} from "../../../shared/constants";
+import {initToolbar, getSelectedBuilding, deselectBuilding, getBuildingCode} from "./buildingToolbar.ui";
+import { BuildingConnection, BuildingLocation, PossibleConnection, Sektor } from "./Sektor";
+import { getResourceColor, getResourceIcon } from "../resources";
+import { buildingDefinitions } from "./buildings/buildings";
+import {showBuildingPanel, hideBuildingPanel} from "./buildings/buildingPanel.ui";
+import {updateSektorStatePanel} from "./sektorStatePanel.ui";
 
 const GRID_SIZE = 10;
 const isTestMode = new URLSearchParams(window.location.search).get("test") === "true";
@@ -460,7 +460,7 @@ function findClickedTile(p: p5, currentZoom: number): { x: number; y: number } |
 const CAM_DIST = 800;
 const CAM_ELEVATION = Math.PI / 6;
 
-const sketch = (p: p5) => {
+const sektorUi = (p: p5) => {
   let camAngleY = Math.PI / 4;
   let camElevation = CAM_ELEVATION;
   let isDragging = false;
@@ -657,7 +657,7 @@ const sketch = (p: p5) => {
   };
 };
 
-new p5(sketch);
+new p5(sektorUi);
 initToolbar();
 if (!isTestMode) {
   loadSavedState();

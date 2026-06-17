@@ -3,7 +3,7 @@ import { parseCommands } from "../../../../shared/parseCommands";
 import { applyCommands } from "../../../../shared/applyCommands";
 import { drawFloor } from "../../../../shared/drawFloor";
 import { BLOCK_SIZE } from "../../../../shared/constants";
-import { createFunctionDisplay } from "../../functionDisplay";
+import { createFunctionDisplay } from "../buildingFunctionDisplay.ui";
 import { BuildingFunction, ResourceThroughput } from "./parseBuildingDefinitions";
 import { BuildingLocation } from "../Sektor";
 

@@ -1,6 +1,6 @@
-import { type SektorState } from "./sektor/Sektor";
-import { getResourceIcon } from "./resources";
-import { ResourceThroughput } from "./sektor/buildings/parseBuildingDefinitions";
+import { type SektorState } from "./Sektor";
+import { getResourceIcon } from "../resources";
+import { ResourceThroughput } from "./buildings/parseBuildingDefinitions";
 
 let panelEl: HTMLElement | null = null;
 

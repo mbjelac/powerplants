@@ -1,11 +1,11 @@
 import p5 from "p5";
-import {buildingDefinitions} from "./sektor/buildings/buildings";
-import {createFunctionDisplay} from "./functionDisplay";
-import {parseCommands} from "../../shared/parseCommands";
-import {applyCommands} from "../../shared/applyCommands";
-import {drawFloor} from "../../shared/drawFloor";
-import {BLOCK_SIZE} from "../../shared/constants";
-import { BuildingFunction } from "./sektor/buildings/parseBuildingDefinitions";
+import {buildingDefinitions} from "./buildings/buildings";
+import {createFunctionDisplay} from "./buildingFunctionDisplay.ui";
+import {parseCommands} from "../../../shared/parseCommands";
+import {applyCommands} from "../../../shared/applyCommands";
+import {drawFloor} from "../../../shared/drawFloor";
+import {BLOCK_SIZE} from "../../../shared/constants";
+import { BuildingFunction } from "./buildings/parseBuildingDefinitions";
 
 let selectedBuilding: string | null = null;
 let buildingCodeMap: Map<string, string> = new Map();
