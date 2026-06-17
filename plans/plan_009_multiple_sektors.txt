@@ -27,7 +27,7 @@
     - if sektor not found for specified name
     - display empty page with error message "Sektor not found"
         - text displayed in center of screen
-        - red text
+        - red text, Courier New
         - text within thin red border with wide inner margins
 #3 Sektor list is the intial page
 - when app starts, it displays sektor list as initial page
