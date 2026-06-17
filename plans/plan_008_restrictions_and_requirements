@@ -39,7 +39,7 @@ If all requirements are met, and no restrictions are exceeded, a Sektor's status
     - no import restrictions, all exports less than requirements -> InProgress
     - no import restrictions, all exports equal or greater than requirements -> Done
 
-#3 Restrictions and requirements are displayed
+#3 [done] Restrictions and requirements are displayed
 - [done] display import restrictions
     - import restrictions should be displayed next to import values of those resource types
     - if a resource import value is 0 and the resource has a restriction, that resource import row should be displayed
@@ -64,7 +64,7 @@ If all requirements are met, and no restrictions are exceeded, a Sektor's status
         - export: heroicons arrow-up-tray, tooltip: "Amount exported"
         - requirement: heroicon check-circle, green, tooltip: "Minimum"
     - if an export value is on or over a requirement, that value has a green background
-- expand existing tests of the status panel to include a mixture of:
+- [done] expand existing tests of the status panel to include a mixture of:
     - non-zero import without restriction
     - zero import with restriction
     - non-zero import with restriction but below
