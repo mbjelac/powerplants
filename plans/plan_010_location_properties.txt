@@ -11,8 +11,8 @@ These properties may influence a building's output.
 
 Each location has a set value for all properties and that value is a floating point number.
 
-#1 Sektors are created with a tool
-- tool for creating sektors
+#1 [done] Sektors are created with a tool
+- [done] tool for creating sektors
     - tool located in <repo root>/creator
     - the main part is a createSektor function in createSektor.ts
     - usage of the tool is by using node to execute the function
