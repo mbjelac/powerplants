@@ -37,6 +37,19 @@ function createTestLocations(gridSize: number): Location[][] {
   );
 }
 
+function locationPropertiesToLocations(locationProperties: { [key: string]: number[][] }): Location[][] {
+  const propertyNames = Object.keys(locationProperties);
+  const rows = locationProperties[propertyNames[0]].length;
+  const cols = locationProperties[propertyNames[0]][0].length;
+  return Array.from({ length: rows }, (_, x) =>
+    Array.from({ length: cols }, (_, z) => ({
+      properties: Object.fromEntries(
+        propertyNames.map(name => [name, locationProperties[name][x][z]])
+      ),
+    }))
+  );
+}
+
 function getLocations(): Location[][] {
   if (isTestMode) {
     return createTestLocations(GRID_SIZE);
@@ -44,7 +57,7 @@ function getLocations(): Location[][] {
   if (sektorName) {
     const sektorData = getSektorData(sektorName);
     if (sektorData) {
-      return sektorData.locations;
+      return locationPropertiesToLocations(sektorData.locationProperties);
     }
   }
   return [];
@@ -82,11 +95,23 @@ const locations = sektor.getLocations();
 const placedBuildings: { type: string; location: BuildingLocation; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
 
+function locationsToLocationProperties(locationMatrix: Location[][]): { [key: string]: number[][] } {
+  if (locationMatrix.length === 0) return {};
+  const propertyNames = Object.keys(locationMatrix[0][0].properties);
+  return Object.fromEntries(
+    propertyNames.map(name => [
+      name,
+      locationMatrix.map(row => row.map(location => location.properties[name])),
+    ])
+  );
+}
+
 function saveState() {
   if (!sektorName) return;
   const state = sektor.getState();
   const { importRestrictions, exportRequirements } = sektor.getSektorState();
   saveSektorData(sektorName, {
+    locationProperties: locationsToLocationProperties(locations),
     importRestrictions,
     exportRequirements,
     buildings: state.buildings,

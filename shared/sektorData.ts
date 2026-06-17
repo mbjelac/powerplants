@@ -27,7 +27,7 @@ export interface Location {
 }
 
 export interface SektorData {
-  locations: Location[][];
+  locationProperties: { [key: string]: number[][] };
   importRestrictions: ResourceThroughput[];
   exportRequirements: ResourceThroughput[];
   buildings: BuildingCreation[];

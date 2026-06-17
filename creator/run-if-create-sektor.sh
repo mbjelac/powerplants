@@ -5,5 +5,6 @@ if echo "$PROMPT" | grep -qi '^create sektor$'; then
   source ~/.nvm/nvm.sh
   nvm use --silent >/dev/null 2>&1
   OUTPUT=$(npx tsx createSektor.ts 2>&1)
-  jq -n --arg ctx "Creator tool output:\n$OUTPUT" '{"hookSpecificOutput":{"hookEventName":"UserPromptSubmit","additionalContext":$ctx}}'
+  echo "$OUTPUT" > created.json
+  jq -n --arg ctx "Created in $(pwd)/created.json" '{"hookSpecificOutput":{"hookEventName":"UserPromptSubmit","additionalContext":$ctx}}'
 fi
