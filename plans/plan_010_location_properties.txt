@@ -57,11 +57,11 @@ Each location has a set value for all properties and that value is a floating po
     - below building toolbar there is a panel with toggle buttons for each property from file assets/properties.md
     - initially the first property from the properties.md is selected
     - clicking on any other button deselects the current one and selects the new one
-- color-coding locations by property
+- [done] color-coding locations by property
     - depending on the selected property, use the property's color codes from properties.md
     - each location in the map has a vaslue for each property
     - calculate the color based on the value of the selected property for each location
         - first color is the minimum (0), last color is the maximum (2)
     - use the color on the location's floor
-- buttons display color gradient from left (minimum) to right (maximum)
-    - button background has the gradient color
+- buttons display two small color squares, first for minimum color, then for maximum color
+    - squares are right-aligned in the button
