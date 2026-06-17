@@ -26,7 +26,18 @@ function createFertilityMatrix(gridSize: number): number[][] {
 
 const SAVE_KEY = "sektor-map-state";
 
-const sektor = new Sektor(createFertilityMatrix(GRID_SIZE), buildingDefinitions, {
+const sektor = new Sektor(createFertilityMatrix(GRID_SIZE), buildingDefinitions, isTestMode ? {
+  importRestrictions: [
+    { name: "Water", value: 4 },
+    { name: "Energy", value: 3 },
+    { name: "Ore", value: 5 },
+  ],
+  exportRequirements: [
+    { name: "Food", value: 4 },
+    { name: "Work", value: 5 },
+    { name: "Metal", value: 8 },
+  ],
+} : {
   importRestrictions: [
     { name: "EnergyElectric", value: 4 },
     { name: "WaterPottable", value: 0 },

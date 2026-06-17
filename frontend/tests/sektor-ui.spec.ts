@@ -298,6 +298,44 @@ test("destroys building when trash icon is clicked", async ({ page }) => {
   await expectScreenshot(page, "building-destroyed", "body");
 });
 
+test("displays sektor state panel with restrictions and requirements", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+  const canvas = page.locator("#canvas-container canvas");
+  const box = await canvas.boundingBox();
+  const centerX = box!.width / 2;
+  const centerY = box!.height / 2;
+
+  // Place TestFactory (imports: Water 3, Energy 1; exports: Food 5)
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX - 60, y: centerY - 20 } });
+  await page.waitForTimeout(200);
+
+  // Place TestMine (imports: Energy 4; exports: Ore 3)
+  await page.locator('.building-item[data-building-name="TestMine"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX + 60, y: centerY - 20 } });
+  await page.waitForTimeout(200);
+
+  // Place TestHouse (imports: Food 2, Water 1; exports: Work 3)
+  await page.locator('.building-item[data-building-name="TestHouse"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+
+  // Imports (restrictions: Water=4, Energy=3, Ore=5):
+  //   Food=2 — non-zero import without restriction
+  //   Ore=0 — zero import with restriction (max 5)
+  //   Water=4 — non-zero import equal to restriction (max 4)
+  //   Energy=5 — non-zero import greater than restriction (max 3)
+  // Exports (requirements: Food=4, Work=5, Metal=8):
+  //   Ore=3 — non-zero export without requirement
+  //   Metal=0 — zero export with requirement (min 8)
+  //   Work=3 — non-zero export below requirement (min 5)
+  //   Food=5 — non-zero export greater than requirement (min 4)
+  await expectScreenshot(page, "sektor-state-panel", "#sektor-state-panel");
+});
+
 test("shows error when placing building on occupied location", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   await page.locator('.building-item[data-building-name="TestFactory"]').click();

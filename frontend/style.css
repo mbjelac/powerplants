@@ -335,10 +335,49 @@ body > main {
   font-family: sans-serif;
   font-size: 11px;
   margin-bottom: 4px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ss-header-resource {
+  flex: 1;
+}
+
+.ss-header-value {
+  width: 32px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .ss-row {
   color: #ccc;
   font-family: sans-serif;
   font-size: 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ss-cell-resource {
+  flex: 1;
+}
+
+.ss-cell-value {
+  width: 32px;
+  text-align: center;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.ss-exceeded {
+  background-color: orange;
+  color: #000;
+}
+
+.ss-met {
+  background-color: green;
+  color: #fff;
 }
