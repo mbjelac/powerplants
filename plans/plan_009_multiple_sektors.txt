@@ -1,0 +1,4 @@
+#1 Sektor list
+- there is a separate page displaying a list of sektors
+    - the sektor list is retrieved from an api function which for now returns a hardcoded list
+    - a list has the structure: { name: string, status: SektorStatus }
