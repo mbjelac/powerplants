@@ -9,3 +9,4 @@ Renders 3D scenes using shapes defined in the architect module. Uses shared rend
 - Update snapshots: `npx playwright test --update-snapshots`
 - Run unit tests: `npm run test:unit`
 - When the plan references heroicons, use inline SVG copied from the [heroicons website](https://heroicons.com/) — there is no heroicons package installed.
+- All icons live in `src/icons.ts`. Check there first before adding a new one — it may already exist.
