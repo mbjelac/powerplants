@@ -22,7 +22,12 @@ export interface RestrictionsRequirements {
   exportRequirements: ResourceThroughput[];
 }
 
+export interface Location {
+  properties: { [key: string]: number };
+}
+
 export interface SektorData {
+  locations: Location[][];
   importRestrictions: ResourceThroughput[];
   exportRequirements: ResourceThroughput[];
   buildings: BuildingCreation[];
