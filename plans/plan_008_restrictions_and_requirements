@@ -76,8 +76,8 @@ If all requirements are met, and no restrictions are exceeded, a Sektor's status
     - non-zero export with requirement, equal to requirement
     - non-zero export with requirement, greater than requirement
 
-#4 Status is displayed
-- status is displayed in the SektorState panel above the Imports & Exports table
+#4 [done] Status is displayed
+- [done] status is displayed in the SektorState panel above the Imports & Exports table
     - label: "Status: "
     - value:
         - InProgress: "In progress", white
