@@ -1,4 +1,27 @@
 #1 Sektor list
 - there is a separate page displaying a list of sektors
-    - the sektor list is retrieved from an api function which for now returns a hardcoded list
-    - a list has the structure: { name: string, status: SektorStatus }
+    - located in frontend/src/list
+    - the list has the structure: { name: string, status: SektorStatus }
+    - the sektor list is retrieved from an api function (in it's own file) which for now returns data from local storage
+        - local storage variable: "sektors"
+        - value structure: [{name: string, status: SektorStatus}]
+- list item displayed as:
+    - name
+    - status
+    - heroicon arrow-right as a button
+
+#2 Sektor page
+- when arrow button in list clicked, navigate to sektor page with sektor name in url
+    - sektor.ui.ts is the sektor page
+    - change the way sektor page creates a Sektor instance
+        - loads data for Sektor from an api function (in it's own file) which for now returns the sektor data from the local storage by sektor name
+            - local storage variable: sektor_<name>
+            - value structure: { importRestrictions: ResourceThroughput[], exportRequirements: ResourceThroughput[], buildings: BuildingCreation[], connections: Connection[] }
+- player can return to sektor list
+    - sektor page has gray X button in top right corner
+    - when clicked, navigate to sektor list
+- if sektor page loads without sektor name in URL, display empty page with error message "Sektor not found"
+- if sektor not found for specified name, display empty page with error message "Sektor not found"
+
+#3 Sektor list is the intial page
+- when app starts, it displays sektor list
