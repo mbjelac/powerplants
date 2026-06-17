@@ -4,30 +4,42 @@ Restrictions and requirements are set for specific resource types.
 
 Import restriction:
 Maximum value of import allowed.
-If not specified, restriction is 0 (no import allowed for that resource).
+If not specified, there is no restriction for imports of that resource.
 
 Export requirements:
 Minimum value of export required.
 If not specified, requirement is 0 (no export required for that resource).
 
 Connected to this, each Sektor has a status.
-Initially, a Sektor's status is "Unfinished".
-If all requirements are met, and no restrictions are exceeded, a Sektor's status is "Finished".
+Initially, a Sektor's status is "InProgress".
+If all requirements are met, and no restrictions are exceeded, a Sektor's status is "Done".
 
-#1 Sektor status & requirements & restrictions can be read
+#1 Sektor has status, requirements & restrictions
 - [done] refactor: ImportsExports should be named SektorState
     - rename methods & tests accordingly
-- Sektor has restrictions & requirements
+- State has restrictions, requirements & status
     - Sektor instance is created with predefined import restrictions & export requirements:
         - param restrictionsRequirements: { importRestrictions: ResourceThroughput[], exportRequirements: ResourceThroughput[] }
     - method getSektorState returns SektorState with:
         - imports (existing)
         - exports (existing)
-        - status: "UNFINISHED" | "FINISHED"
+        - status: "InProgress" | "Done"
         - importRestrictions: ResourceThroughput[]
         - exportRequirements: ResourceThroughput[]
 
-#2 Restrictions and requirements are displayed
+#2 Status depends on restrictions & requirements
+- if an import value is greater than it's restriction, status is RestrictionsExceeded, even if all exports meet requirements
+- create Sektor tests for all status combinations:
+    - no imports & no import restrictions, no export requirements -> Done
+    - some imports & no import restrictions, no export requirements -> Done
+    - some import restrictions & an input greater than it's restriction, no export requirements -> RestrictionsExceeded
+    - some import restrictions & an input non-zero but less than it's restriction, no export requirements -> Done
+    - some import restrictions & an input non-zero but equal to it's restriction, no export requirements -> Done
+    - some import restrictions & an input non-zero but equal to it's restriction, no export requirements -> Done
+    - no import restrictions, all exports less than requirements -> InProgress
+    - no import restrictions, all exports equal or greater than requirements -> Done
+
+#3 Restrictions and requirements are displayed
 - display import restrictions
     - import restrictions should be displayed next to import values of those resource types
     - if a resource import value is 0 and the resource has a restriction, that resource import row should be displayed
@@ -64,11 +76,12 @@ If all requirements are met, and no restrictions are exceeded, a Sektor's status
     - non-zero export with requirement, equal to requirement
     - non-zero export with requirement, greater than requirement
 
-#3 Status is displayed
+#4 Status is displayed
 - status is displayed in the SektorState panel above the Imports & Exports table
 - label: "Status: "
 - value:
-    - UNFINISHED: "Unfinished", white
-    - FINISHED: "Finished", green, bold
-- create visual tests of panel in finished status
-    - other tests should already cover unfinished status
+    - InProgress: "In progress", white
+    - Done: "Done", green, bold
+    - RestrictionsExceeded: "Restrictions exceeded", orange, bold
+- create visual tests of panel in Done & RestrictionsExceeded statuses
+    - other tests should already cover InProgress status
