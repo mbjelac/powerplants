@@ -11,6 +11,7 @@ import {showBuildingPanel, hideBuildingPanel} from "./buildings/buildingPanel.ui
 import {updateSektorStatePanel} from "./sektorStatePanel.ui";
 import { getSektorData, saveSektorData } from "./sektor.api";
 import { xMarkIcon } from "../icons";
+import { initPropertyToggler } from "./propertyToggler.ui";
 
 const GRID_SIZE = 10;
 const isTestMode = new URLSearchParams(window.location.search).get("test") === "true";
@@ -722,6 +723,7 @@ const sektorUi = (p: p5) => {
 
 new p5(sektorUi);
 initToolbar();
+initPropertyToggler();
 if (!isTestMode) {
   addCloseButton();
 }
