@@ -1,0 +1,5 @@
+soil #E3CA86  #86E389
+groundwater #DFE2F2 #0027FF
+ore #B5A8A7 #850E05
+insolation #4F4700 #FFE500
+wind #A1A1A1 #A6E8FF
