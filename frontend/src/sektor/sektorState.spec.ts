@@ -117,3 +117,94 @@ describe("getSektorState", () => {
     });
   });
 });
+
+const statusDefinitions: BuildingDefinition[] = [
+  {
+    name: "Generator",
+    renderingCode: "box s(1,1,1)",
+    buildingFunction: {
+      inputs: [
+        { name: "Coal", value: 5 },
+      ],
+      outputs: [
+        { name: "Power", value: 10 },
+      ],
+    },
+    properties: {},
+  },
+];
+
+describe("status", () => {
+  it("is Done when no buildings, no restrictions, no requirements", () => {
+    const sektor = new Sektor([[50]], statusDefinitions, { importRestrictions: [], exportRequirements: [] });
+
+    expect(sektor.getSektorState().status).toEqual("Done");
+  });
+
+  it("is Done when some imports, no restrictions, no requirements", () => {
+    const sektor = new Sektor([[50]], statusDefinitions, { importRestrictions: [], exportRequirements: [] });
+    sektor.createBuilding({ type: "Generator", location: { x: 0, y: 0 } });
+
+    expect(sektor.getSektorState().status).toEqual("Done");
+  });
+
+  it("is RestrictionsExceeded when an import is greater than its restriction, no requirements", () => {
+    const sektor = new Sektor([[50]], statusDefinitions, {
+      importRestrictions: [{ name: "Coal", value: 3 }],
+      exportRequirements: [],
+    });
+    sektor.createBuilding({ type: "Generator", location: { x: 0, y: 0 } });
+
+    expect(sektor.getSektorState().status).toEqual("RestrictionsExceeded");
+  });
+
+  it("is Done when an import is non-zero but less than its restriction, no requirements", () => {
+    const sektor = new Sektor([[50]], statusDefinitions, {
+      importRestrictions: [{ name: "Coal", value: 8 }],
+      exportRequirements: [],
+    });
+    sektor.createBuilding({ type: "Generator", location: { x: 0, y: 0 } });
+
+    expect(sektor.getSektorState().status).toEqual("Done");
+  });
+
+  it("is Done when an import is equal to its restriction, no requirements", () => {
+    const sektor = new Sektor([[50]], statusDefinitions, {
+      importRestrictions: [{ name: "Coal", value: 5 }],
+      exportRequirements: [],
+    });
+    sektor.createBuilding({ type: "Generator", location: { x: 0, y: 0 } });
+
+    expect(sektor.getSektorState().status).toEqual("Done");
+  });
+
+  it("is InProgress when no restrictions, all exports less than requirements", () => {
+    const sektor = new Sektor([[50]], statusDefinitions, {
+      importRestrictions: [],
+      exportRequirements: [{ name: "Power", value: 15 }],
+    });
+    sektor.createBuilding({ type: "Generator", location: { x: 0, y: 0 } });
+
+    expect(sektor.getSektorState().status).toEqual("InProgress");
+  });
+
+  it("is Done when no restrictions, all exports equal or greater than requirements", () => {
+    const sektor = new Sektor([[50]], statusDefinitions, {
+      importRestrictions: [],
+      exportRequirements: [{ name: "Power", value: 10 }],
+    });
+    sektor.createBuilding({ type: "Generator", location: { x: 0, y: 0 } });
+
+    expect(sektor.getSektorState().status).toEqual("Done");
+  });
+
+  it("is RestrictionsExceeded even if all exports meet requirements", () => {
+    const sektor = new Sektor([[50]], statusDefinitions, {
+      importRestrictions: [{ name: "Coal", value: 3 }],
+      exportRequirements: [{ name: "Power", value: 10 }],
+    });
+    sektor.createBuilding({ type: "Generator", location: { x: 0, y: 0 } });
+
+    expect(sektor.getSektorState().status).toEqual("RestrictionsExceeded");
+  });
+});
