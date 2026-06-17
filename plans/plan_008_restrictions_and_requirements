@@ -27,9 +27,9 @@ If all requirements are met, and no restrictions are exceeded, a Sektor's status
         - importRestrictions: ResourceThroughput[]
         - exportRequirements: ResourceThroughput[]
 
-#2 Status depends on restrictions & requirements
+#2 [done] Status depends on restrictions & requirements
 - [done] if an import value is greater than it's restriction, status is RestrictionsExceeded, even if all exports meet requirements
-- create Sektor tests for all status combinations:
+- [done] create Sektor tests for all status combinations:
     - no imports & no import restrictions, no export requirements -> Done
     - some imports & no import restrictions, no export requirements -> Done
     - some import restrictions & an input greater than it's restriction, no export requirements -> RestrictionsExceeded
