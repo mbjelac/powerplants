@@ -103,7 +103,7 @@ export class Sektor {
 
   getSektorState(): SektorState {
     const imports = this.aggregateThroughputs(this.buildings.map(building => this.getInputs(building.type)).flat());
-    const exports = this.aggregateThroughputs(this.buildings.map(building => this.getOutputs(building.type)).flat());
+    const exports = this.aggregateThroughputs(this.buildings.map(building => this.getOutputs(building.type, building.location)).flat());
 
     for (const connection of this.connections) {
       const importEntry = imports.find(entry => entry.name === connection.resourceType);
@@ -134,9 +134,16 @@ export class Sektor {
     return def?.buildingFunction?.inputs ?? [];
   }
 
-  private getOutputs(type: string): ResourceThroughput[] {
+  private getOutputs(type: string, location: BuildingLocation): ResourceThroughput[] {
     const def = this.buildingDefinitions.find(b => b.name === type);
-    return def?.buildingFunction?.outputs ?? [];
+    if (!def) return [];
+    const locationProperties = this.locations[location.x]?.[location.y]?.properties ?? {};
+    return (def.buildingFunction?.outputs ?? []).map(output => {
+      const modifier = def.outputModifiers.find(modifier => modifier.resource === output.name);
+      if (!modifier) return output;
+      const propertyValue = locationProperties[modifier.property] ?? 0;
+      return { name: output.name, value: Math.round(output.value * propertyValue * 10) / 10 };
+    });
   }
 
   private getRemainingImport(location: BuildingLocation, resourceType: string): number {
@@ -153,7 +160,7 @@ export class Sektor {
   private getRemainingExport(location: BuildingLocation, resourceType: string): number {
     const building = this.findBuildingAt(location);
     if (!building) return 0;
-    const output = this.getOutputs(building.type).find(o => o.name === resourceType);
+    const output = this.getOutputs(building.type, location).find(o => o.name === resourceType);
     if (!output) return 0;
     const connectedAmount = this.connections
       .filter(c => c.source.x === location.x && c.source.y === location.y && c.resourceType === resourceType)
@@ -187,7 +194,7 @@ export class Sektor {
     const targetInput = this.getInputs(targetBuilding.type).find(input => input.name === resourceType);
     if (!targetInput) return { success: false, error: "targetHasNoMatchingInput" };
 
-    const sourceOutput = this.getOutputs(sourceBuilding.type).find(output => output.name === resourceType);
+    const sourceOutput = this.getOutputs(sourceBuilding.type, source).find(output => output.name === resourceType);
     if (!sourceOutput) return { success: false, error: "sourceHasNoMatchingOutput" };
 
     if (this.isAlreadyConnected(target, source, resourceType)) return { success: false, error: "alreadyConnected" };
@@ -225,7 +232,7 @@ export class Sektor {
 
     const sourceBuilding = this.findBuildingAt(source);
     if (!sourceBuilding) return { success: false, error: "sourceBuildingNotFound", newAmount: connection.amount };
-    const sourceOutput = this.getOutputs(sourceBuilding.type).find(output => output.name === resourceType);
+    const sourceOutput = this.getOutputs(sourceBuilding.type, source).find(output => output.name === resourceType);
     if (!sourceOutput) return { success: false, error: "sourceHasNoMatchingOutput", newAmount: connection.amount };
     const totalOutputConnected = this.connections
       .filter(c => c.source.x === source.x && c.source.y === source.y && c.resourceType === resourceType)
@@ -240,13 +247,13 @@ export class Sektor {
     return this.buildings
       .filter(building => {
         if (building.location.x === target.x && building.location.y === target.y) return false;
-        if (!this.getOutputs(building.type).some(output => output.name === resourceType)) return false;
+        if (!this.getOutputs(building.type, building.location).some(output => output.name === resourceType)) return false;
         if (this.isAlreadyConnected(target, building.location, resourceType)) return false;
         return this.getRemainingExport(building.location, resourceType) > 0;
       })
       .map(building => ({
         location: building.location,
-        totalOutput: this.getOutputs(building.type).find(output => output.name === resourceType)!.value,
+        totalOutput: this.getOutputs(building.type, building.location).find(output => output.name === resourceType)!.value,
         remainingOutput: this.getRemainingExport(building.location, resourceType),
       }));
   }

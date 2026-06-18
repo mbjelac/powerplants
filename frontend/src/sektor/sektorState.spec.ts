@@ -15,6 +15,7 @@ const testDefinitions: BuildingDefinition[] = [
         { name: "Water", value: 4 },
       ],
     },
+    outputModifiers: [],
     properties: {},
   },
   {
@@ -30,6 +31,7 @@ const testDefinitions: BuildingDefinition[] = [
         { name: "Food", value: 5 },
       ],
     },
+    outputModifiers: [],
     properties: {},
   },
 ];
@@ -130,6 +132,7 @@ const statusDefinitions: BuildingDefinition[] = [
         { name: "Power", value: 10 },
       ],
     },
+    outputModifiers: [],
     properties: {},
   },
 ];
@@ -206,5 +209,91 @@ describe("status", () => {
     sektor.createBuilding({ type: "Generator", location: { x: 0, y: 0 } });
 
     expect(sektor.getSektorState().status).toEqual("RestrictionsExceeded");
+  });
+});
+
+const modifierDefinitions: BuildingDefinition[] = [
+  {
+    name: "SolarFarm",
+    renderingCode: "box s(1,1,1)",
+    buildingFunction: {
+      inputs: [
+        { name: "Work", value: 2 },
+      ],
+      outputs: [
+        { name: "Energy", value: 10 },
+      ],
+    },
+    outputModifiers: [
+      { resource: "Energy", property: "insolation" },
+    ],
+    properties: {},
+  },
+  {
+    name: "Mine",
+    renderingCode: "box s(1,1,1)",
+    buildingFunction: {
+      inputs: [
+        { name: "Energy", value: 3 },
+      ],
+      outputs: [
+        { name: "Ore", value: 5 },
+      ],
+    },
+    outputModifiers: [],
+    properties: {},
+  },
+];
+
+describe("output modifiers", () => {
+  it("multiplies output by location property value when modifier is present", () => {
+    const sektor = new Sektor(
+      [[{ properties: { insolation: 1.5 } }]],
+      modifierDefinitions,
+      { importRestrictions: [], exportRequirements: [] },
+    );
+    sektor.createBuilding({ type: "SolarFarm", location: { x: 0, y: 0 } });
+
+    expect(sektor.getSektorState().exports).toEqual([
+      { name: "Energy", value: 15 },
+    ]);
+  });
+
+  it("uses unmodified output when no modifier is present", () => {
+    const sektor = new Sektor(
+      [[{ properties: { insolation: 1.5 } }]],
+      modifierDefinitions,
+      { importRestrictions: [], exportRequirements: [] },
+    );
+    sektor.createBuilding({ type: "Mine", location: { x: 0, y: 0 } });
+
+    expect(sektor.getSektorState().exports).toEqual([
+      { name: "Ore", value: 5 },
+    ]);
+  });
+
+  it("modified output affects connection remaining export", () => {
+    const sektor = new Sektor(
+      [[{ properties: { insolation: 0.5 } }, { properties: { insolation: 0.5 } }]],
+      modifierDefinitions,
+      { importRestrictions: [], exportRequirements: [] },
+    );
+    sektor.createBuilding({ type: "SolarFarm", location: { x: 0, y: 0 } });
+    sektor.createBuilding({ type: "Mine", location: { x: 0, y: 1 } });
+    sektor.addConnection({ x: 0, y: 1 }, { x: 0, y: 0 }, "Energy");
+
+    expect(sektor.getSektorState()).toEqual({
+      imports: [
+        { name: "Work", value: 2 },
+        { name: "Energy", value: 2 },
+      ],
+      exports: [
+        { name: "Energy", value: 4 },
+        { name: "Ore", value: 5 },
+      ],
+      status: "Done",
+      importRestrictions: [],
+      exportRequirements: [],
+    });
   });
 });

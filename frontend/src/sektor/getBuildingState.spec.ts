@@ -15,6 +15,7 @@ const testDefinitions: BuildingDefinition[] = [
         { name: "Flour", value: 3 },
       ],
     },
+    outputModifiers: [],
     properties: {},
   },
 ];
@@ -60,7 +61,8 @@ describe("getBuildingState", () => {
           inputs: [{ name: "Water", value: 2 }],
           outputs: [{ name: "Wheat", value: 5 }],
         },
-        properties: {},
+        outputModifiers: [],
+    properties: {},
       },
     ];
     const sektor = new Sektor([[{ properties: { soil: 1.0 } }]], testDefinitionsWithFarm, { importRestrictions: [], exportRequirements: [] });

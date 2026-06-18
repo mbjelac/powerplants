@@ -10,6 +10,7 @@ const testDefinitions: BuildingDefinition[] = [
       inputs: [{ name: "Wheat", value: 4 }],
       outputs: [{ name: "Flour", value: 3 }],
     },
+    outputModifiers: [],
     properties: {},
   },
   {
@@ -19,6 +20,7 @@ const testDefinitions: BuildingDefinition[] = [
       inputs: [{ name: "Water", value: 2 }],
       outputs: [{ name: "Wheat", value: 5 }],
     },
+    outputModifiers: [],
     properties: {},
   },
 ];
@@ -116,7 +118,8 @@ describe("changeConnectionAmount", () => {
           inputs: [{ name: "Wheat", value: 10 }],
           outputs: [{ name: "Flour", value: 3 }],
         },
-        properties: {},
+        outputModifiers: [],
+    properties: {},
       },
       {
         name: "SmallFarm",
@@ -125,7 +128,8 @@ describe("changeConnectionAmount", () => {
           inputs: [{ name: "Water", value: 2 }],
           outputs: [{ name: "Wheat", value: 3 }],
         },
-        properties: {},
+        outputModifiers: [],
+    properties: {},
       },
     ];
     const sektor = new Sektor([[{ properties: { soil: 1.0 } }]], definitions, { importRestrictions: [], exportRequirements: [] });
