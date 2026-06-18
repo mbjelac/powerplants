@@ -80,12 +80,15 @@ Each location has a set value for all properties and that value is a floating po
     - multiply the function's output amount by the property value
     - if no modifier, the function's output amount is used
     - add tests for calculating exports & connections for cases with output modifiers & location property values which modify outputs
-- modified output is visible in building panel
+- [done] modified output is visible in building panel
     - building panel output should show the modified output witht he function output in brackets next to it
        - example: "RawFood <icon> 5.5 (3)"
     - if there was no modification, show only function output like now
     - if modified output is greater than function output, it has green background (same color as in sektor state panel)
     - if modified output is less than function output, it has orange background (same color as in sektor state panel)
+    - add visual tests for these cases
+        - output modified to be larger than function output
+        - output modified to be smaller than function output
 
 #5 Building panel also displays location property values
 - below building function stats, add rows showing all property names & values for that location
