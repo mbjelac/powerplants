@@ -104,3 +104,9 @@ Each location has a set value for all properties and that value is a floating po
     - no row has a border around it
     - panel does not display delete button
 
+#7 Improve location color coding
+- instead of painting floors with the color of the location property value, draw a rectangle around the floor
+    - this rectangle should be the same as used for highlighting currently selected building
+        - same size, positioning and shape
+    - do not use rectangles for soil - keep coloring floors depending on the soil property values
+    - the color of the rectangle should be calculated from location property values in the same way as before
