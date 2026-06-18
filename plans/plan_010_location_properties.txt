@@ -90,15 +90,15 @@ Each location has a set value for all properties and that value is a floating po
         - output modified to be larger than function output
         - output modified to be smaller than function output
 
-#5 Building panel also displays location property values
-- below building function stats, add rows showing all property names & values for that location
+#5 [done] Building panel also displays location property values
+- [done] below building function stats, add rows showing all property names & values for that location
     - table rows with columns:
         - property name
         - property value
         - swatch (colored square) woth color based on property value
-- if property is in this building's output modifier, show the row with a thin border around it
+- [done] if property is in this building's output modifier, show the row with a thin border around it
     - all property rows should have the same margin, even without the border
-- add building panel visual tests for
+- [done] add building panel visual tests for
     - building without modifier
     - building with one modifier
     - building with multiple modifiers
