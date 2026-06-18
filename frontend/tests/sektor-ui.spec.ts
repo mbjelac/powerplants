@@ -129,6 +129,26 @@ test("displays building panel without output modifier", async ({ page }) => {
   await expectScreenshot(page, "building-panel-no-modifier", "#building-panel");
 });
 
+test("displays building panel for empty location", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+
+  await page.evaluate(() => {
+    (window as any).showBuildingPanel({
+      name: "Empty",
+      code: "",
+      buildingFunction: { inputs: [], outputs: [] },
+      modifiedOutputs: [],
+      imports: [],
+      locationProperties: { soil: 0.8, groundwater: 0.4, ore: 0.2, insolation: 1.5, wind: 1.1 },
+      modifierProperties: [],
+      floorColor: [200, 200, 100],
+      location: { x: 3, y: 5 },
+    });
+  });
+
+  await expectScreenshot(page, "building-panel-empty-location", "#building-panel");
+});
+
 test("building panel persists after rotating the view", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   // Place and click a building

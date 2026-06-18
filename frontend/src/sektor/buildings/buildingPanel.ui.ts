@@ -105,7 +105,9 @@ export function showBuildingPanel({ name, code, buildingFunction, modifiedOutput
 
   panelEl.appendChild(header);
 
-  panelEl.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, modifiedOutputs: modifiedOutputs, imports: imports, onAddInputConnection: onAddInputConnection }));
+  if (buildingFunction.inputs.length > 0 || buildingFunction.outputs.length > 0) {
+    panelEl.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, modifiedOutputs: modifiedOutputs, imports: imports, onAddInputConnection: onAddInputConnection }));
+  }
 
   if (locationProperties) {
     const propertiesSection = document.createElement("div");

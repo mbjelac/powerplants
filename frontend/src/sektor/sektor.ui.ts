@@ -383,6 +383,23 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
   });
 }
 
+function openEmptyLocationPanel(location: BuildingLocation) {
+  const selectedProperty = getSelectedProperty();
+  const floorColor = propertyColor(selectedProperty, locations[location.x]?.[location.y]?.properties[selectedProperty] ?? 0);
+  selectedBuildingLocation = location;
+  showBuildingPanel({
+    name: "Empty",
+    code: "",
+    buildingFunction: { inputs: [], outputs: [] },
+    modifiedOutputs: [],
+    imports: [],
+    locationProperties: locations[location.x]?.[location.y]?.properties,
+    modifierProperties: [],
+    floorColor: floorColor,
+    location: location,
+  });
+}
+
 function showError(message: string) {
   const errorEl = document.getElementById("error-message")!;
   errorEl.textContent = message;
@@ -622,12 +639,11 @@ const sektorUi = (p: p5) => {
       if (placed) {
         openBuildingPanel(placed);
       } else {
-        hideBuildingPanel();
-      if (displayedConnections) {
-        for (const label of displayedConnections.labels) label.remove();
-      }
-      selectedBuildingLocation = null;
-      displayedConnections = null;
+        if (displayedConnections) {
+          for (const label of displayedConnections.labels) label.remove();
+        }
+        displayedConnections = null;
+        openEmptyLocationPanel({ x: grid.x, y: grid.y });
       }
       return;
     }

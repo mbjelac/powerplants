@@ -104,14 +104,14 @@ Each location has a set value for all properties and that value is a floating po
     - building with multiple modifiers
 
 #6 Building panel displayed for empty locations
-- if player clicks on an empty location, display building panel
+- [done] if player clicks on an empty location, display building panel
     - panel still has the "Location: x,y" title
     - panel still displays the floor (in it's color) but not the building, as there is none
     - panel does not dispkay the function inputs & outpus
     - panel displays the location's property rows
     - no row has a border around it
     - panel does not display delete button
-- add building panel visual test for empty location
+- [done] add building panel visual test for empty location
 
 #7 Improve location color coding
 - instead of painting floors with the color of the location property value, draw a rectangle around the floor
