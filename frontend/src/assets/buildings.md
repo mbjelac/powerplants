@@ -188,3 +188,31 @@ Ore 5 ore
 ## Properties
 
 showFloor=false
+
+# WindLoop
+
+## Render
+
+```
+tor s(62,62,28) r(0,90,0) t(0,6,40) c(#ffffff)
+tor s(60,60,12) r(0,90,0) t(0,2,40) c(#388eff)
+pri3 c(#ffffff) r(0,74,-89) s(40,40,10) t(27,-1,8)
+pri3 c(#ffffff) r(93,74,-89) s(40,40,6) t(22,-4,8)
+pri3 c(#ffffff) r(0,74,-89) s(40,40,10) t(-17,-1,8)
+pri3 c(#ffffff) r(93,74,-89) s(40,40,6) t(-22,-4,8)
+cyl s(1,1,21) t(4,-1,70) c(#ffffff)
+cyl s(1,1,2) t(4,-1,92) c(#ff0000)
+cyl s(1,1,31) t(-3,-1,70) c(#ffffff)
+cyl s(1,1,2) t(-3,-1,102) c(#ff0000)
+pri6 s(80,80,8) c(#c6c3b8) t(0,0,-1) r(-15,0,0)
+pri3 c(#ffffff) r(0,10,90) s(45,20,4) t(-3,25,8)
+pri3 c(#ffffff) r(180,10,90) s(45,20,4) t(3,-25,8)
+pri4 s(12,7,11) t(1,-20,0) c(#d6d6d6)
+pri4 s(12,7,11) t(-1,20,0) c(#d6d6d6)
+```
+
+## Function
+
+WorkTechnical 1
+=
+EnergyElectric 4 wind
