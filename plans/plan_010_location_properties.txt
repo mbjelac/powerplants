@@ -74,9 +74,13 @@ Each location has a set value for all properties and that value is a floating po
     - add tests of parseBuildingDefinition to check that output property names are parsed correctly
         - if no property names are present, outputModifiers should be empty
         - for each output row with a property name, expect one element in the outputModifiers array
-- when a building's output is used (either to calculate exports or connection possibilities)
+- [done] when a building's output is used (either to calculate exports or connection possibilities)
     - find the outputModifier for the output resource type
     - get the value of the location property for the property name in the outputModifier
     - multiply the function's output amount by the property value
     - if no modifier, the function's output amount is used
     - add tests for calculating exports & connections for cases with output modifiers & location property values which modify outputs
+- modified output is visible in building panel
+    - building panel output should show the modified output witht he function output in brackets next to it
+    - if modified output is greater than function output, it has green background (same color as in sektor state panel)
+    - if modified output is less than function output, it has orange background (same color as in sektor state panel)
