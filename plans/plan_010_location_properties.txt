@@ -67,7 +67,7 @@ Each location has a set value for all properties and that value is a floating po
     - squares are right-aligned in the button
 
 #4 Building outputs are modified by location properties
-- building definition in buildings.md may have location property in output function
+- [done] building definition in buildings.md may have location property in output function
     - function output row format "ResourceType <amount> propertyName"
         - or "ResourceType <amount>" in which case there is no modification
     - these are loaded into BuildingDefinition as outputModifiers: { resource: string, property: string }[]
