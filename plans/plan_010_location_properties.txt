@@ -66,7 +66,7 @@ Each location has a set value for all properties and that value is a floating po
 - [done] buttons display two small color squares, first for minimum color, then for maximum color
     - squares are right-aligned in the button
 
-#4 Building outputs are modified by location properties
+#4 [done] Building outputs are modified by location properties
 - [done] building definition in buildings.md may have location property in output function
     - function output row format "ResourceType <amount> propertyName"
         - or "ResourceType <amount>" in which case there is no modification
@@ -80,7 +80,7 @@ Each location has a set value for all properties and that value is a floating po
     - multiply the function's output amount by the property value
     - if no modifier, the function's output amount is used
     - add tests for calculating exports & connections for cases with output modifiers & location property values which modify outputs
-- [done] modified output is visible in building panel
+- [done] modified output is visible in building panel (including visual tests)
     - building panel output should show the modified output witht he function output in brackets next to it
        - example: "RawFood <icon> 5.5 (3)"
     - if there was no modification, show only function output like now
