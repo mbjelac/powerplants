@@ -9,10 +9,16 @@ export interface BuildingProperties {
   showFloor?: boolean;
 }
 
+export interface OutputModifier {
+  resource: string;
+  property: string;
+}
+
 export interface BuildingDefinition {
   name: string;
   renderingCode: string;
   buildingFunction: BuildingFunction;
+  outputModifiers: OutputModifier[];
   properties: BuildingProperties;
 }
 
@@ -28,10 +34,12 @@ export function parseBuildingDefinitions(lines: string[]): BuildingDefinition[] 
 
   function pushBuilding() {
     if (currentName && codeLines.length > 0) {
+      const parsed = parseBuildingFunction(functionLines);
       buildings.push({
         name: currentName,
         renderingCode: codeLines.join("\n"),
-        buildingFunction: parseBuildingFunction(functionLines),
+        buildingFunction: parsed.buildingFunction,
+        outputModifiers: parsed.outputModifiers,
         properties: parseProperties(propertyLines),
       });
     }
@@ -98,9 +106,10 @@ function parseProperties(lines: string[]): BuildingProperties {
   return props;
 }
 
-function parseBuildingFunction(lines: string[]): BuildingFunction {
+function parseBuildingFunction(lines: string[]): { buildingFunction: BuildingFunction; outputModifiers: OutputModifier[] } {
   const inputs: ResourceThroughput[] = [];
   const outputs: ResourceThroughput[] = [];
+  const outputModifiers: OutputModifier[] = [];
   let seenEquals = false;
 
   for (const line of lines) {
@@ -110,11 +119,14 @@ function parseBuildingFunction(lines: string[]): BuildingFunction {
       seenEquals = true;
       continue;
     }
-    const match = trimmed.match(/^(\S+)\s+(\d+)$/);
+    const match = trimmed.match(/^(\S+)\s+(\d+)(?:\s+(\S+))?$/);
     if (!match) continue;
     const entry = { name: match[1], value: parseInt(match[2]) };
     if (seenEquals) {
       outputs.push(entry);
+      if (match[3]) {
+        outputModifiers.push({ resource: match[1], property: match[3] });
+      }
     } else {
       inputs.push(entry);
     }
@@ -122,8 +134,8 @@ function parseBuildingFunction(lines: string[]): BuildingFunction {
 
   if (inputs.length === 0 && outputs.length === 0) {
     console.error("Building function has no inputs or outputs:", lines.join("\n"));
-    return { inputs: [], outputs: [] };
+    return { buildingFunction: { inputs: [], outputs: [] }, outputModifiers: [] };
   }
 
-  return { inputs, outputs };
+  return { buildingFunction: { inputs, outputs }, outputModifiers };
 }

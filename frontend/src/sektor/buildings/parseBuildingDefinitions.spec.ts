@@ -27,6 +27,7 @@ describe("parseBuildingDefinitions", () => {
       name: "MyBuilding",
       renderingCode: "box s(10,10,10)",
       buildingFunction: { inputs: [], outputs: [] },
+      outputModifiers: [],
       properties: {},
     }]);
   });
@@ -252,6 +253,7 @@ describe("parseBuildingDefinitions", () => {
           inputs: [{ name: "Water", value: 2 }],
           outputs: [{ name: "Steam", value: 1 }],
         },
+        outputModifiers: [],
         properties: {},
       },
       {
@@ -261,6 +263,7 @@ describe("parseBuildingDefinitions", () => {
           inputs: [{ name: "Iron", value: 4 }],
           outputs: [{ name: "Steel", value: 3 }],
         },
+        outputModifiers: [],
         properties: {},
       },
     ]);
@@ -287,6 +290,61 @@ describe("parseBuildingDefinitions", () => {
     ]);
 
     expect(result).toEqual([]);
+  });
+
+  it("parses output modifiers when property name is present", () => {
+    const result = parseBuildingDefinitions([
+      "# Farm",
+      "## Render",
+      "```",
+      "box s(10,10,10)",
+      "```",
+      "## Function",
+      "Water 3",
+      "=",
+      "Food 5 soil",
+      "Grain 2 groundwater",
+    ]);
+
+    expect(result[0].outputModifiers).toEqual([
+      { resource: "Food", property: "soil" },
+      { resource: "Grain", property: "groundwater" },
+    ]);
+  });
+
+  it("returns empty outputModifiers when no property names are present", () => {
+    const result = parseBuildingDefinitions([
+      "# Factory",
+      "## Render",
+      "```",
+      "box s(10,10,10)",
+      "```",
+      "## Function",
+      "Iron 3",
+      "=",
+      "Steel 5",
+    ]);
+
+    expect(result[0].outputModifiers).toEqual([]);
+  });
+
+  it("parses mixed outputs with and without property names", () => {
+    const result = parseBuildingDefinitions([
+      "# MixedFactory",
+      "## Render",
+      "```",
+      "box s(10,10,10)",
+      "```",
+      "## Function",
+      "Energy 2",
+      "=",
+      "Heat 3",
+      "Crop 4 soil",
+    ]);
+
+    expect(result[0].outputModifiers).toEqual([
+      { resource: "Crop", property: "soil" },
+    ]);
   });
 
   it("ignores resource lines outside of Function section", () => {
