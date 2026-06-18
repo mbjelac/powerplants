@@ -82,5 +82,6 @@ Each location has a set value for all properties and that value is a floating po
     - add tests for calculating exports & connections for cases with output modifiers & location property values which modify outputs
 - modified output is visible in building panel
     - building panel output should show the modified output witht he function output in brackets next to it
+       - example: "RawFood <icon> 5.5 (3)"
     - if modified output is greater than function output, it has green background (same color as in sektor state panel)
     - if modified output is less than function output, it has orange background (same color as in sektor state panel)
