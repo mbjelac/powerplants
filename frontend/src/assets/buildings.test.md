@@ -11,7 +11,7 @@ pri4 s(30,30,30) t(0,0,0) c(#4488cc)
 Water 3
 Energy 1
 =
-Food 5
+Food 5 soil
 
 # TestMine
 
@@ -25,7 +25,7 @@ cyl s(20,20,20) t(0,0,0) c(#cc8844)
 
 Energy 4
 =
-Ore 3
+Ore 3 ore
 
 ## Properties
 

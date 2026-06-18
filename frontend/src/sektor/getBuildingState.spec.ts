@@ -43,6 +43,9 @@ describe("getBuildingState", () => {
           { name: "Flour", value: 3 },
         ],
       },
+      modifiedOutputs: [
+        { name: "Flour", value: 3 },
+      ],
       imports: [
         { name: "Wheat", value: 4 },
         { name: "Energy", value: 2 },

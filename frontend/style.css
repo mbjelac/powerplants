@@ -154,6 +154,20 @@ body > main {
   gap: 2px;
 }
 
+.bf-output-boosted {
+  background-color: green;
+  color: #fff;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.bf-output-reduced {
+  background-color: orange;
+  color: #000;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
 .bf-inputs-table {
   display: grid;
   grid-template-columns: 14px auto auto auto;

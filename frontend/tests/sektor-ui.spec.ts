@@ -60,6 +60,48 @@ test("displays building panel with many inputs", async ({ page }) => {
   await expectScreenshot(page, "building-panel-large", "#building-panel");
 });
 
+test("displays building panel with boosted output modifier", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+
+  await page.evaluate(() => {
+    (window as any).showBuildingPanel({
+      name: "SolarFarm",
+      code: "box s(30,30,30) t(0,0,0) c(#4488cc)",
+      buildingFunction: {
+        inputs: [{ name: "Work", value: 2 }],
+        outputs: [{ name: "Energy", value: 10 }],
+      },
+      modifiedOutputs: [{ name: "Energy", value: 15 }],
+      imports: [{ name: "Work", value: 2 }],
+      floorColor: [200, 200, 100],
+      location: { x: 0, y: 0 },
+    });
+  });
+
+  await expectScreenshot(page, "building-panel-boosted-output", "#building-panel");
+});
+
+test("displays building panel with reduced output modifier", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+
+  await page.evaluate(() => {
+    (window as any).showBuildingPanel({
+      name: "SolarFarm",
+      code: "box s(30,30,30) t(0,0,0) c(#4488cc)",
+      buildingFunction: {
+        inputs: [{ name: "Work", value: 2 }],
+        outputs: [{ name: "Energy", value: 10 }],
+      },
+      modifiedOutputs: [{ name: "Energy", value: 3.5 }],
+      imports: [{ name: "Work", value: 2 }],
+      floorColor: [200, 200, 100],
+      location: { x: 0, y: 0 },
+    });
+  });
+
+  await expectScreenshot(page, "building-panel-reduced-output", "#building-panel");
+});
+
 test("building panel persists after rotating the view", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   // Place and click a building

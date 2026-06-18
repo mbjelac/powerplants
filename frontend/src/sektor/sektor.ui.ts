@@ -34,7 +34,13 @@ function showSektorNotFound() {
 function createTestLocations(gridSize: number): Location[][] {
   return Array.from({ length: gridSize }, (_, x) =>
     Array.from({ length: gridSize }, (_, z) => ({
-      properties: { soil: ((x * 17 + z * 31) % 101) / 100 * 2 },
+      properties: {
+        soil: ((x * 17 + z * 31) % 101) / 100 * 2,
+        groundwater: ((x * 13 + z * 23) % 101) / 100 * 2,
+        ore: ((x * 7 + z * 41) % 101) / 100 * 2,
+        insolation: ((x * 29 + z * 11) % 101) / 100 * 2,
+        wind: ((x * 37 + z * 19) % 101) / 100 * 2,
+      },
     }))
   );
 }
@@ -348,6 +354,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
     name: placed.type,
     code: code,
     buildingFunction: buildingState.buildingFunction,
+    modifiedOutputs: buildingState.modifiedOutputs,
     imports: buildingState.imports,
     floorColor: floorColor,
     location: placed.location,
@@ -736,6 +743,7 @@ if (!isTestMode) {
 }
 if (isTestMode) {
   (window as any).updateSektorStatePanel = updateSektorStatePanel;
+  (window as any).showBuildingPanel = showBuildingPanel;
 }
 
 function addCloseButton() {

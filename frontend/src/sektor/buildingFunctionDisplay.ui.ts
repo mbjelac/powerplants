@@ -3,8 +3,9 @@ import { getResourceIcon } from "../resources";
 import { BuildingFunction, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
 import { arrowDownTrayIcon, linkIcon, arrowRightIcon } from "../icons";
 
-export function createFunctionDisplay({ buildingFunction, imports, onAddInputConnection }: {
+export function createFunctionDisplay({ buildingFunction, modifiedOutputs, imports, onAddInputConnection }: {
   buildingFunction: BuildingFunction,
+  modifiedOutputs?: ResourceThroughput[],
   imports: ResourceThroughput[],
   onAddInputConnection?: (resourceType: string) => void
 }): HTMLElement {
@@ -18,7 +19,7 @@ export function createFunctionDisplay({ buildingFunction, imports, onAddInputCon
   arrowEl.innerHTML = arrowRightIcon;
   functionDisplay.appendChild(arrowEl);
 
-  functionDisplay.appendChild(createColumn(buildingFunction.outputs));
+  functionDisplay.appendChild(createOutputColumn(buildingFunction.outputs, modifiedOutputs));
 
   return functionDisplay;
 }
@@ -98,13 +99,22 @@ function createInputsTable({ inputs, imports, onAddConnection }: {
   return table;
 }
 
-function createColumn(items: ResourceThroughput[]): HTMLElement {
+function createOutputColumn(outputs: ResourceThroughput[], modifiedOutputs?: ResourceThroughput[]): HTMLElement {
   const column = document.createElement("div");
   column.className = "bf-col";
-  for (const item of items) {
+  for (const output of outputs) {
     const row = document.createElement("div");
-    const icon = getResourceIcon(item.name);
-    row.textContent = `${item.name} ${icon ?? ""} ${item.value}`;
+    row.className = "bf-output-row";
+    const icon = getResourceIcon(output.name);
+    const modified = modifiedOutputs?.find(modifiedOutput => modifiedOutput.name === output.name);
+    if (modified && modified.value !== output.value) {
+      const modifiedValue = document.createElement("span");
+      modifiedValue.textContent = `${modified.value}`;
+      modifiedValue.className = modified.value > output.value ? "bf-output-boosted" : "bf-output-reduced";
+      row.append(`${output.name} ${icon ?? ""} `, modifiedValue, ` (${output.value})`);
+    } else {
+      row.textContent = `${output.name} ${icon ?? ""} ${output.value}`;
+    }
     column.appendChild(row);
   }
   return column;

@@ -22,6 +22,7 @@ export interface BuildingConnection {
 
 export interface BuildingState {
   buildingFunction: BuildingFunction;
+  modifiedOutputs: ResourceThroughput[];
   imports: ResourceThroughput[];
   inputConnections: BuildingConnection[];
 }
@@ -96,6 +97,7 @@ export class Sektor {
     }));
     return {
       buildingFunction: def.buildingFunction,
+      modifiedOutputs: this.getOutputs(building.type, location),
       imports,
       inputConnections,
     };

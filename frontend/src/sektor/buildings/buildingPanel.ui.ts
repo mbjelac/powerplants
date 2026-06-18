@@ -53,10 +53,11 @@ function ensurePreviewP5(parent: HTMLElement) {
   });
 }
 
-export function showBuildingPanel({ name, code, buildingFunction, imports, floorColor, location, onAddInputConnection, onDestroy }: {
+export function showBuildingPanel({ name, code, buildingFunction, modifiedOutputs, imports, floorColor, location, onAddInputConnection, onDestroy }: {
   name: string,
   code: string,
   buildingFunction: BuildingFunction,
+  modifiedOutputs: ResourceThroughput[],
   imports: ResourceThroughput[],
   floorColor: [number, number, number],
   location: BuildingLocation,
@@ -101,7 +102,7 @@ export function showBuildingPanel({ name, code, buildingFunction, imports, floor
 
   panelEl.appendChild(header);
 
-  panelEl.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, imports: imports, onAddInputConnection: onAddInputConnection }));
+  panelEl.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, modifiedOutputs: modifiedOutputs, imports: imports, onAddInputConnection: onAddInputConnection }));
 
   document.getElementById("canvas-container")!.appendChild(panelEl);
 
