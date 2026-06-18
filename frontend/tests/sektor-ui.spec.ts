@@ -73,6 +73,8 @@ test("displays building panel with boosted output modifier", async ({ page }) =>
       },
       modifiedOutputs: [{ name: "Energy", value: 15 }],
       imports: [{ name: "Work", value: 2 }],
+      locationProperties: { soil: 0.8, groundwater: 0.4, ore: 0.2, insolation: 1.5, wind: 1.1 },
+      modifierProperties: ["insolation"],
       floorColor: [200, 200, 100],
       location: { x: 0, y: 0 },
     });
@@ -94,12 +96,37 @@ test("displays building panel with reduced output modifier", async ({ page }) =>
       },
       modifiedOutputs: [{ name: "Energy", value: 3.5 }],
       imports: [{ name: "Work", value: 2 }],
+      locationProperties: { soil: 0.8, groundwater: 0.4, ore: 0.2, insolation: 0.35, wind: 1.1 },
+      modifierProperties: ["insolation"],
       floorColor: [200, 200, 100],
       location: { x: 0, y: 0 },
     });
   });
 
   await expectScreenshot(page, "building-panel-reduced-output", "#building-panel");
+});
+
+test("displays building panel without output modifier", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+
+  await page.evaluate(() => {
+    (window as any).showBuildingPanel({
+      name: "Warehouse",
+      code: "box s(30,30,30) t(0,0,0) c(#888888)",
+      buildingFunction: {
+        inputs: [{ name: "Wood", value: 3 }],
+        outputs: [{ name: "Goods", value: 4 }],
+      },
+      modifiedOutputs: [{ name: "Goods", value: 4 }],
+      imports: [{ name: "Wood", value: 3 }],
+      locationProperties: { soil: 0.8, groundwater: 0.4, ore: 0.2, insolation: 1.5, wind: 1.1 },
+      modifierProperties: [],
+      floorColor: [200, 200, 100],
+      location: { x: 0, y: 0 },
+    });
+  });
+
+  await expectScreenshot(page, "building-panel-no-modifier", "#building-panel");
 });
 
 test("building panel persists after rotating the view", async ({ page }) => {

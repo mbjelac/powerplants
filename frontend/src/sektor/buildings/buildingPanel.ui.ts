@@ -7,6 +7,7 @@ import { trashIcon } from "../../icons";
 import { createFunctionDisplay } from "../buildingFunctionDisplay.ui";
 import { BuildingFunction, ResourceThroughput } from "./parseBuildingDefinitions";
 import { BuildingLocation } from "../Sektor";
+import { propertyDefinitions } from "../../properties";
 
 let panelEl: HTMLElement | null = null;
 let previewP5: p5 | null = null;
@@ -53,12 +54,14 @@ function ensurePreviewP5(parent: HTMLElement) {
   });
 }
 
-export function showBuildingPanel({ name, code, buildingFunction, modifiedOutputs, imports, floorColor, location, onAddInputConnection, onDestroy }: {
+export function showBuildingPanel({ name, code, buildingFunction, modifiedOutputs, imports, locationProperties, modifierProperties, floorColor, location, onAddInputConnection, onDestroy }: {
   name: string,
   code: string,
   buildingFunction: BuildingFunction,
   modifiedOutputs: ResourceThroughput[],
   imports: ResourceThroughput[],
+  locationProperties?: { [key: string]: number },
+  modifierProperties?: string[],
   floorColor: [number, number, number],
   location: BuildingLocation,
   onAddInputConnection?: (resourceType: string) => void,
@@ -104,12 +107,58 @@ export function showBuildingPanel({ name, code, buildingFunction, modifiedOutput
 
   panelEl.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, modifiedOutputs: modifiedOutputs, imports: imports, onAddInputConnection: onAddInputConnection }));
 
+  if (locationProperties) {
+    const propertiesSection = document.createElement("div");
+    propertiesSection.className = "bp-properties";
+    for (const [propertyName, propertyValue] of Object.entries(locationProperties)) {
+      const row = document.createElement("div");
+      row.className = "bp-property-row";
+      if (modifierProperties?.includes(propertyName)) {
+        row.classList.add("bp-property-modifier");
+      }
+
+      const nameCell = document.createElement("span");
+      nameCell.className = "bp-property-name";
+      nameCell.textContent = propertyName;
+      row.appendChild(nameCell);
+
+      const valueCell = document.createElement("span");
+      valueCell.className = "bp-property-value";
+      valueCell.textContent = `${propertyValue}`;
+      row.appendChild(valueCell);
+
+      const swatch = document.createElement("span");
+      swatch.className = "bp-property-swatch";
+      const propertyDefinition = propertyDefinitions.find(definition => definition.name === propertyName);
+      if (propertyDefinition) {
+        const t = propertyValue / 2;
+        const minColor = parseHexColorForSwatch(propertyDefinition.minColor);
+        const maxColor = parseHexColorForSwatch(propertyDefinition.maxColor);
+        const r = Math.round(minColor[0] + (maxColor[0] - minColor[0]) * t);
+        const g = Math.round(minColor[1] + (maxColor[1] - minColor[1]) * t);
+        const b = Math.round(minColor[2] + (maxColor[2] - minColor[2]) * t);
+        swatch.style.backgroundColor = `rgb(${r},${g},${b})`;
+      }
+      row.appendChild(swatch);
+
+      propertiesSection.appendChild(row);
+    }
+    panelEl.appendChild(propertiesSection);
+  }
+
   document.getElementById("canvas-container")!.appendChild(panelEl);
 
   // Set draw data and render
   currentDraw = { code, floorColor };
   ensurePreviewP5(previewContainer);
   previewP5!.redraw();
+}
+
+function parseHexColorForSwatch(hex: string): [number, number, number] {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return [r, g, b];
 }
 
 export function hideBuildingPanel() {

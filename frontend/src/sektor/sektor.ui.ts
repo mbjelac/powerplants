@@ -356,6 +356,8 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
     buildingFunction: buildingState.buildingFunction,
     modifiedOutputs: buildingState.modifiedOutputs,
     imports: buildingState.imports,
+    locationProperties: locations[placed.location.x]?.[placed.location.y]?.properties,
+    modifierProperties: buildingDefinitions.find(definition => definition.name === placed.type)?.outputModifiers.map(modifier => modifier.property),
     floorColor: floorColor,
     location: placed.location,
     onAddInputConnection: (resourceType: string) => {
