@@ -92,8 +92,16 @@ Each location has a set value for all properties and that value is a floating po
 
 #5 Building panel also displays location property values
 - below building function stats, add rows showing all property names & values for that location
-    - "propertyName: value"
+    - table rows with columns:
+        - property name
+        - property value
+        - swatch (colored square) woth color based on property value
 - if property is in this building's output modifier, show the row with a thin border around it
+    - all property rows should have the same margin, even without the border
+- add building panel visual tests for
+    - building without modifier
+    - building with one modifier
+    - building with multiple modifiers
 
 #6 Building panel displayed for empty locations
 - if player clicks on an empty location, display building panel
@@ -103,6 +111,7 @@ Each location has a set value for all properties and that value is a floating po
     - panel displays the location's property rows
     - no row has a border around it
     - panel does not display delete button
+- add building panel visual test for empty location
 
 #7 Improve location color coding
 - instead of painting floors with the color of the location property value, draw a rectangle around the floor
@@ -110,3 +119,4 @@ Each location has a set value for all properties and that value is a floating po
         - same size, positioning and shape
     - do not use rectangles for soil - keep coloring floors depending on the soil property values
     - the color of the rectangle should be calculated from location property values in the same way as before
+- add complete ui (map) visual tests for location color coding with non-soil property selected in the property toggler
