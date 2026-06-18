@@ -99,3 +99,5 @@ Each location has a set value for all properties and that value is a floating po
     - panel does not dispkay the function inputs & outpus
     - panel displays the location's property rows
     - no row has a border around it
+    - panel does not display delete button
+
