@@ -103,7 +103,7 @@ Each location has a set value for all properties and that value is a floating po
     - building with one modifier
     - building with multiple modifiers
 
-#6 Building panel displayed for empty locations
+#6 [done] Building panel displayed for empty locations
 - [done] if player clicks on an empty location, display building panel
     - panel still has the "Location: x,y" title
     - panel still displays the floor (in it's color) but not the building, as there is none
