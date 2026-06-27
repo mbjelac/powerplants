@@ -1,12 +1,12 @@
-#1 Introducing floating point for location properties modifiers is too complex
-- all location property modifiers should be integers
+#1 [done] Introducing floating point for location properties modifiers is too complex
+- [done] all location property modifiers should be integers
     - modifiers which were generated from 0 to 1 should now be from -6 to 0
     - modifiers which were generated from 1 to 2 should now be from 0 to +6
     - applying a modifier should just sum the value to the value of the output
     - if a negative modifier is applied, the result can be a minimum of 0, not below
     - extract the modifier limits -6 & 6 so they can be easily modified to improve user experience
     - adjust all tests
-- positive location property modifiers are displayed with "+" prefix
+- [done] positive location property modifiers are displayed with "+" prefix
     - zero modifiers are displayed as just "0"
 
 #2 Buildings which have an import are highlighted
