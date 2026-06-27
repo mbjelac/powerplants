@@ -6,4 +6,6 @@
     - if a negative modifier is applied, the result can be a minimum of 0, not below
     - extract the modifier limits -6 & 6 so they can be easily modified to improve user experience
     - adjust all tests
+- positive location property modifiers are displayed with "+" prefix
+    - zero modifiers are displayed as just "0"
 
