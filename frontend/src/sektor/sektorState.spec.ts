@@ -246,22 +246,35 @@ const modifierDefinitions: BuildingDefinition[] = [
 ];
 
 describe("output modifiers", () => {
-  it("multiplies output by location property value when modifier is present", () => {
+  it("adds location property value to output when modifier is present", () => {
     const sektor = new Sektor(
-      [[{ properties: { insolation: 1.5 } }]],
+      [[{ properties: { insolation: 3 } }]],
       modifierDefinitions,
       { importRestrictions: [], exportRequirements: [] },
     );
     sektor.createBuilding({ type: "SolarFarm", location: { x: 0, y: 0 } });
 
     expect(sektor.getSektorState().exports).toEqual([
-      { name: "Energy", value: 15 },
+      { name: "Energy", value: 13 },
+    ]);
+  });
+
+  it("clamps modified output to minimum of 0", () => {
+    const sektor = new Sektor(
+      [[{ properties: { insolation: -6 } }]],
+      modifierDefinitions,
+      { importRestrictions: [], exportRequirements: [] },
+    );
+    sektor.createBuilding({ type: "SolarFarm", location: { x: 0, y: 0 } });
+
+    expect(sektor.getSektorState().exports).toEqual([
+      { name: "Energy", value: 4 },
     ]);
   });
 
   it("uses unmodified output when no modifier is present", () => {
     const sektor = new Sektor(
-      [[{ properties: { insolation: 1.5 } }]],
+      [[{ properties: { insolation: 3 } }]],
       modifierDefinitions,
       { importRestrictions: [], exportRequirements: [] },
     );
@@ -274,7 +287,7 @@ describe("output modifiers", () => {
 
   it("modified output affects connection remaining export", () => {
     const sektor = new Sektor(
-      [[{ properties: { insolation: 0.5 } }, { properties: { insolation: 0.5 } }]],
+      [[{ properties: { insolation: -4 } }, { properties: { insolation: -4 } }]],
       modifierDefinitions,
       { importRestrictions: [], exportRequirements: [] },
     );
@@ -288,7 +301,7 @@ describe("output modifiers", () => {
         { name: "Energy", value: 2 },
       ],
       exports: [
-        { name: "Energy", value: 4 },
+        { name: "Energy", value: 5 },
         { name: "Ore", value: 5 },
       ],
       status: "Done",

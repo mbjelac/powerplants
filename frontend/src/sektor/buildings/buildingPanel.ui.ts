@@ -8,6 +8,7 @@ import { createFunctionDisplay } from "../buildingFunctionDisplay.ui";
 import { BuildingFunction, ResourceThroughput } from "./parseBuildingDefinitions";
 import { BuildingLocation } from "../Sektor";
 import { propertyDefinitions } from "../../properties";
+import { MODIFIER_MIN, MODIFIER_MAX } from "../../../../shared/modifierLimits";
 
 let panelEl: HTMLElement | null = null;
 let previewP5: p5 | null = null;
@@ -60,7 +61,7 @@ export function showBuildingPanel({ name, code, buildingFunction, modifiedOutput
   buildingFunction: BuildingFunction,
   modifiedOutputs: ResourceThroughput[],
   imports: ResourceThroughput[],
-  locationProperties?: { [key: string]: number },
+  locationProperties?: { [_: string]: number },
   modifierProperties?: string[],
   floorColor: [number, number, number],
   location: BuildingLocation,
@@ -133,7 +134,7 @@ export function showBuildingPanel({ name, code, buildingFunction, modifiedOutput
       swatch.className = "bp-property-swatch";
       const propertyDefinition = propertyDefinitions.find(definition => definition.name === propertyName);
       if (propertyDefinition) {
-        const t = propertyValue / 2;
+        const t = (propertyValue - MODIFIER_MIN) / (MODIFIER_MAX - MODIFIER_MIN);
         const minColor = parseHexColorForSwatch(propertyDefinition.minColor);
         const maxColor = parseHexColorForSwatch(propertyDefinition.maxColor);
         const r = Math.round(minColor[0] + (maxColor[0] - minColor[0]) * t);

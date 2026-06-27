@@ -1,4 +1,5 @@
 import { SektorData } from "../shared/sektorData";
+import { MODIFIER_MIN, MODIFIER_MAX } from "../shared/modifierLimits";
 import restrictionsRequirements from "./restrictions_requirements";
 
 const GRID_SIZE = 10;
@@ -27,14 +28,14 @@ function generatePropertyMatrix(): number[][] {
 }
 
 function generatePropertyValue(): number {
-  return Math.round(Math.random() * 20) / 10;
+  return Math.floor(Math.random() * (MODIFIER_MAX - MODIFIER_MIN + 1)) + MODIFIER_MIN;
 }
 
 console.log(formatSektorData(createSektor()));
 
 function formatSektorData(sektorData: SektorData): string {
   return JSON.stringify(sektorData, null, 2).replace(
-    /\[[\s\d.,]+\]/g,
-    numberArray => numberArray.replace(/\s+/g, " ").replace(/\[ /, "[").replace(/ \]/, "]")
+    /\[[\s\d.,]+]/g,
+    numberArray => numberArray.replace(/\s+/g, " ").replace(/\[ /, "[").replace(/ ]/, "]")
   );
 }

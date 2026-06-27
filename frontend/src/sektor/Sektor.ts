@@ -144,7 +144,7 @@ export class Sektor {
       const modifier = def.outputModifiers.find(modifier => modifier.resource === output.name);
       if (!modifier) return output;
       const propertyValue = locationProperties[modifier.property] ?? 0;
-      return { name: output.name, value: Math.round(output.value * propertyValue * 10) / 10 };
+      return { name: output.name, value: Math.max(0, output.value + propertyValue) };
     });
   }
 

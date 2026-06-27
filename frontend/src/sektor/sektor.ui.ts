@@ -13,6 +13,7 @@ import { getSektorData, saveSektorData } from "./sektor.api";
 import { xMarkIcon } from "../icons";
 import { initPropertyToggler, getSelectedProperty } from "./propertyToggler.ui";
 import { propertyDefinitions } from "../properties";
+import { MODIFIER_MIN, MODIFIER_MAX } from "../../../shared/modifierLimits";
 
 const GRID_SIZE = 10;
 const isTestMode = new URLSearchParams(window.location.search).get("test") === "true";
@@ -35,11 +36,11 @@ function createTestLocations(gridSize: number): Location[][] {
   return Array.from({ length: gridSize }, (_, x) =>
     Array.from({ length: gridSize }, (_, z) => ({
       properties: {
-        soil: ((x * 17 + z * 31) % 101) / 100 * 2,
-        groundwater: ((x * 13 + z * 23) % 101) / 100 * 2,
-        ore: ((x * 7 + z * 41) % 101) / 100 * 2,
-        insolation: ((x * 29 + z * 11) % 101) / 100 * 2,
-        wind: ((x * 37 + z * 19) % 101) / 100 * 2,
+        soil: ((x * 17 + z * 31) % 13) + MODIFIER_MIN,
+        groundwater: ((x * 13 + z * 23) % 13) + MODIFIER_MIN,
+        ore: ((x * 7 + z * 41) % 13) + MODIFIER_MIN,
+        insolation: ((x * 29 + z * 11) % 13) + MODIFIER_MIN,
+        wind: ((x * 37 + z * 19) % 13) + MODIFIER_MIN,
       },
     }))
   );
@@ -415,7 +416,7 @@ function propertyColor(propertyName: string, value: number): [number, number, nu
   if (!property) return [128, 128, 128];
   const minColor = parseHexColor(property.minColor);
   const maxColor = parseHexColor(property.maxColor);
-  const t = value / 2;
+  const t = (value - MODIFIER_MIN) / (MODIFIER_MAX - MODIFIER_MIN);
   return [
     Math.round(minColor[0] + (maxColor[0] - minColor[0]) * t),
     Math.round(minColor[1] + (maxColor[1] - minColor[1]) * t),
