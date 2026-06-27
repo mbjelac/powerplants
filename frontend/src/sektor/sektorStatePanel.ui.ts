@@ -58,6 +58,7 @@ function createImportColumn(imports: ResourceThroughput[], restrictions: Resourc
 
   const resourceHeader = document.createElement("span");
   resourceHeader.className = "ss-header-resource";
+  resourceHeader.textContent = "Imports";
   header.appendChild(resourceHeader);
 
   const importHeader = document.createElement("span");
@@ -121,6 +122,7 @@ function createExportColumn(exports: ResourceThroughput[], requirements: Resourc
 
   const resourceHeader = document.createElement("span");
   resourceHeader.className = "ss-header-resource";
+  resourceHeader.textContent = "Exports";
   header.appendChild(resourceHeader);
 
   const exportHeader = document.createElement("span");
