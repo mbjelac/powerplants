@@ -127,7 +127,7 @@ export function showBuildingPanel({ name, code, buildingFunction, modifiedOutput
 
       const valueCell = document.createElement("span");
       valueCell.className = "bp-property-value";
-      valueCell.textContent = `${propertyValue}`;
+      valueCell.textContent = propertyValue > 0 ? `+${propertyValue}` : `${propertyValue}`;
       row.appendChild(valueCell);
 
       const swatch = document.createElement("span");
