@@ -443,6 +443,10 @@ body > main {
   align-items: center;
 }
 
+.ss-import-row:hover {
+  background: #444;
+}
+
 .ss-cell-resource {
   flex: 1;
 }

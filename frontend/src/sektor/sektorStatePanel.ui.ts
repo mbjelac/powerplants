@@ -1,9 +1,14 @@
 import { type SektorState } from "./Sektor";
 import { getResourceIcon } from "../resources";
-import { ResourceThroughput } from "./buildings/parseBuildingDefinitions";
+import { ResourceThroughput } from "../../../shared/sektorData";
 import { arrowDownTrayIcon, arrowUpTrayIcon, exclamationTriangleIcon, checkCircleIcon } from "../icons";
 
 let panelEl: HTMLElement | null = null;
+let importHoverCallback: ((resourceType: string | null) => void) | null = null;
+
+export function onImportHover(callback: (resourceType: string | null) => void) {
+  importHoverCallback = callback;
+}
 
 export function updateSektorStatePanel(sektorState: SektorState) {
   ensurePanel();
@@ -84,7 +89,9 @@ function createImportColumn(imports: ResourceThroughput[], restrictions: Resourc
     const restriction = restrictions.find(item => item.name === name);
 
     const row = document.createElement("div");
-    row.className = "ss-row";
+    row.className = "ss-row ss-import-row";
+    row.addEventListener("mouseenter", () => importHoverCallback?.(name));
+    row.addEventListener("mouseleave", () => importHoverCallback?.(null));
 
     const nameCell = document.createElement("span");
     nameCell.className = "ss-cell-resource";

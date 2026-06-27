@@ -8,7 +8,7 @@ import { BuildingConnection, BuildingLocation, Location, PossibleConnection, Sek
 import { getResourceColor, getResourceIcon } from "../resources";
 import { buildingDefinitions } from "./buildings/buildings";
 import {showBuildingPanel, hideBuildingPanel} from "./buildings/buildingPanel.ui";
-import {updateSektorStatePanel} from "./sektorStatePanel.ui";
+import {updateSektorStatePanel, onImportHover} from "./sektorStatePanel.ui";
 import { getSektorData, saveSektorData } from "./sektor.api";
 import { xMarkIcon } from "../icons";
 import { initPropertyToggler, getSelectedProperty } from "./propertyToggler.ui";
@@ -143,6 +143,7 @@ function loadSavedState() {
 }
 
 let selectedBuildingLocation: BuildingLocation | null = null;
+let hoveredImportResource: string | null = null;
 let displayedConnections: { connections: BuildingConnection[]; buildingLocation: BuildingLocation; labels: HTMLElement[] } | null = null;
 
 let selectMode: {
@@ -399,6 +400,26 @@ function openEmptyLocationPanel(location: BuildingLocation) {
     floorColor: floorColor,
     location: location,
   });
+}
+
+function drawLocationHighlight(p: p5, location: BuildingLocation, color: [number, number, number]) {
+  const { wx, wz } = gridToWorld(location.x, location.y);
+  const borderWidth = BLOCK_SIZE * 0.04;
+  const sides = [
+    { x: wx, z: wz - HALF + borderWidth / 2, w: BLOCK_SIZE, d: borderWidth },
+    { x: wx, z: wz + HALF - borderWidth / 2, w: BLOCK_SIZE, d: borderWidth },
+    { x: wx - HALF + borderWidth / 2, z: wz, w: borderWidth, d: BLOCK_SIZE },
+    { x: wx + HALF - borderWidth / 2, z: wz, w: borderWidth, d: BLOCK_SIZE },
+  ];
+  for (const side of sides) {
+    p.push();
+    p.noStroke();
+    p.noLights();
+    p.fill(color[0], color[1], color[2]);
+    p.translate(side.x, -FLOOR_HEIGHT / 2 - 0.1, side.z);
+    p.box(side.w, 0.1, side.d);
+    p.pop();
+  }
 }
 
 function showError(message: string) {
@@ -693,21 +714,14 @@ const sektorUi = (p: p5) => {
       }
     }
     if (selectedBuildingLocation) {
-      const { wx, wz } = gridToWorld(selectedBuildingLocation.x, selectedBuildingLocation.y);
-      const borderWidth = BLOCK_SIZE * 0.04;
-      const sides = [
-        { x: wx, z: wz - HALF + borderWidth / 2, w: BLOCK_SIZE, d: borderWidth },
-        { x: wx, z: wz + HALF - borderWidth / 2, w: BLOCK_SIZE, d: borderWidth },
-        { x: wx - HALF + borderWidth / 2, z: wz, w: borderWidth, d: BLOCK_SIZE },
-        { x: wx + HALF - borderWidth / 2, z: wz, w: borderWidth, d: BLOCK_SIZE },
-      ];
-      for (const side of sides) {
-        p.push();
-        p.noStroke();
-        p.emissiveMaterial(255, 255, 0);
-        p.translate(side.x, -FLOOR_HEIGHT / 2 - 0.1, side.z);
-        p.box(side.w, 0.1, side.d);
-        p.pop();
+      drawLocationHighlight(p, selectedBuildingLocation, [255, 255, 0]);
+    }
+
+    if (hoveredImportResource) {
+      for (const building of placedBuildings) {
+        const def = buildingDefinitions.find(d => d.name === building.type);
+        if (!def?.buildingFunction.inputs.some(input => input.name === hoveredImportResource)) continue;
+        drawLocationHighlight(p, building.location, [255, 165, 0]);
       }
     }
 
@@ -754,6 +768,7 @@ const sektorUi = (p: p5) => {
 new p5(sektorUi);
 initToolbar();
 initPropertyToggler();
+onImportHover(resourceType => { hoveredImportResource = resourceType; });
 if (!isTestMode) {
   addCloseButton();
 }

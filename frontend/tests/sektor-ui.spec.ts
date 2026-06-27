@@ -456,6 +456,42 @@ test("displays sektor state panel with Done status", async ({ page }) => {
   await expectScreenshot(page, "sektor-state-panel-done", "#sektor-state-panel");
 });
 
+test("highlights buildings importing hovered resource", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+  const canvas = page.locator("#canvas-container canvas");
+  const box = await canvas.boundingBox();
+  const centerX = box!.width / 2;
+  const centerY = box!.height / 2;
+
+  // Place TestFactory (imports Energy) and TestMine (imports Energy)
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX - 60, y: centerY - 20 } });
+  await page.waitForTimeout(200);
+
+  await page.locator('.building-item[data-building-name="TestMine"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX + 60, y: centerY - 20 } });
+  await page.waitForTimeout(200);
+
+  // Place TestHouse (does NOT import Energy)
+  await page.locator('.building-item[data-building-name="TestHouse"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+
+  // Deselect building by clicking empty area
+  await canvas.click({ position: { x: centerX + 120, y: centerY + 60 } });
+  await page.waitForTimeout(200);
+
+  // Hover over Energy import row in sektor state panel
+  const energyRow = page.locator(".ss-row", { hasText: "Energy" }).first();
+  await energyRow.hover();
+  await page.waitForTimeout(200);
+
+  await expectScreenshot(page, "import-hover-highlight", "body");
+});
+
 test("shows error when placing building on occupied location", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   await page.locator('.building-item[data-building-name="TestFactory"]').click();
