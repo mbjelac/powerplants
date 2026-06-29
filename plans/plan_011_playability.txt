@@ -19,12 +19,12 @@
     - with several buildings having the same resource type imported
     - cursor hover event on state panel over that imported resource amount
 
-#3 Building function description also displays location properties which affect it
-- when a player selectes a building in the toolbar, the panel with function description also has a list of location properties which affect it
+#3 [done] Building function description also displays location properties which affect it
+- [done] when a player selectes a building in the toolbar, the panel with function description also has a list of location properties which affect it
     - below the function table
     - list location properties which affect the building
     - each list item has the name of the property and the swatch of the maximum value
-- create visual test for that panel only (if it doesn't exist yet)
+- [done] create visual test for that panel only (if it doesn't exist yet)
     - include test with a panel containing a modifier property and one without any
 
 #4 Building panel clearly labels inputs & outputs
