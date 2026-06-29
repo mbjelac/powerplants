@@ -5,7 +5,8 @@ import {parseCommands} from "../../../shared/parseCommands";
 import {applyCommands} from "../../../shared/applyCommands";
 import {drawFloor} from "../../../shared/drawFloor";
 import {BLOCK_SIZE} from "../../../shared/constants";
-import { BuildingFunction } from "./buildings/parseBuildingDefinitions";
+import { BuildingFunction, OutputModifier } from "./buildings/parseBuildingDefinitions";
+import { propertyDefinitions } from "../properties";
 
 let selectedBuilding: string | null = null;
 let buildingCodeMap: Map<string, string> = new Map();
@@ -25,13 +26,37 @@ export function getBuildingCode(name: string): string | null {
 
 let toolbarFnPanel: HTMLElement | null = null;
 
-function showToolbarFunctionPanel(fn: BuildingFunction, anchorEl: HTMLElement) {
+function showToolbarFunctionPanel(buildingFunction: BuildingFunction, outputModifiers: OutputModifier[], anchorEl: HTMLElement) {
   hideToolbarFunctionPanel();
 
   toolbarFnPanel = document.createElement("div");
   toolbarFnPanel.id = "toolbar-function-panel";
 
-  toolbarFnPanel.appendChild(createFunctionDisplay({ buildingFunction: fn, imports: [] }));
+  toolbarFnPanel.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, imports: [] }));
+
+  if (outputModifiers.length > 0) {
+    const modifierList = document.createElement("div");
+    modifierList.className = "tf-modifier-list";
+    for (const modifier of outputModifiers) {
+      const item = document.createElement("div");
+      item.className = "tf-modifier-item";
+
+      const nameSpan = document.createElement("span");
+      nameSpan.textContent = modifier.property;
+      item.appendChild(nameSpan);
+
+      const propertyDefinition = propertyDefinitions.find(definition => definition.name === modifier.property);
+      if (propertyDefinition) {
+        const swatch = document.createElement("span");
+        swatch.className = "tf-modifier-swatch";
+        swatch.style.backgroundColor = propertyDefinition.maxColor;
+        item.appendChild(swatch);
+      }
+
+      modifierList.appendChild(item);
+    }
+    toolbarFnPanel.appendChild(modifierList);
+  }
 
   document.body.appendChild(toolbarFnPanel);
 
@@ -82,7 +107,7 @@ export function initToolbar() {
         selectedBuilding = building.name;
         item.classList.add("selected");
         if (building.buildingFunction) {
-          showToolbarFunctionPanel(building.buildingFunction, item);
+          showToolbarFunctionPanel(building.buildingFunction, building.outputModifiers, item);
         }
       }
     });

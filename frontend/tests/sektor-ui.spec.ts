@@ -182,6 +182,18 @@ test("displays function panel when building tool is selected", async ({ page }) 
   });
 });
 
+test("displays function panel with modifier property", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.waitForTimeout(100);
+  const panel = page.locator("#toolbar-function-panel");
+  await expect(panel).toBeVisible();
+  await expect(panel).toHaveScreenshot("toolbar-function-panel-with-modifier.png", {
+    maxDiffPixelRatio: 0,
+    timeout: 10000,
+  });
+});
+
 test("displays selection mode with connect buttons", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   const canvas = page.locator("#canvas-container canvas");

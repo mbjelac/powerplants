@@ -9,7 +9,7 @@
 - [done] positive location property modifiers are displayed with "+" prefix
     - zero modifiers are displayed as just "0"
 
-#2 Buildings which have an import are highlighted
+#2 [done] Buildings which have an import are highlighted
 - [done] when a player floats their mouse cursor above an import amount in the state panel
     - all buildings which have the import are highlighted
     - highlight is like the select highlight
