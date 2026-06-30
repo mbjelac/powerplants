@@ -1,12 +1,13 @@
 
 import { getResourceIcon } from "../resources";
 import { BuildingFunction, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
-import { arrowDownTrayIcon, linkIcon, arrowRightIcon } from "../icons";
+import { arrowDownTrayIcon, arrowUpTrayIcon, linkIcon, arrowRightIcon } from "../icons";
 
-export function createFunctionDisplay({ buildingFunction, modifiedOutputs, imports, onAddInputConnection }: {
+export function createFunctionDisplay({ buildingFunction, modifiedOutputs, imports, exports, onAddInputConnection }: {
   buildingFunction: BuildingFunction,
   modifiedOutputs?: ResourceThroughput[],
   imports: ResourceThroughput[],
+  exports?: ResourceThroughput[],
   onAddInputConnection?: (resourceType: string) => void
 }): HTMLElement {
   const functionDisplay = document.createElement("div");
@@ -19,7 +20,7 @@ export function createFunctionDisplay({ buildingFunction, modifiedOutputs, impor
   arrowEl.innerHTML = arrowRightIcon;
   functionDisplay.appendChild(arrowEl);
 
-  functionDisplay.appendChild(createOutputColumn(buildingFunction.outputs, modifiedOutputs));
+  functionDisplay.appendChild(createOutputColumn(buildingFunction.outputs, modifiedOutputs, exports));
 
   return functionDisplay;
 }
@@ -32,31 +33,33 @@ function createInputsTable({ inputs, imports, onAddConnection }: {
   const table = document.createElement("div");
   table.className = onAddConnection ? "bf-inputs-table" : "bf-inputs-table bf-inputs-table-simple";
 
-  if (onAddConnection) {
-    const headerRow = document.createElement("div");
-    headerRow.className = "bf-inputs-row bf-inputs-header";
+  const headerRow = document.createElement("div");
+  headerRow.className = "bf-inputs-row bf-inputs-header";
 
+  if (onAddConnection) {
     const connectHeader = document.createElement("div");
     connectHeader.className = "bf-inputs-cell bf-inputs-connect";
     headerRow.appendChild(connectHeader);
+  }
 
-    const resourceHeader = document.createElement("div");
-    resourceHeader.className = "bf-inputs-cell";
-    resourceHeader.textContent = "Resource";
-    headerRow.appendChild(resourceHeader);
+  const resourceHeader = document.createElement("div");
+  resourceHeader.className = "bf-inputs-cell";
+  resourceHeader.textContent = "Inputs";
+  headerRow.appendChild(resourceHeader);
 
-    const amountHeader = document.createElement("div");
-    amountHeader.className = "bf-inputs-cell";
-    headerRow.appendChild(amountHeader);
+  const amountHeader = document.createElement("div");
+  amountHeader.className = "bf-inputs-cell";
+  headerRow.appendChild(amountHeader);
 
+  if (onAddConnection) {
     const importHeader = document.createElement("div");
     importHeader.className = "bf-inputs-cell bf-inputs-import-header";
     importHeader.innerHTML = arrowDownTrayIcon;
     importHeader.title = "Imported";
     headerRow.appendChild(importHeader);
-
-    table.appendChild(headerRow);
   }
+
+  table.appendChild(headerRow);
 
   for (const input of inputs) {
     const row = document.createElement("div");
@@ -99,23 +102,65 @@ function createInputsTable({ inputs, imports, onAddConnection }: {
   return table;
 }
 
-function createOutputColumn(outputs: ResourceThroughput[], modifiedOutputs?: ResourceThroughput[]): HTMLElement {
-  const column = document.createElement("div");
-  column.className = "bf-col";
+function createOutputColumn(outputs: ResourceThroughput[], modifiedOutputs?: ResourceThroughput[], exports?: ResourceThroughput[]): HTMLElement {
+  const table = document.createElement("div");
+  table.className = "bf-outputs-table";
+
+  const headerRow = document.createElement("div");
+  headerRow.className = "bf-outputs-row bf-outputs-header";
+
+  const resourceHeader = document.createElement("div");
+  resourceHeader.className = "bf-outputs-cell";
+  resourceHeader.textContent = "Outputs";
+  headerRow.appendChild(resourceHeader);
+
+  const amountHeader = document.createElement("div");
+  amountHeader.className = "bf-outputs-cell";
+  headerRow.appendChild(amountHeader);
+
+  if (exports) {
+    const exportHeader = document.createElement("div");
+    exportHeader.className = "bf-outputs-cell bf-outputs-export-header";
+    exportHeader.innerHTML = arrowUpTrayIcon;
+    exportHeader.title = "Exported";
+    headerRow.appendChild(exportHeader);
+  }
+
+  table.appendChild(headerRow);
+
   for (const output of outputs) {
     const row = document.createElement("div");
-    row.className = "bf-output-row";
+    row.className = "bf-outputs-row";
+
+    const resourceCell = document.createElement("div");
+    resourceCell.className = "bf-outputs-cell";
     const icon = getResourceIcon(output.name);
+    resourceCell.textContent = `${output.name} ${icon ?? ""}`;
+    row.appendChild(resourceCell);
+
+    const amountCell = document.createElement("div");
+    amountCell.className = "bf-outputs-cell bf-outputs-amount";
     const modified = modifiedOutputs?.find(modifiedOutput => modifiedOutput.name === output.name);
     if (modified && modified.value !== output.value) {
       const modifiedValue = document.createElement("span");
       modifiedValue.textContent = `${modified.value}`;
       modifiedValue.className = modified.value > output.value ? "bf-output-boosted" : "bf-output-reduced";
-      row.append(`${output.name} ${icon ?? ""} `, modifiedValue, ` (${output.value})`);
+      amountCell.append(modifiedValue, ` (${output.value})`);
     } else {
-      row.textContent = `${output.name} ${icon ?? ""} ${output.value}`;
+      amountCell.textContent = `${output.value}`;
     }
-    column.appendChild(row);
+    row.appendChild(amountCell);
+
+    if (exports) {
+      const exportEntry = exports.find(entry => entry.name === output.name);
+      const exportCell = document.createElement("div");
+      exportCell.className = "bf-outputs-cell bf-outputs-export";
+      exportCell.textContent = exportEntry ? `${exportEntry.value}` : "";
+      row.appendChild(exportCell);
+    }
+
+    table.appendChild(row);
   }
-  return column;
+
+  return table;
 }

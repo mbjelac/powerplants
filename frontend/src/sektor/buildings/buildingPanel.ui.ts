@@ -55,11 +55,12 @@ function ensurePreviewP5(parent: HTMLElement) {
   });
 }
 
-export function showBuildingPanel({ name, code, buildingFunction, modifiedOutputs, imports, locationProperties, modifierProperties, floorColor, location, onAddInputConnection, onDestroy }: {
+export function showBuildingPanel({ name, code, buildingFunction, modifiedOutputs, exports, imports, locationProperties, modifierProperties, floorColor, location, onAddInputConnection, onDestroy }: {
   name: string,
   code: string,
   buildingFunction: BuildingFunction,
   modifiedOutputs: ResourceThroughput[],
+  exports?: ResourceThroughput[],
   imports: ResourceThroughput[],
   locationProperties?: { [_: string]: number },
   modifierProperties?: string[],
@@ -107,7 +108,7 @@ export function showBuildingPanel({ name, code, buildingFunction, modifiedOutput
   panelEl.appendChild(header);
 
   if (buildingFunction.inputs.length > 0 || buildingFunction.outputs.length > 0) {
-    panelEl.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, modifiedOutputs: modifiedOutputs, imports: imports, onAddInputConnection: onAddInputConnection }));
+    panelEl.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, modifiedOutputs: modifiedOutputs, imports: imports, exports: exports, onAddInputConnection: onAddInputConnection }));
   }
 
   if (locationProperties) {

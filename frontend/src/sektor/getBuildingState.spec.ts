@@ -46,6 +46,9 @@ describe("getBuildingState", () => {
       modifiedOutputs: [
         { name: "Flour", value: 3 },
       ],
+      exports: [
+        { name: "Flour", value: 3 },
+      ],
       imports: [
         { name: "Wheat", value: 4 },
         { name: "Energy", value: 2 },
@@ -77,6 +80,32 @@ describe("getBuildingState", () => {
 
     expect(state!.inputConnections).toEqual([
       { to: { x: 1, y: 0 }, resourceType: "Wheat", amount: 1 },
+    ]);
+  });
+
+  it("returns exports reduced by connected amount", () => {
+    const testDefinitionsWithFarm: BuildingDefinition[] = [
+      ...testDefinitions,
+      {
+        name: "Farm",
+        renderingCode: "box s(1,1,1)",
+        buildingFunction: {
+          inputs: [{ name: "Water", value: 2 }],
+          outputs: [{ name: "Wheat", value: 5 }],
+        },
+        outputModifiers: [],
+        properties: {},
+      },
+    ];
+    const sektor = new Sektor([[{ properties: { soil: 1.0 } }]], testDefinitionsWithFarm, { importRestrictions: [], exportRequirements: [] });
+    sektor.createBuilding({ type: "Mill", location: { x: 0, y: 0 } });
+    sektor.createBuilding({ type: "Farm", location: { x: 1, y: 0 } });
+    sektor.addConnection({ x: 0, y: 0 }, { x: 1, y: 0 }, "Wheat");
+
+    const state = sektor.getBuildingState({ x: 1, y: 0 });
+
+    expect(state!.exports).toEqual([
+      { name: "Wheat", value: 4 },
     ]);
   });
 });

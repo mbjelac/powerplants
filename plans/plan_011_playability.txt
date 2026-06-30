@@ -27,19 +27,19 @@
 - [done] create visual test for that panel only (if it doesn't exist yet)
     - include test with a panel containing a modifier property and one without any
 
-#4 Building panel clearly labels inputs & outputs
-- inputs column in the building panel has label "Resource"
+#4 [done] Building panel clearly labels inputs & outputs
+- [done] inputs column in the building panel has label "Resource"
     - should be "Inputs"
-- outputs column in the building panel has no header
+- [done] outputs column in the building panel has no header
     - create header
         - column with resource name should have label "Outputs"
         - column with output amount should have no label
-- add column in output panel for amount of building's output which is exported
+- [done] add column in output panel for amount of building's output which is exported
     - add BuildingState.exports: ResourceThroughput[]
     - create Sektor test for getting exports of a building
     - display building's exports in the output panel for each resource in it's own sub-column
         - sub-column header should be heroicon arrowUpTrayIcon
     - update snapshots
-- building function panel from building toolbar displays both headers
+- [done] building function panel from building toolbar displays both headers
     - currently only output column has header, input column hides it
     - no need to hide input column header

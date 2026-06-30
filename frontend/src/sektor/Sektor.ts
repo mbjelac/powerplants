@@ -23,6 +23,7 @@ export interface BuildingConnection {
 export interface BuildingState {
   buildingFunction: BuildingFunction;
   modifiedOutputs: ResourceThroughput[];
+  exports: ResourceThroughput[];
   imports: ResourceThroughput[];
   inputConnections: BuildingConnection[];
 }
@@ -95,9 +96,15 @@ export class Sektor {
       name: input.name,
       value: this.getRemainingImport(location, input.name),
     }));
+    const modifiedOutputs = this.getOutputs(building.type, location);
+    const exports = modifiedOutputs.map(output => ({
+      name: output.name,
+      value: this.getRemainingExport(location, output.name),
+    }));
     return {
       buildingFunction: def.buildingFunction,
-      modifiedOutputs: this.getOutputs(building.type, location),
+      modifiedOutputs,
+      exports,
       imports,
       inputConnections,
     };
