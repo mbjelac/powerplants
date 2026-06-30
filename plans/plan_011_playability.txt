@@ -40,3 +40,6 @@
     - display building's exports in the output panel for each resource in it's own sub-column
         - sub-column header should be heroicon arrowUpTrayIcon
     - update snapshots
+- building function panel from building toolbar displays both headers
+    - currently only output column has header, input column hides it
+    - no need to hide input column header
