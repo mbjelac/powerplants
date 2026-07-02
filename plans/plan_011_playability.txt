@@ -43,3 +43,10 @@
 - [done] building function panel from building toolbar displays both headers
     - currently only output column has header, input column hides it
     - no need to hide input column header
+
+#5 Outputs are displayed on map
+- when a building is selected, display all building's outputs on the map using arcs
+    - output arcs have the same color as the resource's color (same as for input arcs)
+    - output arcs use a dotted line to separate them from output arcs
+    - on top of the output arc is a label with the resource icon and amount of the output
+
