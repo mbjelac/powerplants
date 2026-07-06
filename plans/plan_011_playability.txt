@@ -64,7 +64,7 @@
     - add visual test for scenario where a connection amount is lowered to 0
 
 #7 Improve building panel
-- toolbar's building function panel has header for location properties
+- [done] toolbar's building function panel has header for location properties
     - header should be "Affected by"
     - header style same as Inputs and outputs columns header
     - location properties text style same as inputs & outputs columns text style
