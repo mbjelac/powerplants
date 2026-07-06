@@ -80,6 +80,7 @@
         - input resource amounts = output resource amounts
         - input import amounts = output export amounts
     - gray line separating geo survey should span whole width
+    - geo survey section should have same left & right margins as inputs & outputs
     - width of bulding panel can now be reduced 20%
 
 #8 Indicate transitions of status more clearly
