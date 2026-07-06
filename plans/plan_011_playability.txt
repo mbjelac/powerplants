@@ -53,8 +53,8 @@
 
 #6 Destroy connection
 - when a connection amount is lowered to 0, the connection is removed
-    - add Sektor.removeInputConnection(building: BuildingLocation, resource: string)
-    - method removes connection from state (building param references Connection.source)
+    - add Sektor.removeInputConnection(target: BuildingLocation, source: BuildingLocation, resource: string)
+    - method removes connection from state (matched by target, source and resource)
     - method throws error if connection doesn't exist
     - add Sektor test for
         - removing input connection
@@ -67,7 +67,7 @@
 - toolbar's building function panel has header for location properties
     - header should be "Affected by"
 - building panel input & output columns should always have same width
-- building panel width should be dynamic to width of input and output columns
+- building panel width should have bigger & fixed width
     - currently sometime output column content flows over the right border of the building panel
 
 #8 Indicate transitions of status more clearly
@@ -80,3 +80,4 @@
 #10 Location property overlay toggler labelled more clearly
 - put location property overlay toggler in own panel
 - panel title: "Geo survey"
+
