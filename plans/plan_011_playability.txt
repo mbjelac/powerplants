@@ -51,8 +51,8 @@
     - on top of the output arc is a label with the resource icon and amount of the output
 - [done] create visual test for rendering map with input & output arcs
 
-#6 Destroy connection
-- when a connection amount is lowered to 0, the connection is removed
+#6 [done] Destroy connection
+- [done] when a connection amount is lowered to 0, the connection is removed
     - add Sektor.removeInputConnection(target: BuildingLocation, source: BuildingLocation, resource: string)
     - method removes connection from state (matched by target, source and resource)
     - method throws error if connection doesn't exist
