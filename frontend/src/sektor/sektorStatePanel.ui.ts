@@ -5,6 +5,7 @@ import { arrowDownTrayIcon, arrowUpTrayIcon, exclamationTriangleIcon, checkCircl
 
 let panelEl: HTMLElement | null = null;
 let importHoverCallback: ((resourceType: string | null) => void) | null = null;
+let previousStatus: SektorState["status"] | null = null;
 
 export function onImportHover(callback: (resourceType: string | null) => void) {
   importHoverCallback = callback;
@@ -16,8 +17,25 @@ export function updateSektorStatePanel(sektorState: SektorState) {
   panelEl!.innerHTML = "";
 
   panelEl!.appendChild(createStatusRow(sektorState.status));
-  panelEl!.appendChild(createImportColumn(sektorState.imports, sektorState.importRestrictions));
-  panelEl!.appendChild(createExportColumn(sektorState.exports, sektorState.exportRequirements));
+
+  const columns = document.createElement("div");
+  columns.className = "ss-columns";
+  columns.appendChild(createImportColumn(sektorState.imports, sektorState.importRestrictions));
+  columns.appendChild(createExportColumn(sektorState.exports, sektorState.exportRequirements));
+  panelEl!.appendChild(columns);
+
+  if (previousStatus !== null && previousStatus !== sektorState.status) {
+    flashPanel(sektorState.status);
+  }
+  previousStatus = sektorState.status;
+}
+
+function flashPanel(status: SektorState["status"]) {
+  const flashColor = status === "Done" ? "var(--color-good)" : status === "RestrictionsExceeded" ? "var(--color-bad)" : "var(--color-neutral)";
+  panelEl!.style.setProperty("--ss-flash-color", flashColor);
+  panelEl!.classList.remove("ss-flash");
+  void panelEl!.offsetWidth;
+  panelEl!.classList.add("ss-flash");
 }
 
 function createStatusRow(status: SektorState["status"]): HTMLElement {
@@ -31,14 +49,14 @@ function createStatusRow(status: SektorState["status"]): HTMLElement {
   const value = document.createElement("span");
   if (status === "InProgress") {
     value.textContent = "In progress";
-    value.style.color = "white";
+    value.style.color = "var(--color-neutral)";
   } else if (status === "Done") {
     value.textContent = "Done";
-    value.style.color = "green";
+    value.style.color = "var(--color-good)";
     value.style.fontWeight = "bold";
   } else {
     value.textContent = "Restrictions exceeded";
-    value.style.color = "orange";
+    value.style.color = "var(--color-bad)";
     value.style.fontWeight = "bold";
   }
   row.appendChild(value);

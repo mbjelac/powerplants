@@ -1,3 +1,10 @@
+:root {
+  /* Semantic status colors, reused across CSS and TS (via var(...)). */
+  --color-good: #00c000;    /* good: Done, boosted output, requirement met (green, halfway to lime) */
+  --color-bad: orange;      /* bad: restrictions exceeded, reduced output */
+  --color-neutral: white;   /* neutral: In Progress */
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -297,14 +304,14 @@ body > main {
 }
 
 .bf-output-boosted {
-  background-color: green;
+  background-color: var(--color-good);
   color: #fff;
   padding: 1px 4px;
   border-radius: 3px;
 }
 
 .bf-output-reduced {
-  background-color: orange;
+  background-color: var(--color-bad);
   color: #000;
   padding: 1px 4px;
   border-radius: 3px;
@@ -492,13 +499,36 @@ body > main {
   position: absolute;
   bottom: 16px;
   right: 16px;
+  width: 460px;
   background: #2a2a2a;
   border: 1px solid #444;
   padding: 12px;
   z-index: 100;
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px 24px;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ss-flash {
+  animation: ss-flash 1s ease-out 3;
+}
+
+@keyframes ss-flash {
+  from {
+    background-color: var(--ss-flash-color);
+  }
+  to {
+    background-color: #2a2a2a;
+  }
+}
+
+.ss-columns {
+  display: flex;
+  gap: 24px;
+}
+
+.ss-columns .ss-col {
+  flex: 1;
 }
 
 .ss-status {
@@ -561,12 +591,12 @@ body > main {
 }
 
 .ss-exceeded {
-  background-color: orange;
+  background-color: var(--color-bad);
   color: #000;
 }
 
 .ss-met {
-  background-color: green;
+  background-color: var(--color-good);
   color: #fff;
 }
 
