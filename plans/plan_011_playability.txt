@@ -63,13 +63,13 @@
     - if removing succeeds, remove connection arc from the map along with all widgets (arc label, triangle buttons)
     - add visual test for scenario where a connection amount is lowered to 0
 
-#7 Improve building panel
+#7 [done] Improve building panel
 - [done] toolbar's building function panel has header for location properties
     - header should be "Affected by"
     - header style same as Inputs and outputs columns header
     - location properties text style same as inputs & outputs columns text style
 - [done] building panel input & output columns should always have same width
-- input & output columns in building panel should be one beneath the other
+- [done] input & output columns in building panel should be one beneath the other
     - not so in the building *function* panel used by the toolbar
     - left-to-right arrow between the columns should be hidden
     - location properties have header "Geo survey"
