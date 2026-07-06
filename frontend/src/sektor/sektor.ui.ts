@@ -144,7 +144,7 @@ function loadSavedState() {
 
 let selectedBuildingLocation: BuildingLocation | null = null;
 let hoveredImportResource: string | null = null;
-let displayedConnections: { connections: BuildingConnection[]; buildingLocation: BuildingLocation; labels: HTMLElement[] } | null = null;
+let displayedConnections: { connections: BuildingConnection[]; buildingLocation: BuildingLocation; labels: HTMLElement[]; outputConnections: BuildingConnection[]; outputLabels: HTMLElement[] } | null = null;
 
 let selectMode: {
   possibleConnections: PossibleConnection[];
@@ -261,7 +261,7 @@ const MAX_GRID_DISTANCE = Math.sqrt((GRID_SIZE - 1) ** 2 + (GRID_SIZE - 1) ** 2)
 const MIN_ARC_HEIGHT = BLOCK_SIZE * 0.15 * 3;
 const MAX_ARC_HEIGHT = BLOCK_SIZE * 0.15 * 9;
 
-function drawConnectionArc(p: p5, source: BuildingLocation, target: BuildingLocation, resourceType: string) {
+function drawConnectionArc(p: p5, source: BuildingLocation, target: BuildingLocation, resourceType: string, dotted: boolean = false) {
   const { wx: sourceX, wz: sourceZ } = gridToWorld(source.x, source.y);
   const { wx: targetX, wz: targetZ } = gridToWorld(target.x, target.y);
 
@@ -277,16 +277,27 @@ function drawConnectionArc(p: p5, source: BuildingLocation, target: BuildingLoca
   p.stroke(r, g, b);
   p.strokeWeight(3);
 
+  const arcPoint = (t: number) => ({
+    x: sourceX + (targetX - sourceX) * t,
+    y: -arcHeight * 4 * t * (1 - t),
+    z: sourceZ + (targetZ - sourceZ) * t,
+  });
+
   const segments = 20;
-  p.beginShape();
-  for (let i = 0; i <= segments; i++) {
-    const t = i / segments;
-    const x = sourceX + (targetX - sourceX) * t;
-    const z = sourceZ + (targetZ - sourceZ) * t;
-    const y = -arcHeight * 4 * t * (1 - t);
-    p.vertex(x, y, z);
+  if (dotted) {
+    for (let i = 0; i < segments; i += 2) {
+      const start = arcPoint(i / segments);
+      const end = arcPoint((i + 1) / segments);
+      p.line(start.x, start.y, start.z, end.x, end.y, end.z);
+    }
+  } else {
+    p.beginShape();
+    for (let i = 0; i <= segments; i++) {
+      const point = arcPoint(i / segments);
+      p.vertex(point.x, point.y, point.z);
+    }
+    p.endShape();
   }
-  p.endShape();
   p.pop();
 }
 
@@ -299,6 +310,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
   const floorColor = propertyColor(selectedProperty, locations[placed.location.x][placed.location.y].properties[selectedProperty] ?? 0);
   if (displayedConnections) {
     for (const label of displayedConnections.labels) label.remove();
+    for (const label of displayedConnections.outputLabels) label.remove();
   }
   const container = document.getElementById("canvas-container")!;
   const labels: HTMLElement[] = [];
@@ -350,8 +362,22 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
     container.appendChild(label);
     labels.push(label);
   }
+  const outputLabels: HTMLElement[] = [];
+  for (const outputConnection of buildingState.outputConnections) {
+    const label = document.createElement("div");
+    label.className = "connection-label";
+
+    const icon = getResourceIcon(outputConnection.resourceType) ?? "";
+    const amountText = document.createElement("span");
+    amountText.className = "connection-amount-text";
+    amountText.textContent = `${icon} ${outputConnection.amount}`;
+    label.appendChild(amountText);
+
+    container.appendChild(label);
+    outputLabels.push(label);
+  }
   selectedBuildingLocation = placed.location;
-  displayedConnections = { connections: buildingState.inputConnections, buildingLocation: placed.location, labels };
+  displayedConnections = { connections: buildingState.inputConnections, buildingLocation: placed.location, labels, outputConnections: buildingState.outputConnections, outputLabels };
   showBuildingPanel({
     name: placed.type,
     code: code,
@@ -378,6 +404,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
       selectedBuildingLocation = null;
       if (displayedConnections) {
         for (const label of displayedConnections.labels) label.remove();
+        for (const label of displayedConnections.outputLabels) label.remove();
       }
       displayedConnections = null;
       updateSektorStatePanel(sektor.getSektorState());
@@ -648,6 +675,7 @@ const sektorUi = (p: p5) => {
       hideBuildingPanel();
       if (displayedConnections) {
         for (const label of displayedConnections.labels) label.remove();
+        for (const label of displayedConnections.outputLabels) label.remove();
       }
       selectedBuildingLocation = null;
       displayedConnections = null;
@@ -753,6 +781,26 @@ const sektorUi = (p: p5) => {
         const midZ = (sourceZ + targetZ) / 2;
         const { screenX, screenY } = worldToScreen(p, midX, midY, midZ, zoom);
         const label = displayedConnections.labels[i];
+        label.style.left = `${screenX}px`;
+        label.style.top = `${screenY}px`;
+      }
+
+      for (let i = 0; i < displayedConnections.outputConnections.length; i++) {
+        const outputConnection = displayedConnections.outputConnections[i];
+        const source = displayedConnections.buildingLocation;
+        const target = outputConnection.to;
+        drawConnectionArc(p, source, target, outputConnection.resourceType, true);
+
+        const { wx: sourceX, wz: sourceZ } = gridToWorld(source.x, source.y);
+        const { wx: targetX, wz: targetZ } = gridToWorld(target.x, target.y);
+        const distance = Math.sqrt((source.x - target.x) ** 2 + (source.y - target.y) ** 2);
+        const normalizedDistance = distance / MAX_GRID_DISTANCE;
+        const arcHeight = MIN_ARC_HEIGHT + normalizedDistance * (MAX_ARC_HEIGHT - MIN_ARC_HEIGHT);
+        const midX = (sourceX + targetX) / 2;
+        const midY = -arcHeight;
+        const midZ = (sourceZ + targetZ) / 2;
+        const { screenX, screenY } = worldToScreen(p, midX, midY, midZ, zoom);
+        const label = displayedConnections.outputLabels[i];
         label.style.left = `${screenX}px`;
         label.style.top = `${screenY}px`;
       }

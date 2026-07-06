@@ -26,6 +26,7 @@ export interface BuildingState {
   exports: ResourceThroughput[];
   imports: ResourceThroughput[];
   inputConnections: BuildingConnection[];
+  outputConnections: BuildingConnection[];
 }
 
 export interface PossibleConnection {
@@ -92,6 +93,9 @@ export class Sektor {
     const inputConnections = this.connections
       .filter(c => c.target.x === location.x && c.target.y === location.y)
       .map(c => ({ to: c.source, resourceType: c.resourceType, amount: c.amount }));
+    const outputConnections = this.connections
+      .filter(c => c.source.x === location.x && c.source.y === location.y)
+      .map(c => ({ to: c.target, resourceType: c.resourceType, amount: c.amount }));
     const imports = def.buildingFunction.inputs.map(input => ({
       name: input.name,
       value: this.getRemainingImport(location, input.name),
@@ -107,6 +111,7 @@ export class Sektor {
       exports,
       imports,
       inputConnections,
+      outputConnections,
     };
   }
 

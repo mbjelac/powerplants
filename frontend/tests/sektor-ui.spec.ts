@@ -306,6 +306,54 @@ test("displays connection arc on map after connecting buildings", async ({ page 
   await expectScreenshot(page, "connection-arc", "body");
 });
 
+test("displays input and output arcs on map for a building with both", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+  const canvas = page.locator("#canvas-container > canvas");
+  const box = await canvas.boundingBox();
+  const centerX = box!.width / 2;
+  const centerY = box!.height / 2;
+
+  // Place TestFactory (outputs Food) — feeds the processor
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX - 90, y: centerY - 20 } });
+  await page.waitForTimeout(200);
+
+  // Place TestProcessor (Food -> Wood) — has both an input and an output connection
+  await page.locator('.building-item[data-building-name="TestProcessor"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX, y: centerY + 40 } });
+  await page.waitForTimeout(200);
+
+  // Place TestRefinery (inputs Wood) — consumes the processor's output
+  await page.locator('.building-item[data-building-name="TestRefinery"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX + 100, y: centerY - 50 } });
+  await page.waitForTimeout(200);
+
+  // Connect TestProcessor's Food input from TestFactory (input arc)
+  await canvas.click({ position: { x: centerX, y: centerY + 40 } });
+  await page.waitForTimeout(200);
+  await page.locator(".bf-input-clickable").first().click();
+  await page.waitForTimeout(300);
+  await page.locator(".connect-button").first().click();
+  await page.waitForTimeout(300);
+
+  // Connect TestRefinery's Wood input from TestProcessor (output arc for the processor)
+  await canvas.click({ position: { x: centerX + 100, y: centerY - 50 } });
+  await page.waitForTimeout(200);
+  await page.locator(".bf-input-clickable").nth(3).click();
+  await page.waitForTimeout(300);
+  await page.locator(".connect-button").first().click();
+  await page.waitForTimeout(300);
+
+  // Re-select the processor so both its input and output arcs are shown
+  await canvas.click({ position: { x: centerX, y: centerY + 40 } });
+  await page.waitForTimeout(300);
+
+  await expectScreenshot(page, "input-output-arcs", "body");
+});
+
 test("increases connection amount when up button is clicked", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   const canvas = page.locator("#canvas-container canvas");

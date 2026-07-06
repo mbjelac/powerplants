@@ -47,6 +47,20 @@ Water 1
 =
 Work 3
 
+# TestProcessor
+
+## Render
+
+```
+pri4 s(22,22,22) t(0,0,0) c(#66cc66)
+```
+
+## Function
+
+Food 2
+=
+Wood 3
+
 # TestRefinery
 
 ## Render
