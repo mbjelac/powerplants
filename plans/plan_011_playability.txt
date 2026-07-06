@@ -68,7 +68,7 @@
     - header should be "Affected by"
     - header style same as Inputs and outputs columns header
     - location properties text style same as inputs & outputs columns text style
-- building panel input & output columns should always have same width
+- [done] building panel input & output columns should always have same width
 - input & output columns in building panel should be one beneath the other
     - not so in the building *function* panel used by the toolbar
     - left-to-right arrow between the columns should be hidden
@@ -76,8 +76,11 @@
     - location properties have header "Geo survey"
         - header has same style as input & output columns header
         - properties text style same as inputs & outputs columns text style
-- building panel width should have bigger & fixed width
-    - currently sometime output column content flows over the right border of the building panel
+    - columns in inputs section & columns in output section should have same width
+        - input resource names & icons = output resource names & icons
+        - input resource amounts = output resource amounts
+        - input import amounts = output export amounts
+    - 
 
 #8 Indicate transitions of status more clearly
 - status panel should have fixed width
