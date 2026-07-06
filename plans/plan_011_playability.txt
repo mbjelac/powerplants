@@ -69,3 +69,14 @@
 - building panel input & output columns should always have same width
 - building panel width should be dynamic to width of input and output columns
     - currently sometime output column content flows over the right border of the building panel
+
+#8 Indicate transitions of status more clearly
+
+#9 Leaving sektor map should be more intuitive
+- exit button
+    - in top left (above toolbar) should be moved inside status panel and placed in bottom right
+    - should be labelled "Leave"
+
+#10 Location property overlay toggler labelled more clearly
+- put location property overlay toggler in own panel
+- panel title: "Geo survey"
