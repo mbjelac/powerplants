@@ -72,7 +72,6 @@
 - input & output columns in building panel should be one beneath the other
     - not so in the building *function* panel used by the toolbar
     - left-to-right arrow between the columns should be hidden
-    - inputs & outputs columns separated by horizontal gray line like location properties
     - location properties have header "Geo survey"
         - header has same style as input & output columns header
         - properties text style same as inputs & outputs columns text style
@@ -80,7 +79,8 @@
         - input resource names & icons = output resource names & icons
         - input resource amounts = output resource amounts
         - input import amounts = output export amounts
-    - 
+    - gray line separating geo survey should span whole width
+    - width of bulding panel can now be reduced 20%
 
 #8 Indicate transitions of status more clearly
 - status panel should have fixed width
