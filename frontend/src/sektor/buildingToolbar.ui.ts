@@ -37,6 +37,12 @@ function showToolbarFunctionPanel(buildingFunction: BuildingFunction, outputModi
   if (outputModifiers.length > 0) {
     const modifierList = document.createElement("div");
     modifierList.className = "tf-modifier-list";
+
+    const modifierHeader = document.createElement("div");
+    modifierHeader.className = "tf-modifier-header";
+    modifierHeader.textContent = "Affected by";
+    modifierList.appendChild(modifierHeader);
+
     for (const modifier of outputModifiers) {
       const item = document.createElement("div");
       item.className = "tf-modifier-item";
