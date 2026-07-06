@@ -89,5 +89,8 @@
 
 #10 Location property overlay toggler labelled more clearly
 - put location property overlay toggler in own panel
-- panel title: "Geo survey"
+    - panel title: "Geo survey"
+- building toolbar should also be enclosed in a panel
+    - panel title: "Construction"
+- building toolbar panel should be opnly as high as needed to display 6 buildings
 
