@@ -71,6 +71,16 @@
     - currently sometime output column content flows over the right border of the building panel
 
 #8 Indicate transitions of status more clearly
+- status panel should have fixed width
+    - currently it's width is modified in some way
+    - when status is Restrictions Exceeded, status panel is wide with empty space on the right
+- when status changes, status panel should flash it's background
+    - background color should be the color of the status
+        - white (light gray) for In Progress
+        - green for Success
+        - orange for Restrictions Exceeded
+    - then color fades gradually during 1 second
+    - this repeats 3 times
 
 #9 Leaving sektor map should be more intuitive
 - exit button
