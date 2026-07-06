@@ -104,10 +104,16 @@ function createInputsTable({ inputs, imports, onAddConnection }: {
 
 function createOutputColumn(outputs: ResourceThroughput[], modifiedOutputs?: ResourceThroughput[], exports?: ResourceThroughput[]): HTMLElement {
   const table = document.createElement("div");
-  table.className = "bf-outputs-table";
+  table.className = exports ? "bf-outputs-table" : "bf-outputs-table bf-outputs-table-simple";
 
   const headerRow = document.createElement("div");
   headerRow.className = "bf-outputs-row bf-outputs-header";
+
+  if (exports) {
+    const spacerHeader = document.createElement("div");
+    spacerHeader.className = "bf-outputs-cell bf-outputs-spacer";
+    headerRow.appendChild(spacerHeader);
+  }
 
   const resourceHeader = document.createElement("div");
   resourceHeader.className = "bf-outputs-cell";
@@ -131,6 +137,12 @@ function createOutputColumn(outputs: ResourceThroughput[], modifiedOutputs?: Res
   for (const output of outputs) {
     const row = document.createElement("div");
     row.className = "bf-outputs-row";
+
+    if (exports) {
+      const spacerCell = document.createElement("div");
+      spacerCell.className = "bf-outputs-cell bf-outputs-spacer";
+      row.appendChild(spacerCell);
+    }
 
     const resourceCell = document.createElement("div");
     resourceCell.className = "bf-outputs-cell";

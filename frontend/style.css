@@ -108,7 +108,7 @@ body > main {
   position: absolute;
   top: 16px;
   right: 16px;
-  width: 360px;
+  width: 288px;
   background: #2a2a2a;
   border: 1px solid #444;
   padding: 12px;
@@ -172,6 +172,27 @@ body > main {
   gap: 12px;
 }
 
+#building-panel .bf-function {
+  display: grid;
+  grid-template-columns: 14px auto auto auto;
+  column-gap: 6px;
+  row-gap: 2px;
+  align-items: center;
+}
+
+#building-panel .bf-arrow {
+  display: none;
+}
+
+#building-panel .bf-inputs-table,
+#building-panel .bf-outputs-table {
+  display: contents;
+}
+
+#building-panel .bf-outputs-header {
+  margin-top: 6px;
+}
+
 .bf-col {
   display: flex;
   flex-direction: column;
@@ -183,16 +204,23 @@ body > main {
 }
 
 .bf-outputs-table {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 2px 6px;
   color: #ccc;
   font-family: sans-serif;
   font-size: 12px;
+  align-items: center;
+}
+
+.bf-outputs-table-simple {
+  grid-template-columns: auto auto;
 }
 
 .bf-outputs-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
   align-items: center;
 }
 
@@ -202,27 +230,20 @@ body > main {
 }
 
 .bf-outputs-cell {
-  padding: 0 4px;
-  flex: 1;
+  white-space: nowrap;
 }
 
 .bf-outputs-amount {
-  flex: none;
-  width: 60px;
-  text-align: right;
+  text-align: center;
 }
 
 .bf-outputs-export-header {
-  flex: none;
-  width: 32px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .bf-outputs-export {
-  flex: none;
-  width: 32px;
   text-align: center;
   color: #999;
 }
@@ -232,14 +253,22 @@ body > main {
   flex-direction: column;
   gap: 2px;
   margin-top: 8px;
-  padding-top: 8px;
+  padding: 8px 16px 0;
   border-top: 1px solid #444;
+  align-self: stretch;
 }
 
-.bp-property-row {
+.bp-properties-header {
   color: #999;
   font-family: sans-serif;
   font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.bp-property-row {
+  color: #ccc;
+  font-family: sans-serif;
+  font-size: 12px;
   display: flex;
   align-items: center;
   gap: 6px;

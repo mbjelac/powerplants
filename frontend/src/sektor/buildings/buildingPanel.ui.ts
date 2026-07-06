@@ -114,6 +114,12 @@ export function showBuildingPanel({ name, code, buildingFunction, modifiedOutput
   if (locationProperties) {
     const propertiesSection = document.createElement("div");
     propertiesSection.className = "bp-properties";
+
+    const propertiesHeader = document.createElement("div");
+    propertiesHeader.className = "bp-properties-header";
+    propertiesHeader.textContent = "Geo survey";
+    propertiesSection.appendChild(propertiesHeader);
+
     for (const [propertyName, propertyValue] of Object.entries(locationProperties)) {
       const row = document.createElement("div");
       row.className = "bp-property-row";
