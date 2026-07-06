@@ -346,6 +346,13 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
     downButton.className = "connection-amount-button";
     downButton.textContent = "▼";
     downButton.addEventListener("click", () => {
+      if (connection.amount === 1) {
+        sektor.removeInputConnection(placed.location, connection.to, connection.resourceType);
+        openBuildingPanel(placed);
+        updateSektorStatePanel(sektor.getSektorState());
+        saveState();
+        return;
+      }
       const result = sektor.changeConnectionAmount(placed.location, connection.to, connection.resourceType, -1);
       if (result.success) {
         openBuildingPanel(placed);

@@ -257,6 +257,16 @@ export class Sektor {
     return { success: true, newAmount };
   }
 
+  removeInputConnection(target: BuildingLocation, source: BuildingLocation, resource: string): void {
+    const index = this.connections.findIndex(
+      connection => connection.target.x === target.x && connection.target.y === target.y
+        && connection.source.x === source.x && connection.source.y === source.y
+        && connection.resourceType === resource
+    );
+    if (index === -1) throw new Error("connectionNotFound");
+    this.connections.splice(index, 1);
+  }
+
   getPossibleConnectionsForInput(target: BuildingLocation, resourceType: string): PossibleConnection[] {
     return this.buildings
       .filter(building => {
