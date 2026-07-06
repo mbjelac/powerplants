@@ -66,6 +66,8 @@
 #7 Improve building panel
 - toolbar's building function panel has header for location properties
     - header should be "Affected by"
+    - header style same as Inputs and outputs columns header
+    - location properties text style same as inputs & outputs columns text style
 - building panel input & output columns should always have same width
 - building panel width should have bigger & fixed width
     - currently sometime output column content flows over the right border of the building panel
