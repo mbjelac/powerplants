@@ -69,6 +69,13 @@
     - header style same as Inputs and outputs columns header
     - location properties text style same as inputs & outputs columns text style
 - building panel input & output columns should always have same width
+- input & output columns in building panel should be one beneath the other
+    - not so in the building *function* panel used by the toolbar
+    - left-to-right arrow between the columns should be hidden
+    - inputs & outputs columns separated by horizontal gray line like location properties
+    - location properties have header "Geo survey"
+        - header has same style as input & output columns header
+        - properties text style same as inputs & outputs columns text style
 - building panel width should have bigger & fixed width
     - currently sometime output column content flows over the right border of the building panel
 
