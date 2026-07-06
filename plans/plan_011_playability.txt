@@ -83,11 +83,11 @@
     - geo survey section should have same left & right margins as inputs & outputs
     - width of bulding panel can now be reduced 20%
 
-#8 Indicate transitions of status more clearly
+#8 [done] Indicate transitions of status more clearly
 - [done] status panel should have fixed width
     - currently it's width is modified in some way
     - when status is Restrictions Exceeded, status panel is wide with empty space on the right
-- when status changes, status panel should flash it's background
+- [done] when status changes, status panel should flash it's background
     - background color should be the color of the status
         - white (light gray) for In Progress
         - green for Success
