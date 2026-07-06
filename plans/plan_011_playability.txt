@@ -63,3 +63,9 @@
     - if removing succeeds, remove connection arc from the map along with all widgets (arc label, triangle buttons)
     - add visual test for scenario where a connection amount is lowered to 0
 
+#7 Improve building panel
+- toolbar's building function panel has header for location properties
+    - header should be "Affected by"
+- building panel input & output columns should always have same width
+- building panel width should be dynamic to width of input and output columns
+    - currently sometime output column content flows over the right border of the building panel
