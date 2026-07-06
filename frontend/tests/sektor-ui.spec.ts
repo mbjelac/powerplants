@@ -361,21 +361,21 @@ test("increases connection amount when up button is clicked", async ({ page }) =
   const centerX = box!.width / 2;
   const centerY = box!.height / 2;
 
-  // Place TestFactory (outputs Food) and TestHouse (inputs Food 2)
-  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  // Place TestProcessor (outputs Wood 3) and TestRefinery (inputs Wood 2)
+  await page.locator('.building-item[data-building-name="TestProcessor"]').click();
   await page.waitForTimeout(100);
   await canvas.click({ position: { x: centerX - 60, y: centerY - 20 } });
   await page.waitForTimeout(200);
 
-  await page.locator('.building-item[data-building-name="TestHouse"]').click();
+  await page.locator('.building-item[data-building-name="TestRefinery"]').click();
   await page.waitForTimeout(100);
   await canvas.click({ position: { x: centerX, y: centerY + 30 } });
   await page.waitForTimeout(200);
 
-  // Open panel, create connection
+  // Open panel, create connection on the Wood input (4th input row)
   await canvas.click({ position: { x: centerX, y: centerY + 30 } });
   await page.waitForTimeout(200);
-  await page.locator(".bf-input-clickable").first().click();
+  await page.locator(".bf-input-clickable").nth(3).click();
   await page.waitForTimeout(300);
   await page.locator(".connect-button").click();
   await page.waitForTimeout(300);
@@ -394,21 +394,21 @@ test("decreases connection amount when down button is clicked", async ({ page })
   const centerX = box!.width / 2;
   const centerY = box!.height / 2;
 
-  // Place TestFactory (outputs Food) and TestHouse (inputs Food 2)
-  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  // Place TestProcessor (outputs Wood 3) and TestRefinery (inputs Wood 2)
+  await page.locator('.building-item[data-building-name="TestProcessor"]').click();
   await page.waitForTimeout(100);
   await canvas.click({ position: { x: centerX - 60, y: centerY - 20 } });
   await page.waitForTimeout(200);
 
-  await page.locator('.building-item[data-building-name="TestHouse"]').click();
+  await page.locator('.building-item[data-building-name="TestRefinery"]').click();
   await page.waitForTimeout(100);
   await canvas.click({ position: { x: centerX, y: centerY + 30 } });
   await page.waitForTimeout(200);
 
-  // Open panel, create connection, increase to 2
+  // Open panel, create connection on the Wood input (4th input row), increase to 2
   await canvas.click({ position: { x: centerX, y: centerY + 30 } });
   await page.waitForTimeout(200);
-  await page.locator(".bf-input-clickable").first().click();
+  await page.locator(".bf-input-clickable").nth(3).click();
   await page.waitForTimeout(300);
   await page.locator(".connect-button").click();
   await page.waitForTimeout(300);
@@ -420,6 +420,39 @@ test("decreases connection amount when down button is clicked", async ({ page })
   await page.waitForTimeout(300);
 
   await expectScreenshot(page, "connection-amount-decreased", "body");
+});
+
+test("removes connection from map when amount is lowered to zero", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+  const canvas = page.locator("#canvas-container canvas");
+  const box = await canvas.boundingBox();
+  const centerX = box!.width / 2;
+  const centerY = box!.height / 2;
+
+  // Place TestFactory (outputs Food) and TestHouse (inputs Food 2)
+  await page.locator('.building-item[data-building-name="TestFactory"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX - 60, y: centerY - 20 } });
+  await page.waitForTimeout(200);
+
+  await page.locator('.building-item[data-building-name="TestHouse"]').click();
+  await page.waitForTimeout(100);
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+
+  // Open panel and create connection (amount 1)
+  await canvas.click({ position: { x: centerX, y: centerY + 30 } });
+  await page.waitForTimeout(200);
+  await page.locator(".bf-input-clickable").first().click();
+  await page.waitForTimeout(300);
+  await page.locator(".connect-button").click();
+  await page.waitForTimeout(300);
+
+  // Click down button to lower the amount to zero, removing the connection
+  await page.locator(".connection-amount-button").last().click();
+  await page.waitForTimeout(300);
+
+  await expectScreenshot(page, "connection-removed", "body");
 });
 
 test("destroys building when trash icon is clicked", async ({ page }) => {
