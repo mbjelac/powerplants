@@ -13,6 +13,7 @@ import { getSektorData, saveSektorData } from "./sektor.api";
 import { initPropertyToggler, getSelectedProperty } from "./propertyToggler.ui";
 import { propertyDefinitions } from "../properties";
 import { MODIFIER_MIN, MODIFIER_MAX } from "../../../shared/modifierLimits";
+import { trashIcon } from "../icons";
 
 const GRID_SIZE = 10;
 const isTestMode = new URLSearchParams(window.location.search).get("test") === "true";
@@ -343,7 +344,11 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
 
     const downButton = document.createElement("button");
     downButton.className = "connection-amount-button";
-    downButton.textContent = "▼";
+    if (connection.amount === 1) {
+      downButton.innerHTML = trashIcon;
+    } else {
+      downButton.textContent = "▼";
+    }
     downButton.addEventListener("click", () => {
       if (connection.amount === 1) {
         sektor.removeInputConnection(placed.location, connection.to, connection.resourceType);
