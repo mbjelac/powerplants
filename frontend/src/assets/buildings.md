@@ -126,6 +126,32 @@ EnergyElectric 4
 =
 Work 2
 
+## Boosters
+
+HealthPhysical 3 = Work 1
+HealthMental 3 = Work 1
+HealthSocial 3 = Work 1
+
+# Library
+
+## Render
+
+```
+pri4 s(20,20,20) c(#4f0515)
+```
+
+## Function
+
+EnergyElectrical 1
+Water 1
+WorkEducational 1
+=
+HealthMental 3
+
+## Properties
+
+autoExport=false
+
 # Agriplot
 
 ## Render

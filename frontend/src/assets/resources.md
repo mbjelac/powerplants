@@ -5,3 +5,6 @@ WaterPottable 💧 #55aaff
 FoodRaw 🥕 #ff9955
 EducationElementary 📖 #D4F4FF
 Ore 🪨 #cccccc
+HealthMental 🧠 #FFD4FA
+HealthPhysical 🫀 #F03818
+HealthSocial ☺️ #F0B618
