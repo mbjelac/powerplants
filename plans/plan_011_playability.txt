@@ -95,8 +95,8 @@
     - then color fades gradually during 1 second
     - this repeats 3 times
 
-#9 Leaving sektor map should be more intuitive
-- exit button
+#9 [done] Leaving sektor map should be more intuitive
+- [done] exit button
     - in top left (above toolbar) should be moved inside status panel and placed in bottom right
     - should be labelled "Leave"
 
