@@ -16,6 +16,7 @@ import { MODIFIER_MIN, MODIFIER_MAX } from "../../../shared/modifierLimits";
 import { trashIcon } from "../icons";
 
 const GRID_SIZE = 10;
+const PANEL_FLOOR_PROPERTY = "soil";
 const isTestMode = new URLSearchParams(window.location.search).get("test") === "true";
 const sektorName = new URLSearchParams(window.location.search).get("name");
 
@@ -306,8 +307,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
   if (!buildingState) return;
   const code = getBuildingCode(placed.type);
   if (!code) return;
-  const selectedProperty = getSelectedProperty();
-  const floorColor = propertyColor(selectedProperty, locations[placed.location.x][placed.location.y].properties[selectedProperty] ?? 0);
+  const floorColor = propertyColor(PANEL_FLOOR_PROPERTY, locations[placed.location.x][placed.location.y].properties[PANEL_FLOOR_PROPERTY] ?? 0);
   if (displayedConnections) {
     for (const label of displayedConnections.labels) label.remove();
     for (const label of displayedConnections.outputLabels) label.remove();
@@ -426,8 +426,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
 }
 
 function openEmptyLocationPanel(location: BuildingLocation) {
-  const selectedProperty = getSelectedProperty();
-  const floorColor = propertyColor(selectedProperty, locations[location.x]?.[location.y]?.properties[selectedProperty] ?? 0);
+  const floorColor = propertyColor(PANEL_FLOOR_PROPERTY, locations[location.x]?.[location.y]?.properties[PANEL_FLOOR_PROPERTY] ?? 0);
   selectedBuildingLocation = location;
   showBuildingPanel({
     name: "Empty",
