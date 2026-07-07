@@ -28,5 +28,26 @@ If a building has multiple outputs in it's Function, the arcs for those outputs 
 This avoids having two arcs going towards the same building as inputs being on top of each other.
 
 #1 A building definition can have Boosters
+- a building definition can have an optional ## Boosters section
+    - within that section each "booster" is defined as an input to the building with its maximum amount and how much each point boosts what output resource of that building
+        - example:
+                ## Boosters
+                WorkOptimization 5 = EnergyElectrical 2
+            - format: InputResource <maximumInputAmount> = OutputResource <boostFactor>
+            - means: if this building's WorkOptimization input is connected to some buildings WorkOptimization output with the amount of 3, this building's EnergyElectrical output will be increased by 3 * 2 = 6
+                - shorter: specified building output is increased by input amount * boost factor
+            - also: the maximum amount of WorkOptimization input this building can have is 5
+        - booster inputs are NOT automatically filled from imports as they are optional and the building can function without them
+    - adjust data structures:
+        - add to BuildingDefinition a new param boosters: Booster[]
+            - if Boosters section does not exist, building definition boosters is empty
+        - Booster = { input: ResourceThroughput; outputBoost: ResourceThroughput[]; }
+        - all building's booster inputs show up in BuildingState.buildingFunction as regular inputs
+    - create Sektor tests which verify:
+        - building with boosters does not have to connect them
+        - initial booster input amount is 0
+        - sektor imports are not increased with unconnected booster amounts
+        - building with a connected booster increases output by the boosting amount specified
+        - a booster input cannot be increased beyond the maximum specified amount
 
 #3 A building definition can specify whether its excess outputs should not be automatically exported
