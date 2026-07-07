@@ -74,9 +74,8 @@ sph s(3,3,4) t(-26,-8,7) c(#248f3e)
 WaterPottable 1
 FoodRaw 5
 EnergyElectric 4
-EducationElementary 2
 =
-WorkTechnical 3
+Work 2
 
 # Agriplot
 
