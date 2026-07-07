@@ -1,18 +1,10 @@
 Buildings where people live should have more complex inputs.
 
-Idea:
+Idea: Building "Habitats" has additional inputs HealthPhysical, HealthMental & HealthSocial. These are optional but improve Work output if present.
+Amounts of Health inputs are initially 0 and do not automatically fill from imports.
+These inputs can be connected to other buildings' outputs of same type and amounts increased until some maximum.
 
-Building "Habitats" has additional inputs HealthPhysical, HealthMental & HealthSocial.
-These are under another function in the building definition titled FunctionMinimum. Output is Work.
-Only the output has an amount. This represents the maximum input amount (also the maximum output) of the function.
-This function can have only one output.
-FunctionMinimum works so that the output is the minimum of the inputs (smallest amount).
-Inputs of FunctionMinimum are initially 0 and do not automatically fill from imports.
-Inputs can be connected to other buildings' outputs of same type and amounts increased until the function's maximum output.
-
-If a building's Function & FunctionMinimum have outputs of same type, the amounts are summed to get the building's output.
-
-There are buildings which have the specified resources as outputs.
+There are buildings which have Health outputs.
 Example:
 Library:
 EnergyElectrical 1
@@ -31,18 +23,10 @@ WorkAdministrative 3
 =
 HealthSocial 15
 
-Input-Output connections work in the same way. Both inputs from Function & from FunctionMinimum can be connected to outputs of other buildings.
-
-Function & FunctionMinimum definitions can have an optional "Name: ..." line. If this is present, building panels display first this line as title, then the function table, for easier usage.
-
 Multiple outputs:
-If a building has multiple outputs in it's Function, the arcs for those outpus are anchored off the center of the building floor.
+If a building has multiple outputs in it's Function, the arcs for those outputs are anchored off the center of the building floor.
 This avoids having two arcs going towards the same building as inputs being on top of each other.
 
-#1 A building definition can have FunctionMinimum
+#1 A building definition can have Boosters
 
-#2 All building's functions are displayed on toolbar panel & building panel
-
-#3 Some resources are not automatically filled from imports & do not automatically fill exports
-
-#4 A building definition's Function & FunctionMinimum can have names
+#3 A building definition can specify whether its excess outputs should not be automatically exported
