@@ -13,7 +13,7 @@ import { MODIFIER_MIN, MODIFIER_MAX } from "../../../../shared/modifierLimits";
 let panelEl: HTMLElement | null = null;
 let previewP5: p5 | null = null;
 let previewContainer: HTMLElement | null = null;
-let currentDraw: { code: string; floorColor: [number, number, number] } | null = null;
+let currentDraw: { code: string; floorColor: [number, number, number]; showFloor: boolean } | null = null;
 
 function ensurePreviewP5(parent: HTMLElement) {
   if (previewP5) {
@@ -48,14 +48,16 @@ function ensurePreviewP5(parent: HTMLElement) {
       p.noStroke();
 
       p.translate(0, BLOCK_SIZE * 0.3, 0);
-      drawFloor(p, BLOCK_SIZE, currentDraw.floorColor);
+      if (currentDraw.showFloor) {
+        drawFloor(p, BLOCK_SIZE, currentDraw.floorColor);
+      }
       const commands = parseCommands(currentDraw.code);
       applyCommands(p, commands);
     };
   });
 }
 
-export function showBuildingPanel({ name, code, buildingFunction, modifiedOutputs, exports, imports, locationProperties, modifierProperties, floorColor, location, onAddInputConnection, onDestroy }: {
+export function showBuildingPanel({ name, code, buildingFunction, modifiedOutputs, exports, imports, locationProperties, modifierProperties, floorColor, showFloor, location, onAddInputConnection, onDestroy }: {
   name: string,
   code: string,
   buildingFunction: BuildingFunction,
@@ -65,6 +67,7 @@ export function showBuildingPanel({ name, code, buildingFunction, modifiedOutput
   locationProperties?: { [_: string]: number },
   modifierProperties?: string[],
   floorColor: [number, number, number],
+  showFloor?: boolean,
   location: BuildingLocation,
   onAddInputConnection?: (resourceType: string) => void,
   onDestroy?: () => void
@@ -159,7 +162,7 @@ export function showBuildingPanel({ name, code, buildingFunction, modifiedOutput
   document.getElementById("canvas-container")!.appendChild(panelEl);
 
   // Set draw data and render
-  currentDraw = { code, floorColor };
+  currentDraw = { code, floorColor, showFloor: showFloor !== false };
   ensurePreviewP5(previewContainer);
   previewP5!.redraw();
 }

@@ -8,9 +8,8 @@ import { BuildingConnection, BuildingLocation, Location, PossibleConnection, Sek
 import { getResourceColor, getResourceIcon } from "../resources";
 import { buildingDefinitions } from "./buildings/buildings";
 import {showBuildingPanel, hideBuildingPanel} from "./buildings/buildingPanel.ui";
-import {updateSektorStatePanel, onImportHover} from "./sektorStatePanel.ui";
+import {updateSektorStatePanel, onImportHover, onLeave} from "./sektorStatePanel.ui";
 import { getSektorData, saveSektorData } from "./sektor.api";
-import { xMarkIcon } from "../icons";
 import { initPropertyToggler, getSelectedProperty } from "./propertyToggler.ui";
 import { propertyDefinitions } from "../properties";
 import { MODIFIER_MIN, MODIFIER_MAX } from "../../../shared/modifierLimits";
@@ -395,6 +394,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
     locationProperties: locations[placed.location.x]?.[placed.location.y]?.properties,
     modifierProperties: buildingDefinitions.find(definition => definition.name === placed.type)?.outputModifiers.map(modifier => modifier.property),
     floorColor: floorColor,
+    showFloor: buildingDefinitions.find(definition => definition.name === placed.type)?.properties.showFloor,
     location: placed.location,
     onAddInputConnection: (resourceType: string) => {
       enterSelectMode(placed.location, resourceType)
@@ -826,7 +826,7 @@ initToolbar();
 initPropertyToggler();
 onImportHover(resourceType => { hoveredImportResource = resourceType; });
 if (!isTestMode) {
-  addCloseButton();
+  onLeave(() => { window.location.href = "/"; });
 }
 if (!isTestMode) {
   loadSavedState();
@@ -834,14 +834,4 @@ if (!isTestMode) {
 if (isTestMode) {
   (window as any).updateSektorStatePanel = updateSektorStatePanel;
   (window as any).showBuildingPanel = showBuildingPanel;
-}
-
-function addCloseButton() {
-  const button = document.createElement("button");
-  button.id = "sektor-close";
-  button.innerHTML = xMarkIcon;
-  button.addEventListener("click", () => {
-    window.location.href = "/";
-  });
-  document.body.appendChild(button);
 }
