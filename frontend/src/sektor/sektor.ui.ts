@@ -825,9 +825,7 @@ new p5(sektorUi);
 initToolbar();
 initPropertyToggler();
 onImportHover(resourceType => { hoveredImportResource = resourceType; });
-if (!isTestMode) {
-  onLeave(() => { window.location.href = "/"; });
-}
+onLeave(() => { window.location.href = "/"; });
 if (!isTestMode) {
   loadSavedState();
 }
