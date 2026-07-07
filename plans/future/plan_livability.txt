@@ -50,4 +50,4 @@ This avoids having two arcs going towards the same building as inputs being on t
         - building with a connected booster increases output by the boosting amount specified
         - a booster input cannot be increased beyond the maximum specified amount
 
-#3 A building definition can specify whether its excess outputs should not be automatically exported
+#3 A building definition can specify whether its excess outputs should be automatically exported
