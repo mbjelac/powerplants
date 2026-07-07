@@ -100,11 +100,11 @@
     - in top left (above toolbar) should be moved inside status panel and placed in bottom right
     - should be labelled "Leave"
 
-#10 Location property overlay toggler labelled more clearly
-- put location property overlay toggler in own panel
+#10 [done] Location property overlay toggler labelled more clearly
+- [done] put location property overlay toggler in own panel
     - panel title: "Geo survey"
     - floating on map in the bottom left corner with small margin from edge like building panel
-- building toolbar should also be enclosed in a panel
+- [done] building toolbar should also be enclosed in a panel
     - panel title: "Construction"
     - building toolbar panel should be only as high as needed to display 6 buildings
     - floating on map in the bottom left corner with small margin from edge like building panel

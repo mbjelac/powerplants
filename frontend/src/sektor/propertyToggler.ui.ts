@@ -15,12 +15,17 @@ export function initPropertyToggler() {
   const panel = document.createElement("div");
   panel.id = "property-toggler";
 
+  const title = document.createElement("div");
+  title.className = "panel-title";
+  title.textContent = "Geo survey";
+  panel.appendChild(title);
+
   for (const property of propertyDefinitions) {
     const button = createToggleButton(property);
     panel.appendChild(button);
   }
 
-  document.getElementById("toolbar")!.appendChild(panel);
+  document.getElementById("left-panels")!.appendChild(panel);
   updateSelection();
 }
 
