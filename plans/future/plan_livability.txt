@@ -43,11 +43,27 @@ This avoids having two arcs going towards the same building as inputs being on t
             - if Boosters section does not exist, building definition boosters is empty
         - Booster = { input: ResourceThroughput; outputBoost: ResourceThroughput[]; }
         - all building's booster inputs show up in BuildingState.buildingFunction as regular inputs
+        - booster inputs can be connected to other buildings outputs of same resource type
     - create Sektor tests which verify:
         - building with boosters does not have to connect them
         - initial booster input amount is 0
         - sektor imports are not increased with unconnected booster amounts
         - building with a connected booster increases output by the boosting amount specified
+            - extract calculation of total boost amount to unit and add thorough unit tests for various input amounts & boost factors
         - a booster input cannot be increased beyond the maximum specified amount
+- display booster inputs in the toolbar building panel
+    - display booster inputs beneath the inputs & outputs columns by separating them with a horizontal line
+    - header: "Improvements +"
+    - each booster input is displayed in one row in the same way as regular inputs are, with its maximum amount as the amount value
+- display booster inputs in the selected building panel
+    - display booster inputs beneath regular inputs in the same column using same style
+    - prepend "+ " to each resource name
+    - display current booster amount & maximum amount in amount column as: <currentAmount> / <maximumAmount>
+    - do not display any value in the import column
 
-#3 A building definition can specify whether its excess outputs should be automatically exported
+#2 A building definition can specify whether its excess outputs should be automatically exported
+- when a building definition has property autoExport=false the excess outputs are not counted towards sektor exports
+    - create Sektor tests which verify:
+        - sektor state does not have export of resource X if building with excess output of resource X has autoExport=false
+    - building panel of building with autoExport=false does not display export header
+        - instead, display heroicon arrow-up-circle with tooltip "Available"
