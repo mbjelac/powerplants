@@ -142,8 +142,8 @@ pri4 s(20,20,20) c(#4f0515)
 
 ## Function
 
-EnergyElectrical 1
-Water 1
+EnergyElectric 1
+WaterPottable 1
 WorkEducational 1
 =
 HealthMental 3
