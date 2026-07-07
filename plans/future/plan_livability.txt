@@ -39,3 +39,10 @@ Multiple outputs:
 If a building has multiple outputs in it's Function, the arcs for those outpus are anchored off the center of the building floor.
 This avoids having two arcs going towards the same building as inputs being on top of each other.
 
+#1 A building definition can have FunctionMinimum
+
+#2 All building's functions are displayed on toolbar panel & building panel
+
+#3 Some resources are not automatically filled from imports & do not automatically fill exports
+
+#4 A building definition's Function & FunctionMinimum can have names
