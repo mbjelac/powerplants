@@ -8,6 +8,7 @@ import { BuildingConnection, BuildingLocation, Location, PossibleConnection, Sek
 import { getResourceColor, getResourceIcon } from "../resources";
 import { buildingDefinitions } from "./buildings/buildings";
 import {showBuildingPanel, hideBuildingPanel} from "./buildings/buildingPanel.ui";
+import { BoosterInputDisplay } from "./buildingFunctionDisplay.ui";
 import {updateSektorStatePanel, onImportHover, onLeave} from "./sektorStatePanel.ui";
 import { getSektorData, saveSektorData } from "./sektor.api";
 import { initPropertyToggler, getSelectedProperty } from "./propertyToggler.ui";
@@ -389,6 +390,14 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
   }
   selectedBuildingLocation = placed.location;
   displayedConnections = { connections: buildingState.inputConnections, buildingLocation: placed.location, labels, outputConnections: buildingState.outputConnections, outputLabels };
+  const definition = buildingDefinitions.find(definition => definition.name === placed.type);
+  const boosters: BoosterInputDisplay[] = (definition?.boosters ?? []).map(booster => ({
+    name: booster.input.name,
+    maxAmount: booster.input.value,
+    currentAmount: buildingState.inputConnections
+      .filter(connection => connection.resourceType === booster.input.name)
+      .reduce((sum, connection) => sum + connection.amount, 0),
+  }));
   showBuildingPanel({
     name: placed.type,
     code: code,
@@ -396,10 +405,11 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
     modifiedOutputs: buildingState.modifiedOutputs,
     exports: buildingState.exports,
     imports: buildingState.imports,
+    boosters: boosters,
     locationProperties: locations[placed.location.x]?.[placed.location.y]?.properties,
-    modifierProperties: buildingDefinitions.find(definition => definition.name === placed.type)?.outputModifiers.map(modifier => modifier.property),
+    modifierProperties: definition?.outputModifiers.map(modifier => modifier.property),
     floorColor: floorColor,
-    showFloor: buildingDefinitions.find(definition => definition.name === placed.type)?.properties.showFloor,
+    showFloor: definition?.properties.showFloor,
     location: placed.location,
     onAddInputConnection: (resourceType: string) => {
       enterSelectMode(placed.location, resourceType)

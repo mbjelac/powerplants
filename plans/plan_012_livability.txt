@@ -55,7 +55,7 @@ This avoids having two arcs going towards the same building as inputs being on t
     - display booster inputs beneath the inputs & outputs columns by separating them with a horizontal line
     - header: "Improvements +"
     - each booster input is displayed in one row in the same way as regular inputs are, with its maximum amount as the amount value
-- display booster inputs in the selected building panel
+- [done] display booster inputs in the selected building panel
     - display booster inputs beneath regular inputs in the same column using same style
     - prepend "+ " to each resource name
     - display current booster amount & maximum amount in amount column as: <currentAmount> / <maximumAmount>

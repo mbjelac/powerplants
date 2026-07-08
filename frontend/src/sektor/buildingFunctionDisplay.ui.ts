@@ -3,17 +3,27 @@ import { getResourceIcon } from "../resources";
 import { Booster, BuildingFunction, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
 import { arrowDownTrayIcon, arrowUpTrayIcon, linkIcon, arrowRightIcon } from "../icons";
 
-export function createFunctionDisplay({ buildingFunction, modifiedOutputs, imports, exports, onAddInputConnection }: {
+export interface BoosterInputDisplay {
+  name: string;
+  currentAmount: number;
+  maxAmount: number;
+}
+
+export function createFunctionDisplay({ buildingFunction, modifiedOutputs, imports, exports, boosters, onAddInputConnection }: {
   buildingFunction: BuildingFunction,
   modifiedOutputs?: ResourceThroughput[],
   imports: ResourceThroughput[],
   exports?: ResourceThroughput[],
+  boosters?: BoosterInputDisplay[],
   onAddInputConnection?: (resourceType: string) => void
 }): HTMLElement {
   const functionDisplay = document.createElement("div");
   functionDisplay.className = "bf-function";
 
-  functionDisplay.appendChild(createInputsTable({ inputs: buildingFunction.inputs, imports: imports, onAddConnection: onAddInputConnection }));
+  const boosterNames = new Set((boosters ?? []).map(booster => booster.name));
+  const regularInputs = buildingFunction.inputs.filter(input => !boosterNames.has(input.name));
+
+  functionDisplay.appendChild(createInputsTable({ inputs: regularInputs, imports: imports, boosters: boosters, onAddConnection: onAddInputConnection }));
 
   const arrowEl = document.createElement("div");
   arrowEl.className = "bf-arrow";
@@ -60,9 +70,10 @@ export function createBoosterList(boosters: Booster[]): HTMLElement {
   return boosterSection;
 }
 
-function createInputsTable({ inputs, imports, onAddConnection }: {
+function createInputsTable({ inputs, imports, boosters, onAddConnection }: {
   inputs: ResourceThroughput[],
   imports: ResourceThroughput[],
+  boosters?: BoosterInputDisplay[],
   onAddConnection?: (resourceType: string) => void
 }): HTMLElement {
   const table = document.createElement("div");
@@ -129,6 +140,42 @@ function createInputsTable({ inputs, imports, onAddConnection }: {
     if (onAddConnection) {
       row.classList.add("bf-input-clickable");
       row.addEventListener("click", () => onAddConnection(input.name));
+    }
+
+    table.appendChild(row);
+  }
+
+  for (const booster of boosters ?? []) {
+    const row = document.createElement("div");
+    row.className = "bf-inputs-row";
+
+    if (onAddConnection) {
+      const connectCell = document.createElement("div");
+      connectCell.className = "bf-inputs-cell bf-inputs-connect";
+      connectCell.innerHTML = linkIcon;
+      row.appendChild(connectCell);
+    }
+
+    const icon = getResourceIcon(booster.name);
+    const resourceCell = document.createElement("div");
+    resourceCell.className = "bf-inputs-cell";
+    resourceCell.textContent = `+ ${booster.name} ${icon ?? ""}`;
+    row.appendChild(resourceCell);
+
+    const amountCell = document.createElement("div");
+    amountCell.className = "bf-inputs-cell bf-inputs-amount";
+    amountCell.textContent = `${booster.currentAmount} / ${booster.maxAmount}`;
+    row.appendChild(amountCell);
+
+    if (onAddConnection) {
+      const importCell = document.createElement("div");
+      importCell.className = "bf-inputs-cell bf-inputs-import";
+      row.appendChild(importCell);
+    }
+
+    if (onAddConnection) {
+      row.classList.add("bf-input-clickable");
+      row.addEventListener("click", () => onAddConnection(booster.name));
     }
 
     table.appendChild(row);
