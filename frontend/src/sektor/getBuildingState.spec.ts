@@ -16,6 +16,7 @@ const testDefinitions: BuildingDefinition[] = [
       ],
     },
     outputModifiers: [],
+    boosters: [],
     properties: {},
   },
 ];
@@ -69,6 +70,7 @@ describe("getBuildingState", () => {
           outputs: [{ name: "Wheat", value: 5 }],
         },
         outputModifiers: [],
+    boosters: [],
     properties: {},
       },
     ];
@@ -95,6 +97,7 @@ describe("getBuildingState", () => {
           outputs: [{ name: "Wheat", value: 5 }],
         },
         outputModifiers: [],
+        boosters: [],
         properties: {},
       },
     ];
@@ -121,6 +124,7 @@ describe("getBuildingState", () => {
           outputs: [{ name: "Wheat", value: 5 }],
         },
         outputModifiers: [],
+        boosters: [],
         properties: {},
       },
     ];

@@ -11,6 +11,7 @@ const testDefinitions: BuildingDefinition[] = [
       outputs: [{ name: "Flour", value: 3 }],
     },
     outputModifiers: [],
+    boosters: [],
     properties: {},
   },
   {
@@ -21,6 +22,7 @@ const testDefinitions: BuildingDefinition[] = [
       outputs: [{ name: "Wheat", value: 5 }],
     },
     outputModifiers: [],
+    boosters: [],
     properties: {},
   },
 ];
@@ -119,6 +121,7 @@ describe("changeConnectionAmount", () => {
           outputs: [{ name: "Flour", value: 3 }],
         },
         outputModifiers: [],
+    boosters: [],
     properties: {},
       },
       {
@@ -129,6 +132,7 @@ describe("changeConnectionAmount", () => {
           outputs: [{ name: "Wheat", value: 3 }],
         },
         outputModifiers: [],
+    boosters: [],
     properties: {},
       },
     ];

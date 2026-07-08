@@ -11,6 +11,7 @@ const testDefinitions: BuildingDefinition[] = [
       outputs: [{ name: "Flour", value: 3 }],
     },
     outputModifiers: [],
+    boosters: [],
     properties: {},
   },
   {
@@ -21,6 +22,7 @@ const testDefinitions: BuildingDefinition[] = [
       outputs: [{ name: "Wheat", value: 5 }],
     },
     outputModifiers: [],
+    boosters: [],
     properties: {},
   },
   {
@@ -31,6 +33,7 @@ const testDefinitions: BuildingDefinition[] = [
       outputs: [{ name: "Water", value: 4 }],
     },
     outputModifiers: [],
+    boosters: [],
     properties: {},
   },
 ];

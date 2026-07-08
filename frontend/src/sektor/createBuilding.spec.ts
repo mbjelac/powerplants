@@ -11,6 +11,7 @@ const testDefinitions: BuildingDefinition[] = [
       outputs: [{ name: "Flour", value: 3 }],
     },
     outputModifiers: [],
+    boosters: [],
     properties: {},
   },
 ];

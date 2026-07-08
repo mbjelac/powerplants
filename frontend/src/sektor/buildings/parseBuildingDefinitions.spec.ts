@@ -28,6 +28,7 @@ describe("parseBuildingDefinitions", () => {
       renderingCode: "box s(10,10,10)",
       buildingFunction: { inputs: [], outputs: [] },
       outputModifiers: [],
+      boosters: [],
       properties: {},
     }]);
   });
@@ -254,6 +255,7 @@ describe("parseBuildingDefinitions", () => {
           outputs: [{ name: "Steam", value: 1 }],
         },
         outputModifiers: [],
+        boosters: [],
         properties: {},
       },
       {
@@ -264,6 +266,7 @@ describe("parseBuildingDefinitions", () => {
           outputs: [{ name: "Steel", value: 3 }],
         },
         outputModifiers: [],
+        boosters: [],
         properties: {},
       },
     ]);
@@ -344,6 +347,83 @@ describe("parseBuildingDefinitions", () => {
 
     expect(result[0].outputModifiers).toEqual([
       { resource: "Crop", property: "soil" },
+    ]);
+  });
+
+  it("returns empty boosters when no Boosters section exists", () => {
+    const result = parseBuildingDefinitions([
+      "# Factory",
+      "## Render",
+      "```",
+      "box s(10,10,10)",
+      "```",
+    ]);
+
+    expect(result[0].boosters).toEqual([]);
+  });
+
+  it("parses a booster with a single output boost", () => {
+    const result = parseBuildingDefinitions([
+      "# Habitat",
+      "## Render",
+      "```",
+      "box s(10,10,10)",
+      "```",
+      "## Boosters",
+      "WorkOptimization 5 = EnergyElectrical 2",
+    ]);
+
+    expect(result[0].boosters).toEqual([
+      {
+        input: { name: "WorkOptimization", value: 5 },
+        outputBoost: [{ name: "EnergyElectrical", value: 2 }],
+      },
+    ]);
+  });
+
+  it("parses multiple boosters", () => {
+    const result = parseBuildingDefinitions([
+      "# Habitat",
+      "## Render",
+      "```",
+      "box s(10,10,10)",
+      "```",
+      "## Boosters",
+      "HealthMental 3 = Work 1",
+      "HealthSocial 4 = Work 2",
+    ]);
+
+    expect(result[0].boosters).toEqual([
+      {
+        input: { name: "HealthMental", value: 3 },
+        outputBoost: [{ name: "Work", value: 1 }],
+      },
+      {
+        input: { name: "HealthSocial", value: 4 },
+        outputBoost: [{ name: "Work", value: 2 }],
+      },
+    ]);
+  });
+
+  it("ignores blank and malformed lines in boosters section", () => {
+    const result = parseBuildingDefinitions([
+      "# Habitat",
+      "## Render",
+      "```",
+      "box s(10,10,10)",
+      "```",
+      "## Boosters",
+      "",
+      "some random text",
+      "WorkOptimization 5 = EnergyElectrical 2",
+      "",
+    ]);
+
+    expect(result[0].boosters).toEqual([
+      {
+        input: { name: "WorkOptimization", value: 5 },
+        outputBoost: [{ name: "EnergyElectrical", value: 2 }],
+      },
     ]);
   });
 

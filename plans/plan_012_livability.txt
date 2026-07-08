@@ -28,7 +28,7 @@ If a building has multiple outputs in it's Function, the arcs for those outputs 
 This avoids having two arcs going towards the same building as inputs being on top of each other.
 
 #1 A building definition can have Boosters
-- a building definition can have an optional ## Boosters section
+- [done] a building definition can have an optional ## Boosters section
     - within that section each "booster" is defined as an input to the building with its maximum amount and how much each point boosts what output resource of that building
         - example:
                 ## Boosters

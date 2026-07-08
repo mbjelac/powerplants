@@ -16,6 +16,7 @@ const testDefinitions: BuildingDefinition[] = [
       ],
     },
     outputModifiers: [],
+    boosters: [],
     properties: {},
   },
   {
@@ -32,6 +33,7 @@ const testDefinitions: BuildingDefinition[] = [
       ],
     },
     outputModifiers: [],
+    boosters: [],
     properties: {},
   },
 ];
@@ -133,6 +135,7 @@ const statusDefinitions: BuildingDefinition[] = [
       ],
     },
     outputModifiers: [],
+    boosters: [],
     properties: {},
   },
 ];
@@ -227,6 +230,7 @@ const modifierDefinitions: BuildingDefinition[] = [
     outputModifiers: [
       { resource: "Energy", property: "insolation" },
     ],
+    boosters: [],
     properties: {},
   },
   {
@@ -241,6 +245,7 @@ const modifierDefinitions: BuildingDefinition[] = [
       ],
     },
     outputModifiers: [],
+    boosters: [],
     properties: {},
   },
 ];

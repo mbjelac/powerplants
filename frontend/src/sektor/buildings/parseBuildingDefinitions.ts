@@ -14,11 +14,17 @@ export interface OutputModifier {
   property: string;
 }
 
+export interface Booster {
+  input: ResourceThroughput;
+  outputBoost: ResourceThroughput[];
+}
+
 export interface BuildingDefinition {
   name: string;
   renderingCode: string;
   buildingFunction: BuildingFunction;
   outputModifiers: OutputModifier[];
+  boosters: Booster[];
   properties: BuildingProperties;
 }
 
@@ -30,7 +36,8 @@ export function parseBuildingDefinitions(lines: string[]): BuildingDefinition[] 
   let codeLines: string[] = [];
   let functionLines: string[] = [];
   let propertyLines: string[] = [];
-  let section: "none" | "render" | "function" | "properties" = "none";
+  let boosterLines: string[] = [];
+  let section: "none" | "render" | "function" | "properties" | "boosters" = "none";
 
   function pushBuilding() {
     if (currentName && codeLines.length > 0) {
@@ -40,6 +47,7 @@ export function parseBuildingDefinitions(lines: string[]): BuildingDefinition[] 
         renderingCode: codeLines.join("\n"),
         buildingFunction: parsed.buildingFunction,
         outputModifiers: parsed.outputModifiers,
+        boosters: parseBoosters(boosterLines),
         properties: parseProperties(propertyLines),
       });
     }
@@ -53,6 +61,7 @@ export function parseBuildingDefinitions(lines: string[]): BuildingDefinition[] 
       codeLines = [];
       functionLines = [];
       propertyLines = [];
+      boosterLines = [];
       inCodeBlock = false;
       section = "none";
       continue;
@@ -73,6 +82,11 @@ export function parseBuildingDefinitions(lines: string[]): BuildingDefinition[] 
       continue;
     }
 
+    if (line.match(/^##\s+Boosters/)) {
+      section = "boosters";
+      continue;
+    }
+
     if (line.trim().startsWith("```")) {
       inCodeBlock = !inCodeBlock;
       continue;
@@ -82,6 +96,8 @@ export function parseBuildingDefinitions(lines: string[]): BuildingDefinition[] 
       codeLines.push(line);
     } else if (section === "properties") {
       propertyLines.push(line);
+    } else if (section === "boosters") {
+      boosterLines.push(line);
     } else if (section === "function") {
       functionLines.push(line);
     }
@@ -90,6 +106,21 @@ export function parseBuildingDefinitions(lines: string[]): BuildingDefinition[] 
   pushBuilding();
 
   return buildings;
+}
+
+function parseBoosters(lines: string[]): Booster[] {
+  const boosters: Booster[] = [];
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    const match = trimmed.match(/^(\S+)\s+(\d+)\s*=\s*(\S+)\s+(\d+)$/);
+    if (!match) continue;
+    boosters.push({
+      input: { name: match[1], value: parseInt(match[2]) },
+      outputBoost: [{ name: match[3], value: parseInt(match[4]) }],
+    });
+  }
+  return boosters;
 }
 
 function parseProperties(lines: string[]): BuildingProperties {

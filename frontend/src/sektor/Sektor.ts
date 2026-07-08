@@ -1,6 +1,7 @@
 
 import { BuildingDefinition, BuildingFunction, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
 import { BuildingLocation, BuildingCreation, Connection, RestrictionsRequirements, Location } from "../../../shared/sektorData";
+import { calculateBoost } from "./calculateBoost";
 
 export type { BuildingLocation, BuildingCreation, Connection, RestrictionsRequirements, Location };
 
@@ -105,8 +106,12 @@ export class Sektor {
       name: output.name,
       value: this.getRemainingExport(location, output.name),
     }));
+    const buildingFunction: BuildingFunction = {
+      inputs: [...def.buildingFunction.inputs, ...def.boosters.map(booster => ({ ...booster.input }))],
+      outputs: def.buildingFunction.outputs,
+    };
     return {
-      buildingFunction: def.buildingFunction,
+      buildingFunction,
       modifiedOutputs,
       exports,
       imports,
@@ -148,27 +153,42 @@ export class Sektor {
     return def?.buildingFunction?.inputs ?? [];
   }
 
+  private getConnectableInputs(type: string): ResourceThroughput[] {
+    const def = this.buildingDefinitions.find(b => b.name === type);
+    if (!def) return [];
+    return [...def.buildingFunction.inputs, ...def.boosters.map(booster => ({ ...booster.input }))];
+  }
+
   private getOutputs(type: string, location: BuildingLocation): ResourceThroughput[] {
     const def = this.buildingDefinitions.find(b => b.name === type);
     if (!def) return [];
     const locationProperties = this.locations[location.x]?.[location.y]?.properties ?? {};
+    const connectedBoosterInputAmounts = def.boosters.map(booster => ({
+      name: booster.input.name,
+      value: this.getConnectedInputAmount(location, booster.input.name),
+    }));
+    const boosts = calculateBoost(def.boosters, connectedBoosterInputAmounts);
     return (def.buildingFunction?.outputs ?? []).map(output => {
       const modifier = def.outputModifiers.find(modifier => modifier.resource === output.name);
-      if (!modifier) return output;
-      const propertyValue = locationProperties[modifier.property] ?? 0;
-      return { name: output.name, value: Math.max(0, output.value + propertyValue) };
+      const propertyValue = modifier ? (locationProperties[modifier.property] ?? 0) : 0;
+      const modifiedValue = modifier ? Math.max(0, output.value + propertyValue) : output.value;
+      const boost = boosts.find(boost => boost.name === output.name)?.value ?? 0;
+      return { name: output.name, value: modifiedValue + boost };
     });
+  }
+
+  private getConnectedInputAmount(location: BuildingLocation, resourceType: string): number {
+    return this.connections
+      .filter(c => c.target.x === location.x && c.target.y === location.y && c.resourceType === resourceType)
+      .reduce((sum, c) => sum + c.amount, 0);
   }
 
   private getRemainingImport(location: BuildingLocation, resourceType: string): number {
     const building = this.findBuildingAt(location);
     if (!building) return 0;
-    const input = this.getInputs(building.type).find(i => i.name === resourceType);
+    const input = this.getConnectableInputs(building.type).find(i => i.name === resourceType);
     if (!input) return 0;
-    const connectedAmount = this.connections
-      .filter(c => c.target.x === location.x && c.target.y === location.y && c.resourceType === resourceType)
-      .reduce((sum, c) => sum + c.amount, 0);
-    return input.value - connectedAmount;
+    return input.value - this.getConnectedInputAmount(location, resourceType);
   }
 
   private getRemainingExport(location: BuildingLocation, resourceType: string): number {
@@ -205,7 +225,7 @@ export class Sektor {
     const sourceBuilding = this.findBuildingAt(source);
     if (!sourceBuilding) return { success: false, error: "sourceBuildingNotFound" };
 
-    const targetInput = this.getInputs(targetBuilding.type).find(input => input.name === resourceType);
+    const targetInput = this.getConnectableInputs(targetBuilding.type).find(input => input.name === resourceType);
     if (!targetInput) return { success: false, error: "targetHasNoMatchingInput" };
 
     const sourceOutput = this.getOutputs(sourceBuilding.type, source).find(output => output.name === resourceType);
@@ -237,7 +257,7 @@ export class Sektor {
 
     const targetBuilding = this.findBuildingAt(target);
     if (!targetBuilding) return { success: false, error: "targetBuildingNotFound", newAmount: connection.amount };
-    const targetInput = this.getInputs(targetBuilding.type).find(input => input.name === resourceType);
+    const targetInput = this.getConnectableInputs(targetBuilding.type).find(input => input.name === resourceType);
     if (!targetInput) return { success: false, error: "targetHasNoMatchingInput", newAmount: connection.amount };
     const totalInputConnected = this.connections
       .filter(c => c.target.x === target.x && c.target.y === target.y && c.resourceType === resourceType)
