@@ -1,6 +1,6 @@
 
 import { getResourceIcon } from "../resources";
-import { BuildingFunction, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
+import { Booster, BuildingFunction, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
 import { arrowDownTrayIcon, arrowUpTrayIcon, linkIcon, arrowRightIcon } from "../icons";
 
 export function createFunctionDisplay({ buildingFunction, modifiedOutputs, imports, exports, onAddInputConnection }: {
@@ -23,6 +23,41 @@ export function createFunctionDisplay({ buildingFunction, modifiedOutputs, impor
   functionDisplay.appendChild(createOutputColumn(buildingFunction.outputs, modifiedOutputs, exports));
 
   return functionDisplay;
+}
+
+export function createBoosterList(boosters: Booster[]): HTMLElement {
+  const boosterSection = document.createElement("div");
+  boosterSection.className = "bf-boosters";
+
+  const header = document.createElement("div");
+  header.className = "bf-boosters-header";
+  header.textContent = "Improvements +";
+  boosterSection.appendChild(header);
+
+  const table = document.createElement("div");
+  table.className = "bf-inputs-table bf-inputs-table-simple";
+
+  for (const booster of boosters) {
+    const row = document.createElement("div");
+    row.className = "bf-inputs-row";
+
+    const icon = getResourceIcon(booster.input.name);
+    const resourceCell = document.createElement("div");
+    resourceCell.className = "bf-inputs-cell";
+    resourceCell.textContent = `${booster.input.name} ${icon ?? ""}`;
+    row.appendChild(resourceCell);
+
+    const amountCell = document.createElement("div");
+    amountCell.className = "bf-inputs-cell bf-inputs-amount";
+    amountCell.textContent = `${booster.input.value}`;
+    row.appendChild(amountCell);
+
+    table.appendChild(row);
+  }
+
+  boosterSection.appendChild(table);
+
+  return boosterSection;
 }
 
 function createInputsTable({ inputs, imports, onAddConnection }: {

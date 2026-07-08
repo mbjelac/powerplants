@@ -51,7 +51,7 @@ This avoids having two arcs going towards the same building as inputs being on t
         - building with a connected booster increases output by the boosting amount specified
             - extract calculation of total boost amount to unit and add thorough unit tests for various input amounts & boost factors
         - a booster input cannot be increased beyond the maximum specified amount
-- display booster inputs in the toolbar building panel
+- [done] display booster inputs in the toolbar building panel
     - display booster inputs beneath the inputs & outputs columns by separating them with a horizontal line
     - header: "Improvements +"
     - each booster input is displayed in one row in the same way as regular inputs are, with its maximum amount as the amount value

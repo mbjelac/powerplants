@@ -1,11 +1,11 @@
 import p5 from "p5";
 import {buildingDefinitions} from "./buildings/buildings";
-import {createFunctionDisplay} from "./buildingFunctionDisplay.ui";
+import {createFunctionDisplay, createBoosterList} from "./buildingFunctionDisplay.ui";
 import {parseCommands} from "../../../shared/parseCommands";
 import {applyCommands} from "../../../shared/applyCommands";
 import {drawFloor} from "../../../shared/drawFloor";
 import {BLOCK_SIZE} from "../../../shared/constants";
-import { BuildingFunction, OutputModifier } from "./buildings/parseBuildingDefinitions";
+import { Booster, BuildingFunction, OutputModifier } from "./buildings/parseBuildingDefinitions";
 import { propertyDefinitions } from "../properties";
 
 let selectedBuilding: string | null = null;
@@ -26,13 +26,17 @@ export function getBuildingCode(name: string): string | null {
 
 let toolbarFnPanel: HTMLElement | null = null;
 
-function showToolbarFunctionPanel(buildingFunction: BuildingFunction, outputModifiers: OutputModifier[], anchorEl: HTMLElement) {
+function showToolbarFunctionPanel(buildingFunction: BuildingFunction, outputModifiers: OutputModifier[], boosters: Booster[], anchorEl: HTMLElement) {
   hideToolbarFunctionPanel();
 
   toolbarFnPanel = document.createElement("div");
   toolbarFnPanel.id = "toolbar-function-panel";
 
   toolbarFnPanel.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, imports: [] }));
+
+  if (boosters.length > 0) {
+    toolbarFnPanel.appendChild(createBoosterList(boosters));
+  }
 
   if (outputModifiers.length > 0) {
     const modifierList = document.createElement("div");
@@ -113,7 +117,7 @@ export function initToolbar() {
         selectedBuilding = building.name;
         item.classList.add("selected");
         if (building.buildingFunction) {
-          showToolbarFunctionPanel(building.buildingFunction, building.outputModifiers, item);
+          showToolbarFunctionPanel(building.buildingFunction, building.outputModifiers, building.boosters, item);
         }
       }
     });
