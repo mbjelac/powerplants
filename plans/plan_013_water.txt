@@ -29,3 +29,4 @@
     - corner minisquares should be empty
     - middle edge minisquares should be either there or not depending on the neighboring square
         - if neighboring square has a river, put a minisquare on the edge towards that square
+    - if a location is on edge of map and location has only 1 river neighbor, assume river is also over the edge
