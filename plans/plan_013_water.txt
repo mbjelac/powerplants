@@ -13,7 +13,7 @@
         - 1 = river
     - river creation function starts at starting edge square and creates a meandering sequence of 1s through the matrix to reach the end square
     - creator outputs the result into the json file with matrices being output with the row array in one line, second row in the line below, etc.
-- river is displayed
+- [done] river is displayed
     - in frontend when drawing the map locations
         - if a location is a river (river matrix has 1 on that location) draw blue square on floor
 
