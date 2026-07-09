@@ -20,3 +20,12 @@
 #3 Improve river creation
 - creator should not create river squares which touch more than 2 other river squares
     - touch means having a neighboring square (same column, row index -1 or +1; same row, column index -1 or +1)
+
+#4 Improve river display
+- display a river as only part of a square
+    - locations with a river should not draw 1 blue floor square
+    - draw 3 smaller floor minisquares in a 3x3 grid
+    - center minisquare should be blue
+    - corner minisquares should be empty
+    - middle edge minisquares should be either there or not depending on the neighboring square
+        - if neighboring square has a river, put a minisquare on the edge towards that square
