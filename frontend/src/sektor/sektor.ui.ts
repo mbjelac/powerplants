@@ -519,6 +519,42 @@ function gridToWorld(gx: number, gy: number): { wx: number; wz: number } {
   };
 }
 
+// Draws a river tile as a 3x3 grid of blue mini floor squares: the centre is
+// always drawn, corners never, and each edge mini square only when the
+// neighbouring tile in that direction is also a river — so the river connects.
+// A river endpoint on the map edge (only 1 river neighbour) is assumed to
+// continue over the edge, so its off-map edge gets a mini square too.
+function drawRiverFloor(p: p5, x: number, z: number) {
+  const miniSize = BLOCK_SIZE / 3;
+  drawRiverMiniSquare(p, 0, 0, miniSize);
+  const riverContinuesOverEdge = countRiverNeighbours(x, z) === 1;
+  if (hasRiverTowards(x - 1, z, riverContinuesOverEdge)) drawRiverMiniSquare(p, -miniSize, 0, miniSize);
+  if (hasRiverTowards(x + 1, z, riverContinuesOverEdge)) drawRiverMiniSquare(p, miniSize, 0, miniSize);
+  if (hasRiverTowards(x, z - 1, riverContinuesOverEdge)) drawRiverMiniSquare(p, 0, -miniSize, miniSize);
+  if (hasRiverTowards(x, z + 1, riverContinuesOverEdge)) drawRiverMiniSquare(p, 0, miniSize, miniSize);
+}
+
+function countRiverNeighbours(x: number, z: number): number {
+  return [[x - 1, z], [x + 1, z], [x, z - 1], [x, z + 1]].filter(
+    ([nx, nz]) => river[nx]?.[nz] === 1
+  ).length;
+}
+
+function hasRiverTowards(x: number, z: number, riverContinuesOverEdge: boolean): boolean {
+  const insideMap = x >= 0 && x < GRID_SIZE && z >= 0 && z < GRID_SIZE;
+  return insideMap ? river[x][z] === 1 : riverContinuesOverEdge;
+}
+
+function drawRiverMiniSquare(p: p5, offsetX: number, offsetZ: number, miniSize: number) {
+  // Lift the mini square so it rests on top of the tile's land floor.
+  const miniHeight = miniSize * 0.15;
+  const restOnFloor = -(FLOOR_HEIGHT / 2 + miniHeight / 2);
+  p.push();
+  p.translate(offsetX, restOnFloor, offsetZ);
+  drawFloor(p, miniSize, RIVER_COLOR);
+  p.pop();
+}
+
 function rayAABB(
   ox: number, oy: number, oz: number,
   dx: number, dy: number, dz: number,
@@ -783,11 +819,10 @@ const sektorUi = (p: p5) => {
         const { wx, wz } = gridToWorld(x, z);
         p.translate(wx, 0, wz);
         const selectedProperty = getSelectedProperty();
-        const isRiver = river[x]?.[z] === 1;
-        const floorColor = isRiver
-          ? RIVER_COLOR
-          : propertyColor(selectedProperty, locations[x][z].properties[selectedProperty] ?? 0);
-        drawFloor(p, BLOCK_SIZE, floorColor);
+        drawFloor(p, BLOCK_SIZE, propertyColor(selectedProperty, locations[x][z].properties[selectedProperty] ?? 0));
+        if (river[x]?.[z] === 1) {
+          drawRiverFloor(p, x, z);
+        }
         p.pop();
       }
     }
