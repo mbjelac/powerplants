@@ -3,7 +3,7 @@
     - [done] adjust creator matrices
 - [done] left mouse drag moves the camera over the map
 
-#2 Rivers
+#2 [done] Rivers
 - [done] creator creates a river
     - pick a random location on the edge of the map for start of river
     - pick a random location on the edge of the map for end of river
