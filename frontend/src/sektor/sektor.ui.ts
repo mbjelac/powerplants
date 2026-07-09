@@ -16,7 +16,7 @@ import { propertyDefinitions } from "../properties";
 import { MODIFIER_MIN, MODIFIER_MAX } from "../../../shared/modifierLimits";
 import { trashIcon } from "../icons";
 
-const GRID_SIZE = 10;
+const GRID_SIZE = 20;
 const PANEL_FLOOR_PROPERTY = "soil";
 const isTestMode = new URLSearchParams(window.location.search).get("test") === "true";
 const sektorName = new URLSearchParams(window.location.search).get("name");
