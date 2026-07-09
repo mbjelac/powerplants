@@ -1,5 +1,16 @@
 #1 Increase map
-- map should be 20x20
-    - adjust creator matrices
+- [done] map should be 20x20
+    - [done] adjust creator matrices
 - left mouse drag moves the camera over the map
+
+#2 Rivers
+- creator creates a river
+    - pick a random location on the edge of the map for start of river
+    - pick a random location on the edge of the map for end of river
+    - a square on the map can either be a river or land
+    - creator create a matrix similar to location properties matrices but with 0 & 1
+        - 0 = land
+        - 1 = river
+    - river creation function starts at starting edge square and creates a meandering sequence of 1s through the matrix to reach the end square
+    - creator outputs the result into the json file with matrices being output with the row array in one line, second row in the line below, etc.
 
