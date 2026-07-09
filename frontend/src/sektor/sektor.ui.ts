@@ -546,11 +546,14 @@ function hasRiverTowards(x: number, z: number, riverContinuesOverEdge: boolean):
 }
 
 function drawRiverMiniSquare(p: p5, offsetX: number, offsetZ: number, miniSize: number) {
-  // Lift the mini square so it rests on top of the tile's land floor.
+  // Keep the mini square's top face at the same level as the land floor's top,
+  // lifted by a hair so it stays visible instead of z-fighting with the floor.
   const miniHeight = miniSize * 0.15;
-  const restOnFloor = -(FLOOR_HEIGHT / 2 + miniHeight / 2);
+  const lift = 0.5;
+  const atFloorLevel = (miniHeight - FLOOR_HEIGHT) / 2 - lift;
   p.push();
-  p.translate(offsetX, restOnFloor, offsetZ);
+  p.noStroke();
+  p.translate(offsetX, atFloorLevel, offsetZ);
   drawFloor(p, miniSize, RIVER_COLOR);
   p.pop();
 }
