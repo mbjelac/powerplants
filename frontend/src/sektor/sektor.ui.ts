@@ -74,6 +74,16 @@ function getLocations(): Location[][] {
   return [];
 }
 
+function getRiver(): number[][] {
+  if (sektorName) {
+    const sektorData = getSektorData(sektorName);
+    if (sektorData?.river) {
+      return sektorData.river;
+    }
+  }
+  return [];
+}
+
 function getRestrictionsRequirements() {
   if (isTestMode) {
     return {
@@ -103,6 +113,8 @@ function getRestrictionsRequirements() {
 
 const sektor = new Sektor(getLocations(), buildingDefinitions, getRestrictionsRequirements());
 const locations = sektor.getLocations();
+const river = getRiver();
+const RIVER_COLOR: [number, number, number] = [40, 120, 220];
 const placedBuildings: { type: string; location: BuildingLocation; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -771,7 +783,11 @@ const sektorUi = (p: p5) => {
         const { wx, wz } = gridToWorld(x, z);
         p.translate(wx, 0, wz);
         const selectedProperty = getSelectedProperty();
-        drawFloor(p, BLOCK_SIZE, propertyColor(selectedProperty, locations[x][z].properties[selectedProperty] ?? 0));
+        const isRiver = river[x]?.[z] === 1;
+        const floorColor = isRiver
+          ? RIVER_COLOR
+          : propertyColor(selectedProperty, locations[x][z].properties[selectedProperty] ?? 0);
+        drawFloor(p, BLOCK_SIZE, floorColor);
         p.pop();
       }
     }
