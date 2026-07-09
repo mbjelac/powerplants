@@ -1,7 +1,7 @@
 #1 Increase map
 - [done] map should be 20x20
     - [done] adjust creator matrices
-- left mouse drag moves the camera over the map
+- [done] left mouse drag moves the camera over the map
 
 #2 Rivers
 - creator creates a river
