@@ -8,4 +8,4 @@ EducationElementary 📖 #D4F4FF
 Ore 🪨 #cccccc
 HealthMental 🧠 #FFD4FA
 HealthPhysical 🫀 #F03818
-HealthSocial ☺️ #F0B618
+HealthSocial 🧑🏽‍🤝‍🧑🏽 #F0B618
