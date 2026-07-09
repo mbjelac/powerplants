@@ -17,8 +17,8 @@
     - in frontend when drawing the map locations
         - if a location is a river (river matrix has 1 on that location) draw blue square on floor
 
-#3 Improve river creation
-- creator should not create river squares which touch more than 2 other river squares
+#3 [done] Improve river creation
+- [done] creator should not create river squares which touch more than 2 other river squares
     - touch means having a neighboring square (same column, row index -1 or +1; same row, column index -1 or +1)
 
 #4 Improve river display
