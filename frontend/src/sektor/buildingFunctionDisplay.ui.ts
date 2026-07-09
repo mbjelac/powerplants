@@ -1,7 +1,7 @@
 
 import { getResourceIcon } from "../resources";
 import { Booster, BuildingFunction, ResourceThroughput } from "./buildings/parseBuildingDefinitions";
-import { arrowDownTrayIcon, arrowUpTrayIcon, linkIcon, arrowRightIcon } from "../icons";
+import { arrowDownTrayIcon, arrowUpTrayIcon, arrowUpCircleIcon, linkIcon, arrowRightIcon } from "../icons";
 
 export interface BoosterInputDisplay {
   name: string;
@@ -9,12 +9,13 @@ export interface BoosterInputDisplay {
   maxAmount: number;
 }
 
-export function createFunctionDisplay({ buildingFunction, modifiedOutputs, imports, exports, boosters, onAddInputConnection }: {
+export function createFunctionDisplay({ buildingFunction, modifiedOutputs, imports, exports, boosters, autoExport, onAddInputConnection }: {
   buildingFunction: BuildingFunction,
   modifiedOutputs?: ResourceThroughput[],
   imports: ResourceThroughput[],
   exports?: ResourceThroughput[],
   boosters?: BoosterInputDisplay[],
+  autoExport?: boolean,
   onAddInputConnection?: (resourceType: string) => void
 }): HTMLElement {
   const functionDisplay = document.createElement("div");
@@ -30,7 +31,7 @@ export function createFunctionDisplay({ buildingFunction, modifiedOutputs, impor
   arrowEl.innerHTML = arrowRightIcon;
   functionDisplay.appendChild(arrowEl);
 
-  functionDisplay.appendChild(createOutputColumn(buildingFunction.outputs, modifiedOutputs, exports));
+  functionDisplay.appendChild(createOutputColumn(buildingFunction.outputs, modifiedOutputs, exports, autoExport));
 
   return functionDisplay;
 }
@@ -184,7 +185,7 @@ function createInputsTable({ inputs, imports, boosters, onAddConnection }: {
   return table;
 }
 
-function createOutputColumn(outputs: ResourceThroughput[], modifiedOutputs?: ResourceThroughput[], exports?: ResourceThroughput[]): HTMLElement {
+function createOutputColumn(outputs: ResourceThroughput[], modifiedOutputs?: ResourceThroughput[], exports?: ResourceThroughput[], autoExport?: boolean): HTMLElement {
   const table = document.createElement("div");
   table.className = exports ? "bf-outputs-table" : "bf-outputs-table bf-outputs-table-simple";
 
@@ -209,8 +210,13 @@ function createOutputColumn(outputs: ResourceThroughput[], modifiedOutputs?: Res
   if (exports) {
     const exportHeader = document.createElement("div");
     exportHeader.className = "bf-outputs-cell bf-outputs-export-header";
-    exportHeader.innerHTML = arrowUpTrayIcon;
-    exportHeader.title = "Exported";
+    if (autoExport === false) {
+      exportHeader.innerHTML = arrowUpCircleIcon;
+      exportHeader.title = "Available";
+    } else {
+      exportHeader.innerHTML = arrowUpTrayIcon;
+      exportHeader.title = "Exported";
+    }
     headerRow.appendChild(exportHeader);
   }
 

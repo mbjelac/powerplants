@@ -27,7 +27,7 @@ Multiple outputs:
 If a building has multiple outputs in it's Function, the arcs for those outputs are anchored off the center of the building floor.
 This avoids having two arcs going towards the same building as inputs being on top of each other.
 
-#1 A building definition can have Boosters
+#1 [done] A building definition can have Boosters
 - [done] a building definition can have an optional ## Boosters section
     - within that section each "booster" is defined as an input to the building with its maximum amount and how much each point boosts what output resource of that building
         - example:
@@ -62,7 +62,7 @@ This avoids having two arcs going towards the same building as inputs being on t
     - do not display any value in the import column
 
 #2 A building definition can specify whether its excess outputs should be automatically exported
-- when a building definition has property autoExport=false the excess outputs are not counted towards sektor exports
+- [done] when a building definition has property autoExport=false the excess outputs are not counted towards sektor exports
     - create Sektor tests which verify:
         - sektor state does not have export of resource X if building with excess output of resource X has autoExport=false
     - building panel of building with autoExport=false does not display export header

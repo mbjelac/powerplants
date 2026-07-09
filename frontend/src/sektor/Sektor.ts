@@ -122,13 +122,20 @@ export class Sektor {
 
   getSektorState(): SektorState {
     const imports = this.aggregateThroughputs(this.buildings.map(building => this.getInputs(building.type)).flat());
-    const exports = this.aggregateThroughputs(this.buildings.map(building => this.getOutputs(building.type, building.location)).flat());
+    const exports = this.aggregateThroughputs(
+      this.buildings
+        .filter(building => this.isAutoExport(building.type))
+        .map(building => this.getOutputs(building.type, building.location))
+        .flat()
+    );
 
     for (const connection of this.connections) {
       const importEntry = imports.find(entry => entry.name === connection.resourceType);
       if (importEntry) importEntry.value -= connection.amount;
-      const exportEntry = exports.find(entry => entry.name === connection.resourceType);
-      if (exportEntry) exportEntry.value -= connection.amount;
+      if (this.isAutoExport(this.findBuildingAt(connection.source)?.type)) {
+        const exportEntry = exports.find(entry => entry.name === connection.resourceType);
+        if (exportEntry) exportEntry.value -= connection.amount;
+      }
     }
 
     const { importRestrictions, exportRequirements } = this.restrictionsRequirements;
@@ -183,6 +190,19 @@ export class Sektor {
       .reduce((sum, c) => sum + c.amount, 0);
   }
 
+  // A building with autoExport=false does not contribute its outputs to sektor exports:
+  // its connected outputs are consumed internally and its excess is not exported.
+  private isAutoExport(type: string | undefined): boolean {
+    const def = this.buildingDefinitions.find(b => b.name === type);
+    return def?.properties.autoExport !== false;
+  }
+
+  private getConnectedOutputAmount(location: BuildingLocation, resourceType: string): number {
+    return this.connections
+      .filter(c => c.source.x === location.x && c.source.y === location.y && c.resourceType === resourceType)
+      .reduce((sum, c) => sum + c.amount, 0);
+  }
+
   private getRemainingImport(location: BuildingLocation, resourceType: string): number {
     const building = this.findBuildingAt(location);
     if (!building) return 0;
@@ -196,10 +216,7 @@ export class Sektor {
     if (!building) return 0;
     const output = this.getOutputs(building.type, location).find(o => o.name === resourceType);
     if (!output) return 0;
-    const connectedAmount = this.connections
-      .filter(c => c.source.x === location.x && c.source.y === location.y && c.resourceType === resourceType)
-      .reduce((sum, c) => sum + c.amount, 0);
-    return output.value - connectedAmount;
+    return output.value - this.getConnectedOutputAmount(location, resourceType);
   }
 
   private isAlreadyConnected(target: BuildingLocation, source: BuildingLocation, resourceType: string): boolean {

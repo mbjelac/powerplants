@@ -7,6 +7,7 @@ export interface BuildingFunction {
 
 export interface BuildingProperties {
   showFloor?: boolean;
+  autoExport?: boolean;
 }
 
 export interface OutputModifier {
@@ -132,6 +133,9 @@ function parseProperties(lines: string[]): BuildingProperties {
     if (!match) continue;
     if (match[1] === "showFloor" && match[2] === "false") {
       props.showFloor = false;
+    }
+    if (match[1] === "autoExport" && match[2] === "false") {
+      props.autoExport = false;
     }
   }
   return props;

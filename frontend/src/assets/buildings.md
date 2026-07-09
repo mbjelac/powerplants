@@ -359,3 +359,40 @@ sph s(6,6,6) t(0,0,18) c(#9a9589) r(0,0,0)
 WorkTechnical 1
 =
 EnergyElectric 10 insolation
+
+# Stadium
+
+## Render
+
+```
+tor s(68,68,68) t(0,0,4) c(#5c82db)
+cyl s(60,60,1) t(0,0,11) c(#8cff00)
+pri3 s(21,21,1) c(#23d100) t(0,-22,12) r(-15,-4,0)
+pri3 s(21,21,1) c(#23d100) t(0,22,12) r(48,4,0)
+cyl c(#e6e6e6) s(100,100,1) t(0,0,8)
+cyl c(#e6e6e6) s(95,95,1) t(0,0,9)
+cyl c(#e6e6e6) s(90,90,1) t(0,0,10)
+sph s(1,1,1) t(-4,0,12) c(#ff0000)
+sph s(1,1,1) t(-10,-7,12) c(#ff0000)
+sph s(1,1,1) t(7,1,12) c(#ff0000)
+sph s(1,1,1) t(2,-5,12) c(#ff0000)
+sph s(1,1,1) t(9,6,12) c(#ff0000)
+sph s(1,1,1) t(5,-4,12) c(#007bff)
+sph s(1,1,1) t(1,-8,12) c(#007bff)
+sph s(1,1,1) t(-1,-8,12) c(#007bff)
+sph s(1,1,1) t(-7,8,12) c(#007bff)
+sph s(1,1,1) t(-1,6,12) c(#007bff)
+sph s(1,1,1) t(4,2,12) c(#fff700)
+sph s(1,1,1) t(-11,5,12) c(#fff700)
+```
+
+## Function
+
+EnergyElectric 10
+WorkAdministrative 3
+=
+HealthSocial 10
+
+## Properties
+
+autoExport=false

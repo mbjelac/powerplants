@@ -149,6 +149,29 @@ test("displays building panel for empty location", async ({ page }) => {
   await expectScreenshot(page, "building-panel-empty-location", "#building-panel");
 });
 
+test("displays building panel with autoExport disabled", async ({ page }) => {
+  await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
+
+  await page.evaluate(() => {
+    (window as any).showBuildingPanel({
+      name: "Reservoir",
+      code: "box s(30,30,30) t(0,0,0) c(#4488cc)",
+      buildingFunction: {
+        inputs: [{ name: "Energy", value: 3 }],
+        outputs: [{ name: "Water", value: 5 }],
+      },
+      modifiedOutputs: [{ name: "Water", value: 5 }],
+      exports: [{ name: "Water", value: 5 }],
+      imports: [{ name: "Energy", value: 3 }],
+      autoExport: false,
+      floorColor: [200, 200, 100],
+      location: { x: 0, y: 0 },
+    });
+  });
+
+  await expectScreenshot(page, "building-panel-auto-export-disabled", "#building-panel");
+});
+
 test("building panel persists after rotating the view", async ({ page }) => {
   await page.locator('#canvas-container[data-rendered="true"]').waitFor({ timeout: 5000 });
   // Place and click a building

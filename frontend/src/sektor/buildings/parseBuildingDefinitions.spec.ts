@@ -182,6 +182,24 @@ describe("parseBuildingDefinitions", () => {
     expect(result[0].properties).toEqual({ showFloor: false });
   });
 
+  it("parses autoExport=false property", () => {
+    const result = parseBuildingDefinitions([
+      "# Reservoir",
+      "## Render",
+      "```",
+      "box s(10,10,10)",
+      "```",
+      "## Function",
+      "Energy 3",
+      "=",
+      "Water 5",
+      "## Properties",
+      "autoExport=false",
+    ]);
+
+    expect(result[0].properties).toEqual({ autoExport: false });
+  });
+
   it("returns empty properties when no Properties section exists", () => {
     const result = parseBuildingDefinitions([
       "# Factory",

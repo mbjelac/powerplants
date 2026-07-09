@@ -406,6 +406,7 @@ function openBuildingPanel(placed: { type: string; location: BuildingLocation; c
     exports: buildingState.exports,
     imports: buildingState.imports,
     boosters: boosters,
+    autoExport: definition?.properties.autoExport,
     locationProperties: locations[placed.location.x]?.[placed.location.y]?.properties,
     modifierProperties: definition?.outputModifiers.map(modifier => modifier.property),
     floorColor: floorColor,

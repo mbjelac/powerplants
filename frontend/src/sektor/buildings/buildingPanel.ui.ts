@@ -57,7 +57,7 @@ function ensurePreviewP5(parent: HTMLElement) {
   });
 }
 
-export function showBuildingPanel({ name, code, buildingFunction, modifiedOutputs, exports, imports, boosters, locationProperties, modifierProperties, floorColor, showFloor, location, onAddInputConnection, onDestroy }: {
+export function showBuildingPanel({ name, code, buildingFunction, modifiedOutputs, exports, imports, boosters, autoExport, locationProperties, modifierProperties, floorColor, showFloor, location, onAddInputConnection, onDestroy }: {
   name: string,
   code: string,
   buildingFunction: BuildingFunction,
@@ -65,6 +65,7 @@ export function showBuildingPanel({ name, code, buildingFunction, modifiedOutput
   exports?: ResourceThroughput[],
   imports: ResourceThroughput[],
   boosters?: BoosterInputDisplay[],
+  autoExport?: boolean,
   locationProperties?: { [_: string]: number },
   modifierProperties?: string[],
   floorColor: [number, number, number],
@@ -112,7 +113,7 @@ export function showBuildingPanel({ name, code, buildingFunction, modifiedOutput
   panelEl.appendChild(header);
 
   if (buildingFunction.inputs.length > 0 || buildingFunction.outputs.length > 0) {
-    panelEl.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, modifiedOutputs: modifiedOutputs, imports: imports, exports: exports, boosters: boosters, onAddInputConnection: onAddInputConnection }));
+    panelEl.appendChild(createFunctionDisplay({ buildingFunction: buildingFunction, modifiedOutputs: modifiedOutputs, imports: imports, exports: exports, boosters: boosters, autoExport: autoExport, onAddInputConnection: onAddInputConnection }));
   }
 
   if (locationProperties) {
