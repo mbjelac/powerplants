@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "node_modules/.bin/vite --port 5174",
+    "dev": "node_modules/.bin/vite --port 5175",
     "build": "node_modules/.bin/vite build",
     "test": "npx playwright test",
     "test:update": "npx playwright test --update-snapshots",
