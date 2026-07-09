@@ -628,6 +628,8 @@ const CAM_ELEVATION = Math.PI / 6;
 const sektorUi = (p: p5) => {
   let camAngleY = Math.PI / 4;
   let camElevation = CAM_ELEVATION;
+  let panX = 0;
+  let panZ = 0;
   let isDragging = false;
   let didDrag = false;
   let mouseDownOnCanvas = false;
@@ -664,9 +666,7 @@ const sektorUi = (p: p5) => {
       if (Math.abs(dx) > 2 || Math.abs(dy) > 2) didDrag = true;
       lastMouseX = e.clientX;
       lastMouseY = e.clientY;
-      camAngleY -= dx * 0.005;
-      camElevation += dy * 0.005;
-      camElevation = Math.max(0.05, Math.min(Math.PI / 2 - 0.05, camElevation));
+      panCamera(dx, dy);
       updateCamera(p);
     });
     canvas.elt.addEventListener("wheel", (e: WheelEvent) => {
@@ -678,10 +678,21 @@ const sektorUi = (p: p5) => {
   };
 
   function updateCamera(p: p5) {
-    const camX = CAM_DIST * Math.sin(camAngleY) * Math.cos(camElevation);
+    const camX = panX + CAM_DIST * Math.sin(camAngleY) * Math.cos(camElevation);
     const camY = -CAM_DIST * Math.sin(camElevation);
-    const camZ = CAM_DIST * Math.cos(camAngleY) * Math.cos(camElevation);
-    p.camera(camX, camY, camZ, 0, 0, 0, 0, 1, 0);
+    const camZ = panZ + CAM_DIST * Math.cos(camAngleY) * Math.cos(camElevation);
+    p.camera(camX, camY, camZ, panX, 0, panZ, 0, 1, 0);
+  }
+
+  // Move the camera target across the ground plane in response to a left-drag,
+  // keeping the world point under the cursor following the cursor ("grab" pan).
+  function panCamera(dx: number, dy: number) {
+    const rightX = Math.cos(camAngleY);
+    const rightZ = -Math.sin(camAngleY);
+    const forwardX = -Math.sin(camAngleY);
+    const forwardZ = -Math.cos(camAngleY);
+    panX += (-rightX * dx + forwardX * dy) * zoom;
+    panZ += (-rightZ * dx + forwardZ * dy) * zoom;
   }
 
   p.mouseReleased = () => {
