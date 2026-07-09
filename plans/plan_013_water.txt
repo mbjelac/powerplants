@@ -1,0 +1,5 @@
+#1 Increase map
+- map should be 20x20
+    - adjust creator matrices
+- left mouse drag moves the camera over the map
+
