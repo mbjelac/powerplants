@@ -28,6 +28,7 @@ export interface Location {
 
 export interface SektorData {
   locationProperties: { [key: string]: number[][] };
+  river?: number[][];
   importRestrictions: ResourceThroughput[];
   exportRequirements: ResourceThroughput[];
   buildings: BuildingCreation[];
