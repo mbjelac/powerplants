@@ -32,7 +32,7 @@
     - if a location is on edge of map and location has only 1 river neighbor, assume river is also over the edge
 
 #5 Sea
-- creator creates a sea
+- [done] creator creates a sea
     - rename matrix "river" to "water"
     - this will be used for sea also
     - sea is "2"
