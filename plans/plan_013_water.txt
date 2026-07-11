@@ -39,6 +39,8 @@
     - pick a random edge of the map
     - advance the sea inland somewhat randomly
     - sea surface can not exceed 40% of the map
+    - create sea BEFORE creating river
+    - when creating river, the sea "shore" should be looked at as the edge of the map
 - sea is displayed
     - in frontend when drawing the map locations
         - if a location is a sea (water matrix has 2 on that location) instead of floor cube, draw a sea cube (dark blue on the sides, light blue on top)
