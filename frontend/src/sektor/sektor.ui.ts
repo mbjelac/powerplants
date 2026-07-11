@@ -115,6 +115,8 @@ const sektor = new Sektor(getLocations(), buildingDefinitions, getRestrictionsRe
 const locations = sektor.getLocations();
 const water = getWater();
 const RIVER_COLOR: [number, number, number] = [40, 120, 220];
+const SEA_TOP_COLOR: [number, number, number] = [90, 170, 230];
+const SEA_SIDE_COLOR: [number, number, number] = [20, 55, 120];
 const placedBuildings: { type: string; location: BuildingLocation; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -522,16 +524,16 @@ function gridToWorld(gx: number, gy: number): { wx: number; wz: number } {
 // Draws a river tile as a 3x3 grid of blue mini floor squares: the centre is
 // always drawn, corners never, and each edge mini square only when the
 // neighbouring tile in that direction is also a river — so the river connects.
-// A river endpoint on the map edge (only 1 river neighbour) is assumed to
-// continue over the edge, so its off-map edge gets a mini square too.
+// A river endpoint (only 1 river neighbour) is assumed to continue past the
+// map edge or into a neighbouring sea, so that edge gets a mini square too.
 function drawRiverFloor(p: p5, x: number, z: number) {
   const miniSize = BLOCK_SIZE / 3;
   drawRiverMiniSquare(p, 0, 0, miniSize);
-  const riverContinuesOverEdge = countRiverNeighbours(x, z) === 1;
-  if (hasRiverTowards(x - 1, z, riverContinuesOverEdge)) drawRiverMiniSquare(p, -miniSize, 0, miniSize);
-  if (hasRiverTowards(x + 1, z, riverContinuesOverEdge)) drawRiverMiniSquare(p, miniSize, 0, miniSize);
-  if (hasRiverTowards(x, z - 1, riverContinuesOverEdge)) drawRiverMiniSquare(p, 0, -miniSize, miniSize);
-  if (hasRiverTowards(x, z + 1, riverContinuesOverEdge)) drawRiverMiniSquare(p, 0, miniSize, miniSize);
+  const riverContinuesPastEdge = countRiverNeighbours(x, z) === 1;
+  if (hasRiverTowards(x - 1, z, riverContinuesPastEdge)) drawRiverMiniSquare(p, -miniSize, 0, miniSize);
+  if (hasRiverTowards(x + 1, z, riverContinuesPastEdge)) drawRiverMiniSquare(p, miniSize, 0, miniSize);
+  if (hasRiverTowards(x, z - 1, riverContinuesPastEdge)) drawRiverMiniSquare(p, 0, -miniSize, miniSize);
+  if (hasRiverTowards(x, z + 1, riverContinuesPastEdge)) drawRiverMiniSquare(p, 0, miniSize, miniSize);
 }
 
 function countRiverNeighbours(x: number, z: number): number {
@@ -540,9 +542,13 @@ function countRiverNeighbours(x: number, z: number): number {
   ).length;
 }
 
-function hasRiverTowards(x: number, z: number, riverContinuesOverEdge: boolean): boolean {
+// A mini square points this way if the neighbour is a river square, or — for a
+// river endpoint — if it is off the map or a sea square (river flows into sea).
+function hasRiverTowards(x: number, z: number, riverContinuesPastEdge: boolean): boolean {
   const insideMap = x >= 0 && x < GRID_SIZE && z >= 0 && z < GRID_SIZE;
-  return insideMap ? water[x][z] === 1 : riverContinuesOverEdge;
+  if (insideMap && water[x][z] === 1) return true;
+  const edgeOrSea = !insideMap || water[x][z] === 2;
+  return edgeOrSea && riverContinuesPastEdge;
 }
 
 function drawRiverMiniSquare(p: p5, offsetX: number, offsetZ: number, miniSize: number) {
@@ -821,10 +827,14 @@ const sektorUi = (p: p5) => {
         p.push();
         const { wx, wz } = gridToWorld(x, z);
         p.translate(wx, 0, wz);
-        const selectedProperty = getSelectedProperty();
-        drawFloor(p, BLOCK_SIZE, propertyColor(selectedProperty, locations[x][z].properties[selectedProperty] ?? 0));
-        if (water[x]?.[z] === 1) {
-          drawRiverFloor(p, x, z);
+        if (water[x]?.[z] === 2) {
+          drawFloor(p, BLOCK_SIZE, SEA_TOP_COLOR, SEA_SIDE_COLOR);
+        } else {
+          const selectedProperty = getSelectedProperty();
+          drawFloor(p, BLOCK_SIZE, propertyColor(selectedProperty, locations[x][z].properties[selectedProperty] ?? 0));
+          if (water[x]?.[z] === 1) {
+            drawRiverFloor(p, x, z);
+          }
         }
         p.pop();
       }
