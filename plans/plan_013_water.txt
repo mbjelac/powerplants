@@ -21,8 +21,8 @@
 - [done] creator should not create river squares which touch more than 2 other river squares
     - touch means having a neighboring square (same column, row index -1 or +1; same row, column index -1 or +1)
 
-#4 Improve river display
-- display a river as only part of a square
+#4 [done] Improve river display
+- [done] display a river as only part of a square
     - locations with a river should not draw 1 blue floor square
     - draw 3 smaller floor minisquares in a 3x3 grid
     - center minisquare should be blue
@@ -30,3 +30,15 @@
     - middle edge minisquares should be either there or not depending on the neighboring square
         - if neighboring square has a river, put a minisquare on the edge towards that square
     - if a location is on edge of map and location has only 1 river neighbor, assume river is also over the edge
+
+#5 Sea
+- creator creates a sea
+    - rename matrix "river" to "water"
+    - this will be used for sea also
+    - sea is "2"
+    - pick a random edge of the map
+    - advance the sea inland somewhat randomly
+    - sea surface can not exceed 40% of the map
+- sea is displayed
+    - in frontend when drawing the map locations
+        - if a location is a sea (water matrix has 2 on that location) instead of floor cube, draw a sea cube (dark blue on the sides, light blue on top)
