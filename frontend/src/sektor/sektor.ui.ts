@@ -74,11 +74,11 @@ function getLocations(): Location[][] {
   return [];
 }
 
-function getRiver(): number[][] {
+function getWater(): number[][] {
   if (sektorName) {
     const sektorData = getSektorData(sektorName);
-    if (sektorData?.river) {
-      return sektorData.river;
+    if (sektorData?.water) {
+      return sektorData.water;
     }
   }
   return [];
@@ -113,7 +113,7 @@ function getRestrictionsRequirements() {
 
 const sektor = new Sektor(getLocations(), buildingDefinitions, getRestrictionsRequirements());
 const locations = sektor.getLocations();
-const river = getRiver();
+const water = getWater();
 const RIVER_COLOR: [number, number, number] = [40, 120, 220];
 const placedBuildings: { type: string; location: BuildingLocation; code: string }[] = [];
 let errorTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -536,13 +536,13 @@ function drawRiverFloor(p: p5, x: number, z: number) {
 
 function countRiverNeighbours(x: number, z: number): number {
   return [[x - 1, z], [x + 1, z], [x, z - 1], [x, z + 1]].filter(
-    ([nx, nz]) => river[nx]?.[nz] === 1
+    ([nx, nz]) => water[nx]?.[nz] === 1
   ).length;
 }
 
 function hasRiverTowards(x: number, z: number, riverContinuesOverEdge: boolean): boolean {
   const insideMap = x >= 0 && x < GRID_SIZE && z >= 0 && z < GRID_SIZE;
-  return insideMap ? river[x][z] === 1 : riverContinuesOverEdge;
+  return insideMap ? water[x][z] === 1 : riverContinuesOverEdge;
 }
 
 function drawRiverMiniSquare(p: p5, offsetX: number, offsetZ: number, miniSize: number) {
@@ -823,7 +823,7 @@ const sektorUi = (p: p5) => {
         p.translate(wx, 0, wz);
         const selectedProperty = getSelectedProperty();
         drawFloor(p, BLOCK_SIZE, propertyColor(selectedProperty, locations[x][z].properties[selectedProperty] ?? 0));
-        if (river[x]?.[z] === 1) {
+        if (water[x]?.[z] === 1) {
           drawRiverFloor(p, x, z);
         }
         p.pop();
